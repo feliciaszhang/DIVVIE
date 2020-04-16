@@ -1,18 +1,22 @@
 package com.example.divvie
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
-class SplitFragment : AppCompatActivity() {
+class SplitFragment : Fragment() {
+    companion object {
+        fun newInstance() = SplitFragment()
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.split_fragment)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val fragment = inflater.inflate(R.layout.split_fragment, container, false)
 
-        val numberOfPeople = intent.getStringExtra(NUMBER_OF_PEOPLE)
-        val subtotal = intent.getStringExtra(SUBTOTAL)
-        val tax = intent.getStringExtra(TAX)
-
-//        val textView = findViewById<TextView>(R.id.textView).apply { text = message }
+        return fragment
     }
 }

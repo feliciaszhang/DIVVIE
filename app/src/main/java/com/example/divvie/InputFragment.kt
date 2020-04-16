@@ -1,9 +1,7 @@
 package com.example.divvie
 
-import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,13 +90,8 @@ class InputFragment : Fragment() {
         calculateButton.setOnClickListener {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
-
-//            val intent = Intent(activity, SplitFragment::class.java).apply {
-//                putExtra(NUMBER_OF_PEOPLE, numberOfPeople.toString())
-//                putExtra(SUBTOTAL, subtotal.toString())
-//                putExtra(TAX, tax.toString())
-//            }
-//            startActivity(intent)
+            fragmentManager!!.beginTransaction().replace(R.id.input_fragment_layout, SplitFragment.newInstance())
+                .commit()
         }
     }
 
