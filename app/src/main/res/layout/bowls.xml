@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/bowls">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/bowl" />
+</LinearLayout>
