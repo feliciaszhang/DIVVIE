@@ -1,8 +1,8 @@
 package com.example.divvie
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.view.get
@@ -72,9 +72,13 @@ class MainActivity : AppCompatActivity() {
         calculateButton.setOnClickListener {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
-            Log.d("*****", numberOfPeople.toString())
-            Log.d("*****", subtotal.toString())
-            Log.d("*****", tax.toString())
+
+            val intent = Intent(this, SplitActivity::class.java).apply {
+                putExtra(NUMBER_OF_PEOPLE, numberOfPeople.toString())
+                putExtra(SUBTOTAL, subtotal.toString())
+                putExtra(TAX, tax.toString())
+            }
+            startActivity(intent)
         }
     }
 }
