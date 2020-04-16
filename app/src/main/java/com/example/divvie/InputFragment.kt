@@ -23,7 +23,7 @@ class InputFragment : Fragment() {
     private lateinit var downButton: ImageButton
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
-    private lateinit var calculateButton: Button
+    private lateinit var nextButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +35,9 @@ class InputFragment : Fragment() {
         downButton = fragment.findViewById(R.id.down_button)
         editSubtotalText = fragment.findViewById(R.id.edit_subtotal)
         editTaxText = fragment.findViewById(R.id.edit_tax)
-        calculateButton = fragment.findViewById(R.id.calculate)
+        nextButton = fragment.findViewById(R.id.next)
 
-        calculateButton.isEnabled = false
+        nextButton.isEnabled = false
 
         return fragment
     }
@@ -45,6 +45,7 @@ class InputFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
+        viewModel.setDisplayPrices(false)
         viewModel.setNumberOfPeople(NUMBER_OF_PEOPLE_DEFAULT)
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
@@ -71,7 +72,7 @@ class InputFragment : Fragment() {
         editSubtotalText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 if (editSubtotalText.text.toString() != "") {
-                    calculateButton.isEnabled = true
+                    nextButton.isEnabled = true
                     val num = editSubtotalText.text.toString().toDouble()
                     viewModel.setSubtotal(num)
                 }
@@ -87,9 +88,10 @@ class InputFragment : Fragment() {
             }
         }
 
-        calculateButton.setOnClickListener {
+        nextButton.setOnClickListener {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
+            viewModel.setDisplayPrices(true)
             fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, SplitFragment.newInstance())
                 .commit()
         }

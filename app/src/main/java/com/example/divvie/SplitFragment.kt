@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 
 class SplitFragment : Fragment() {
@@ -32,6 +33,13 @@ class SplitFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
+        val numberOfPeople = viewModel.getNumberOfPeople()
+        val subtotal = viewModel.getSubtotal()
+        val equalPrice: Double
+        if (numberOfPeople != null && subtotal != null) {
+            equalPrice = subtotal / numberOfPeople
+        }
+
 
         equalButton.setOnClickListener {  }
 

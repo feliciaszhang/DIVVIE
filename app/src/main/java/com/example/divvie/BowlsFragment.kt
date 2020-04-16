@@ -31,6 +31,7 @@ class BowlsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
         viewModel.numberOfPeopleObservable.observe(viewLifecycleOwner, Observer { displayBowls(it) })
+        viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
     }
 
     private fun displayBowls(num: Int) {
@@ -40,6 +41,16 @@ class BowlsFragment : Fragment() {
             }
             else {
                 bowlsList.getChildAt(i).visibility = View.GONE
+            }
+        }
+    }
+
+    private fun displayPrices(bool: Boolean) {
+        if (bool) {
+            for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+                val view = bowlsList.getChildAt(i)
+                val price: View = view.findViewById(R.id.price)
+                price.visibility = View.VISIBLE
             }
         }
     }
