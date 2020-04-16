@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">DIVVIE</string>
     <string name="currency">$</string>
+    <string name="equally">Split Equally</string>
+    <string name="individually">Enter Individual Items</string>
+    <string name="back">Back</string>
 </resources>

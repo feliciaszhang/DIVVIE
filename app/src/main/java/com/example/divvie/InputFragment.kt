@@ -33,8 +33,8 @@ class InputFragment : Fragment() {
         numberOfPeopleText = fragment.findViewById(R.id.number_of_people)
         upButton = fragment.findViewById(R.id.up_button)
         downButton = fragment.findViewById(R.id.down_button)
-        editSubtotalText = fragment.findViewById(R.id.editSubtotal)
-        editTaxText = fragment.findViewById(R.id.editTax)
+        editSubtotalText = fragment.findViewById(R.id.edit_subtotal)
+        editTaxText = fragment.findViewById(R.id.edit_tax)
         calculateButton = fragment.findViewById(R.id.calculate)
 
         calculateButton.isEnabled = false
@@ -90,7 +90,7 @@ class InputFragment : Fragment() {
         calculateButton.setOnClickListener {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
-            fragmentManager!!.beginTransaction().replace(R.id.input_fragment_layout, SplitFragment.newInstance())
+            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, SplitFragment.newInstance())
                 .commit()
         }
     }

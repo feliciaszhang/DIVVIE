@@ -12,7 +12,7 @@
         android:layout_weight="1" />
 
     <FrameLayout
-        android:id="@+id/input_fragment_layout"
+        android:id="@+id/info_fragment_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

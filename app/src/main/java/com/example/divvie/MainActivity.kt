@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.input_fragment_layout, InputFragment.newInstance())
+            supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
                 .commit()
             supportFragmentManager.beginTransaction().replace(R.id.bowls_fragment_layout, BowlsFragment.newInstance())
                 .commit()
