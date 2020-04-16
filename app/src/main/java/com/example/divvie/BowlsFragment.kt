@@ -35,9 +35,13 @@ class BowlsFragment : Fragment() {
     }
 
     private fun displayBowls(num: Int) {
-        Log.d("/////////", num.toString())
-        for (i in 0 until num) {
-            bowlsList.getChildAt(i).visibility = View.VISIBLE
+        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+            if (i < num) {
+                bowlsList.getChildAt(i).visibility = View.VISIBLE
+            }
+            else {
+                bowlsList.getChildAt(i).visibility = View.GONE
+            }
         }
     }
 }
