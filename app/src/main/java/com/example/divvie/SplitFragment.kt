@@ -1,14 +1,13 @@
 package com.example.divvie
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
-class SplitActivity : AppCompatActivity() {
+class SplitFragment : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_split)
+        setContentView(R.layout.split_fragment)
 
         val numberOfPeople = intent.getStringExtra(NUMBER_OF_PEOPLE)
         val subtotal = intent.getStringExtra(SUBTOTAL)
