@@ -15,6 +15,6 @@ import com.example.divvie.*
 )
 data class Person (
     @ColumnInfo(name = PERSON_ITEM_ID) var itemId: Int? = null,
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = PERSON_ID) var personId: Int = 0
+    @PrimaryKey
+    @ColumnInfo(name = PERSON_ID) var personId: Int
 )

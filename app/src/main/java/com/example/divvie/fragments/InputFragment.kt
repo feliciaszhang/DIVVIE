@@ -2,6 +2,7 @@ package com.example.divvie.fragments
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class InputFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            viewModel.insertPerson(Person())
+            viewModel.insertPerson(Person(personId = i))
         }
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
@@ -61,7 +62,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num < MAX_NUMBER_OF_PEOPLE) {
                 num += 1
-                viewModel.insertPerson(Person())
+                viewModel.insertPerson(Person(personId = num - 1))
             }
         }
 
@@ -69,7 +70,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num > MIN_NUMBER_OF_PEOPLE) {
                 num -= 1
-              //  viewModel.deletePerson()
+                viewModel.deletePerson(Person(personId = num))
             }
         }
 

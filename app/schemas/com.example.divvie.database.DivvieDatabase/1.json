@@ -1,0 +1,93 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ab9e880ee3cd952c7197edf841f8d0eb",
+    "entities": [
+      {
+        "tableName": "person",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`person_item_id` INTEGER, `person_id` INTEGER NOT NULL, PRIMARY KEY(`person_id`), FOREIGN KEY(`person_item_id`) REFERENCES `item`(`item_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "itemId",
+            "columnName": "person_item_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "personId",
+            "columnName": "person_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "person_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_person_person_item_id",
+            "unique": false,
+            "columnNames": [
+              "person_item_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_person_person_item_id` ON `${TABLE_NAME}` (`person_item_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "item",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "person_item_id"
+            ],
+            "referencedColumns": [
+              "item_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`item_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `price` REAL NOT NULL, `split_between` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "itemId",
+            "columnName": "item_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "splitBetween",
+            "columnName": "split_between",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "item_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ab9e880ee3cd952c7197edf841f8d0eb')"
+    ]
+  }
+}

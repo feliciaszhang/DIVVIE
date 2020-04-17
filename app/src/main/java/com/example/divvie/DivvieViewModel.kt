@@ -12,7 +12,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun insertPerson(person: Person) { dao.insertPerson(person) }
 
-   // fun deletePerson() { dao.deletePerson() }
+    fun getAllPerson() = dao.getAllPerson()
+
+    fun deletePerson(person: Person) = dao.deletePerson(person)
 
     fun getNumberOfPeople() = dao.getNumberOfPeople()
 
