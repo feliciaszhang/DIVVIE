@@ -1,4 +1,4 @@
-package com.example.divvie
+package com.example.divvie.fragments
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,13 +11,14 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.example.divvie.*
 
 class InputFragment : Fragment() {
     companion object {
         fun newInstance() = InputFragment()
     }
 
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var viewModel: DivvieViewModel
     private lateinit var numberOfPeopleText: TextView
     private lateinit var upButton: ImageButton
     private lateinit var downButton: ImageButton
@@ -44,7 +45,7 @@ class InputFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
         viewModel.setNumberOfPeople(NUMBER_OF_PEOPLE_DEFAULT)
         viewModel.setSubtotal(AMOUNT_DEFAULT)
@@ -92,7 +93,10 @@ class InputFragment : Fragment() {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
             viewModel.setDisplayPrices(true)
-            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, SplitFragment.newInstance())
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout,
+                SplitFragment.newInstance()
+            )
                 .commit()
         }
     }

@@ -1,13 +1,15 @@
 package com.example.divvie
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.divvie.database.DivvieDatabase
 
-class SharedViewModel : ViewModel() {
-    private val listOfPrices = MutableLiveData<Array<Double>>()
-    val listOfPricesObservable: LiveData<Array<Double>>
-        get() = listOfPrices
+class DivvieViewModel(application: Application) : AndroidViewModel(application) {
+    private val countNumberOfPeople: LiveData<Int> = DivvieDatabase.getInstance(application).dao().countNumberOfPeople()
+    val countNumberOfPeopleObservable: LiveData<Int>
+            get() = countNumberOfPeople
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
@@ -53,3 +55,4 @@ class SharedViewModel : ViewModel() {
         return tax.value
     }
 }
+

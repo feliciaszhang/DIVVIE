@@ -2,6 +2,8 @@ package com.example.divvie
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.divvie.fragments.BowlsFragment
+import com.example.divvie.fragments.InputFragment
 
 class MainActivity : AppCompatActivity() {
 

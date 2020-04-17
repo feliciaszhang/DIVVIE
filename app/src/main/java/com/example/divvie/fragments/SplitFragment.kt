@@ -1,4 +1,4 @@
-package com.example.divvie
+package com.example.divvie.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
+import com.example.divvie.R
+import com.example.divvie.DivvieViewModel
 
 class SplitFragment : Fragment() {
     companion object {
         fun newInstance() = SplitFragment()
     }
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var viewModel: DivvieViewModel
     private lateinit var equalButton: Button
     private lateinit var individualButton: Button
     private lateinit var backButton: Button
@@ -32,7 +33,7 @@ class SplitFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         val numberOfPeople = viewModel.getNumberOfPeople()
         val subtotal = viewModel.getSubtotal()
         val equalPrice: Double
