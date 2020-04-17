@@ -11,13 +11,28 @@
         android:layout_weight="1"
         app:srcCompat="@drawable/bowl" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/price"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="gone"
-        android:textSize="@dimen/textSize"
-        android:text="@string/currency" />
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/currency"
+            android:textSize="@dimen/textSize" />
+
+        <TextView
+            android:id="@+id/price_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/textSize" />
+    </LinearLayout>
 
 </LinearLayout>

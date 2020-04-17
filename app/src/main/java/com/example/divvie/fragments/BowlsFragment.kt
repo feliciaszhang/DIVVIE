@@ -44,8 +44,8 @@ class BowlsFragment : Fragment() {
             if (i < num) {
                 val view = bowlsList.getChildAt(i)
                 view.visibility = View.VISIBLE
-                val price: TextView = view.findViewById(R.id.price)
-                price.text = num.toString()
+                val priceAmount: TextView = view.findViewById(R.id.price_amount)
+                priceAmount.text = num.toString()
             }
             else {
                 bowlsList.getChildAt(i).visibility = View.GONE
@@ -57,7 +57,7 @@ class BowlsFragment : Fragment() {
         if (bool) {
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
-                val price: TextView = view.findViewById(R.id.price)
+                val price: LinearLayout = view.findViewById(R.id.price)
                 price.visibility = View.VISIBLE
             }
         }
