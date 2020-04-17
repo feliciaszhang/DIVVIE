@@ -9,10 +9,7 @@ import com.example.divvie.DIVVIEDATABASE
 
 
 @Database(
-    entities = [
-        Person::class,
-        Item::class,
-        Counter::class],
+    entities = [Person::class, Item::class],
     version = 1
 )
 abstract class DivvieDatabase : RoomDatabase() {
@@ -22,14 +19,15 @@ abstract class DivvieDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: DivvieDatabase? = null
 
-        fun getInstance(context: Context): DivvieDatabase =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+        fun getInstance(context: Context): DivvieDatabase {
+            if (INSTANCE == null) {
+                INSTANCE = Room.databaseBuilder(context.applicationContext,
+                    DivvieDatabase::class.java, DIVVIEDATABASE)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
-
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context.applicationContext,
-                DivvieDatabase::class.java, DIVVIEDATABASE)
-                .build()
+            return INSTANCE!!
+        }
     }
 }

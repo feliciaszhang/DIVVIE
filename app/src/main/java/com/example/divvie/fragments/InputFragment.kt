@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.divvie.*
+import com.example.divvie.database.Person
 
 class InputFragment : Fragment() {
     companion object {
@@ -47,10 +48,12 @@ class InputFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
-        viewModel.setNumberOfPeople(NUMBER_OF_PEOPLE_DEFAULT)
+        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
+            viewModel.insertPerson(Person())
+        }
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
-        viewModel.numberOfPeopleObservable.observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
+        viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
         viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { displaySubtotal(it) })
         viewModel.taxObservable.observe(viewLifecycleOwner, Observer{  displayTax(it) })
 
@@ -58,7 +61,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num < MAX_NUMBER_OF_PEOPLE) {
                 num += 1
-                viewModel.setNumberOfPeople(num)
+                viewModel.insertPerson(Person())
             }
         }
 
@@ -66,7 +69,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num > MIN_NUMBER_OF_PEOPLE) {
                 num -= 1
-                viewModel.setNumberOfPeople(num)
+              //  viewModel.deletePerson()
             }
         }
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import kotlinx.android.synthetic.main.bowl.view.*
 
 class BowlsFragment : Fragment() {
     companion object {
@@ -34,15 +35,17 @@ class BowlsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.numberOfPeopleObservable.observe(viewLifecycleOwner, Observer { displayBowls(it) })
+        viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
-        viewModel.countNumberOfPeopleObservable.observe(viewLifecycleOwner, Observer { calculateAverage(it) })
     }
 
     private fun displayBowls(num: Int) {
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
             if (i < num) {
-                bowlsList.getChildAt(i).visibility = View.VISIBLE
+                val view = bowlsList.getChildAt(i)
+                view.visibility = View.VISIBLE
+                val price: TextView = view.findViewById(R.id.price)
+                price.text = num.toString()
             }
             else {
                 bowlsList.getChildAt(i).visibility = View.GONE
@@ -57,14 +60,6 @@ class BowlsFragment : Fragment() {
                 val price: TextView = view.findViewById(R.id.price)
                 price.visibility = View.VISIBLE
             }
-        }
-    }
-
-    private fun calculateAverage(num: Int) {
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-            val view = bowlsList.getChildAt(i)
-            val price: TextView = view.findViewById(R.id.price)
-            price.text = num.toString()
         }
     }
 }

@@ -37,9 +37,6 @@ class SplitFragment : Fragment() {
         val numberOfPeople = viewModel.getNumberOfPeople()
         val subtotal = viewModel.getSubtotal()
         val equalPrice: Double
-        if (numberOfPeople != null && subtotal != null) {
-            equalPrice = subtotal / numberOfPeople
-        }
 
 
         equalButton.setOnClickListener {  }

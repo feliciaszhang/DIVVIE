@@ -5,19 +5,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.divvie.database.DivvieDatabase
+import com.example.divvie.database.Person
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
-    private val countNumberOfPeople: LiveData<Int> = DivvieDatabase.getInstance(application).dao().countNumberOfPeople()
-    val countNumberOfPeopleObservable: LiveData<Int>
-            get() = countNumberOfPeople
+    private val dao = DivvieDatabase.getInstance(application).dao()
+
+    fun insertPerson(person: Person) { dao.insertPerson(person) }
+
+   // fun deletePerson() { dao.deletePerson() }
+
+    fun getNumberOfPeople() = dao.getNumberOfPeople()
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
-
-    private val numberOfPeople = MutableLiveData<Int>()
-    val numberOfPeopleObservable: LiveData<Int>
-        get() = numberOfPeople
 
     private val subtotal = MutableLiveData<Double>()
     val subtotalObservable: LiveData<Double>
@@ -27,16 +28,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     val taxObservable: LiveData<Double>
         get() = tax
 
+
     fun setDisplayPrices(bool: Boolean) {
         displayPrices.value = bool
-    }
-
-    fun setNumberOfPeople(num: Int) {
-        numberOfPeople.value = num
-    }
-
-    fun getNumberOfPeople(): Int? {
-        return numberOfPeople.value
     }
 
     fun setSubtotal(num: Double) {
