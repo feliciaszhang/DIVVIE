@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.NUMBER_OF_PEOPLE_DEFAULT
 import kotlinx.android.synthetic.main.bowl.view.*
 
 class BowlsFragment : Fragment() {
@@ -21,6 +22,7 @@ class BowlsFragment : Fragment() {
 
     private lateinit var viewModel: DivvieViewModel
     private lateinit var bowlsList: LinearLayout
+    private var numberOfBowls: Int = NUMBER_OF_PEOPLE_DEFAULT
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,20 +39,20 @@ class BowlsFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
+        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { calculateAverage(it) })
     }
 
     private fun displayBowls(num: Int) {
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+            val view = bowlsList.getChildAt(i)
             if (i < num) {
-                val view = bowlsList.getChildAt(i)
                 view.visibility = View.VISIBLE
-                val priceAmount: TextView = view.findViewById(R.id.price_amount)
-                priceAmount.text = num.toString()
             }
             else {
-                bowlsList.getChildAt(i).visibility = View.GONE
+                view.visibility = View.GONE
             }
         }
+        numberOfBowls = num
     }
 
     private fun displayPrices(bool: Boolean) {
@@ -60,6 +62,15 @@ class BowlsFragment : Fragment() {
                 val price: LinearLayout = view.findViewById(R.id.price)
                 price.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun calculateAverage(price: Double) {
+        val average = price / numberOfBowls
+        for (i in 0 until numberOfBowls) {
+            val view = bowlsList.getChildAt(i)
+            val priceAmount: TextView = view.findViewById(R.id.price_amount)
+            priceAmount.text = average.toString()
         }
     }
 }
