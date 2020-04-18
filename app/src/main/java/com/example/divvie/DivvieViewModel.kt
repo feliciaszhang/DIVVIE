@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +18,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun deletePerson(person: Person) = dao.deletePerson(person)
 
     fun getNumberOfPeople() = dao.getNumberOfPeople()
+
+    fun updatePerson(person: Person) {dao.updatePerson(person)}
+
+    fun splitEqually(num: Int) {
+        for (person in getAllPerson()) {
+            person.subtotal = getSubtotal()?.div(num) ?: 0.0
+            updatePerson(person)
+        }
+    }
+
+    fun getAllPerson2() = dao.getAllPerson2()
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
@@ -37,10 +49,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val total = MutableLiveData<Double>()
     val totalObservable: LiveData<Double>
         get() = total
-
-    private val pretaxListOfPrices = MutableLiveData<List<Double>>()
-    val pretaxListOfPricesObservable: LiveData<List<Double>>
-        get() = pretaxListOfPrices
 
     private fun setTotal() {
         val subtotal: Double = getSubtotal() ?: 0.0
@@ -78,14 +86,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getTip(): Double? {
         return tip.value
-    }
-
-    fun setPretaxListOfPrices(list: List<Double>) {
-        pretaxListOfPrices.value = list
-    }
-
-    fun getPretaxListOfPrices(): List<Double>? {
-        return pretaxListOfPrices.value
     }
 }
 

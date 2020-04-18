@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "698a1b6a9359520cefa4aa6a5ae6c4ac",
+    "identityHash": "86738d955e7065ba29df8975dfb790d1",
     "entities": [
       {
         "tableName": "person",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `subtotal` REAL NOT NULL, `tax` REAL NOT NULL, `tip` REAL NOT NULL, PRIMARY KEY(`index`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `subtotal` REAL NOT NULL, `tax` REAL NOT NULL, `tip` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "index",
-            "columnName": "index",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -35,18 +35,18 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "index"
+            "id"
           ],
           "autoGenerate": false
         },
         "indices": [
           {
-            "name": "index_person_index",
+            "name": "index_person_id",
             "unique": false,
             "columnNames": [
-              "index"
+              "id"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_person_index` ON `${TABLE_NAME}` (`index`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_person_id` ON `${TABLE_NAME}` (`id`)"
           }
         ],
         "foreignKeys": []
@@ -55,7 +55,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '698a1b6a9359520cefa4aa6a5ae6c4ac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '86738d955e7065ba29df8975dfb790d1')"
     ]
   }
 }

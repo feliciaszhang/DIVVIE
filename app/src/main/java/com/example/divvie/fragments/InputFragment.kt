@@ -27,6 +27,7 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
+    private var numberOfPeople = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +51,7 @@ class InputFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            viewModel.insertPerson(Person(index = i))
+            viewModel.insertPerson(Person(id = i))
         }
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
@@ -62,7 +63,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num < MAX_NUMBER_OF_PEOPLE) {
                 num += 1
-                viewModel.insertPerson(Person(index = num - 1))
+                viewModel.insertPerson(Person(id = num - 1))
             }
         }
 
@@ -70,7 +71,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num > MIN_NUMBER_OF_PEOPLE) {
                 num -= 1
-                viewModel.deletePerson(Person(index = num))
+                viewModel.deletePerson(Person(id = num))
             }
         }
 
@@ -97,6 +98,7 @@ class InputFragment : Fragment() {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
             viewModel.setDisplayPrices(true)
+            viewModel.splitEqually(numberOfPeople)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()
@@ -106,6 +108,7 @@ class InputFragment : Fragment() {
     }
 
     private fun displayNumberOfPeople(num: Int) {
+        numberOfPeople = num
         numberOfPeopleText.text = num.toString()
     }
 

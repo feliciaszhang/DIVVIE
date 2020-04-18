@@ -13,6 +13,7 @@ import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
 import com.example.divvie.NUMBER_OF_PEOPLE_DEFAULT
+import com.example.divvie.database.Person
 import kotlinx.android.synthetic.main.bowl.view.*
 
 class BowlsFragment : Fragment() {
@@ -39,7 +40,7 @@ class BowlsFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { calculateAverage(it) })
+        viewModel.getAllPerson2().observe(viewLifecycleOwner, Observer { updateBowls(it) })
     }
 
     private fun displayBowls(num: Int) {
@@ -65,15 +66,12 @@ class BowlsFragment : Fragment() {
         }
     }
 
-    private fun calculateAverage(price: Double) {
-        val average = price / numberOfBowls
-        val list = mutableListOf<Double>()
-        for (i in 0 until numberOfBowls) {
+    private fun updateBowls(list: List<Person>) {
+        for (i in list.indices) {
+            val person = list[i]
             val view = bowlsList.getChildAt(i)
             val priceAmount: TextView = view.findViewById(R.id.price_amount)
-            priceAmount.text = average.toString()
-            list.add(average)
+            priceAmount.text = person.subtotal.toString()
         }
-        viewModel.setPretaxListOfPrices(list)
     }
 }
