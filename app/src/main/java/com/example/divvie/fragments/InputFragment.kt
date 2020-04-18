@@ -50,7 +50,7 @@ class InputFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            viewModel.insertPerson(Person(personId = i))
+            viewModel.insertPerson(Person(index = i))
         }
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
@@ -62,7 +62,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num < MAX_NUMBER_OF_PEOPLE) {
                 num += 1
-                viewModel.insertPerson(Person(personId = num - 1))
+                viewModel.insertPerson(Person(index = num - 1))
             }
         }
 
@@ -70,7 +70,7 @@ class InputFragment : Fragment() {
             var num = numberOfPeopleText.text.toString().toInt()
             if (num > MIN_NUMBER_OF_PEOPLE) {
                 num -= 1
-                viewModel.deletePerson(Person(personId = num))
+                viewModel.deletePerson(Person(index = num))
             }
         }
 

@@ -7,10 +7,8 @@ const val AMOUNT_DEFAULT = 0.00
 
 // room constants
 const val DIVVIEDATABASE = "divvie_database"
-const val ITEM = "item"
-const val ITEM_ID = "item_id"
-const val PRICE = "price"
 const val PERSON = "person"
-const val PERSON_ID = "person_id"
-const val PERSON_ITEM_ID = "person_item_id"
-const val SPLIT_BETWEEN = "split_between"
+const val INDEX = "index"
+const val SUBTOTAL = "subtotal"
+const val TAX = "tax"
+const val TIP = "tip"

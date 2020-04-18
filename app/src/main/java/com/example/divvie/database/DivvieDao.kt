@@ -15,6 +15,6 @@ interface DivvieDao {
     @Delete
     fun deletePerson(vararg person: Person)
 
-    @Query("SELECT COUNT(PERSON_ID) FROM PERSON")
+    @Query("SELECT COUNT(*) FROM PERSON")
     fun getNumberOfPeople(): LiveData<Int>
 }

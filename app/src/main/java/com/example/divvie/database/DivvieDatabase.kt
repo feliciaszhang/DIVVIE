@@ -9,7 +9,7 @@ import com.example.divvie.DIVVIEDATABASE
 
 
 @Database(
-    entities = [Person::class, Item::class],
+    entities = [Person::class],
     version = 1
 )
 abstract class DivvieDatabase : RoomDatabase() {
