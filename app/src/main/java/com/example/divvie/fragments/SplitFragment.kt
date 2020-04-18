@@ -40,13 +40,20 @@ class SplitFragment : Fragment() {
         val equalPrice: Double
 
 
-        equalButton.setOnClickListener {  }
+        equalButton.setOnClickListener {
+            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ResultFragment.newInstance())
+                .commit()
+        }
 
         individualButton.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ItemFragment.newInstance())
                 .commit()
         }
 
-        backButton.setOnClickListener {  }
+        backButton.setOnClickListener {
+            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
+                .commit()
+            // TODO previous InputFragment and BowlsFragment
+        }
     }
 }

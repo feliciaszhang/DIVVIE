@@ -30,6 +30,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     val taxObservable: LiveData<Double>
         get() = tax
 
+    private val pretaxListOfPrices = MutableLiveData<List<Double>>()
+    val pretaxListOfPricesObservable: LiveData<List<Double>>
+        get() = pretaxListOfPrices
 
     fun setDisplayPrices(bool: Boolean) {
         displayPrices.value = bool
@@ -49,6 +52,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getTax(): Double? {
         return tax.value
+    }
+
+    fun setPretaxListOfPrices(list: List<Double>) {
+        pretaxListOfPrices.value = list
+    }
+
+    fun getPretaxListOfPrices(): List<Double>? {
+        return pretaxListOfPrices.value
     }
 }
 

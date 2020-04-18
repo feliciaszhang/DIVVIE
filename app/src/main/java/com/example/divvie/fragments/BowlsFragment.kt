@@ -67,10 +67,13 @@ class BowlsFragment : Fragment() {
 
     private fun calculateAverage(price: Double) {
         val average = price / numberOfBowls
+        val list = mutableListOf<Double>()
         for (i in 0 until numberOfBowls) {
             val view = bowlsList.getChildAt(i)
             val priceAmount: TextView = view.findViewById(R.id.price_amount)
             priceAmount.text = average.toString()
+            list.add(average)
         }
+        viewModel.setPretaxListOfPrices(list)
     }
 }

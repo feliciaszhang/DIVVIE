@@ -5,4 +5,10 @@
     <string name="equally">Split Equally</string>
     <string name="individually">Enter Individual Items</string>
     <string name="back">Back</string>
+    <string name="start_over">Start Over</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="tax">Tax</string>
+    <string name="tip">Tip</string>
+    <string name="total">Total</string>
+    <string name="number_of_people">Number Of People</string>
 </resources>
