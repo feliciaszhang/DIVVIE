@@ -2,7 +2,6 @@ package com.example.divvie.fragments
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,7 +97,7 @@ class InputFragment : Fragment() {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
             viewModel.setDisplayPrices(true)
-            viewModel.splitEqually()
+            viewModel.splitPretaxEqually()
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()

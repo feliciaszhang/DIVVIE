@@ -1,7 +1,6 @@
 package com.example.divvie.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,12 +34,9 @@ class SplitFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        val numberOfPeople = viewModel.getNumberOfPeople()
-        val subtotal = viewModel.getSubtotal()
-        val equalPrice: Double
-
 
         equalButton.setOnClickListener {
+            viewModel.calculatePersonResult()
             fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ResultFragment.newInstance())
                 .commit()
         }

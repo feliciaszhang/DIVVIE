@@ -13,6 +13,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun getAllPersonStatic() = dao.getAllPersonStatic()
 
+    fun getAllPerson() = dao.getAllPerson()
+
     fun insertPerson(person: Person) { dao.insertPerson(person) }
 
     fun deletePerson(person: Person) = dao.deletePerson(person)
@@ -21,14 +23,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun updatePerson(person: Person) {dao.updatePerson(person)}
 
-    fun splitEqually() {
+    fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
             person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: 0.0
             updatePerson(person)
         }
     }
 
-    fun getAllPerson() = dao.getAllPerson()
+    fun calculatePersonResult() {
+        for (person in getAllPersonStatic()) {
+            val tax: Double = getTax() ?: 0.0
+            val tip: Double = getTip() ?: 0.0
+            val ratio = person.subtotal / getSubtotal()!!
+            person.tax = ratio * tax
+            person.tip = ratio * tip
+            updatePerson(person)
+        }
+    }
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
