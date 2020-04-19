@@ -11,7 +11,7 @@
     <string name="tip">Tip</string>
     <string name="item_price">Item Price</string>
     <string name="total">Total</string>
-    <string name="leftover">$ %1$d leftover</string>
+    <string name="leftover">$%1$s leftover</string>
     <string name="calculate">Calculate</string>
     <string name="undo">Undo</string>
     <string name="clear_all">Clear All</string>

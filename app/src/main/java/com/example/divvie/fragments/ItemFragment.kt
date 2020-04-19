@@ -1,6 +1,8 @@
 package com.example.divvie.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +29,6 @@ class ItemFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var clearAllButton: Button
     private val itemStack: Stack<Item> = Stack()
-    private var currentItemPrice: Double = AMOUNT_DEFAULT
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,21 +49,26 @@ class ItemFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        val subtotal = viewModel.getSubtotal()
+        leftoverText.text = String.format(resources.getString(R.string.leftover), subtotal.toString())
         viewModel.setEnterPrice(true)
         viewModel.enterPriceObservable.observe(viewLifecycleOwner, Observer { enableEnterPrice(it) })
+        viewModel.currentItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
 
-        editItemText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                if (editItemText.text.toString() != "") {
+        editItemText.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val num = editItemText.text.toString()
+                if (num != "") {
                     nextButton.isEnabled = true
-                }
-            } else {
-                if (editItemText.text.toString() != "") {
-                    currentItemPrice = editItemText.text.toString().toDouble()
-                    itemStack.push(Item())
+                    viewModel.setCurrentItemPrice(num.toDouble())
+                } else {
+                    nextButton.isEnabled = false
+                    viewModel.setCurrentItemPrice(AMOUNT_DEFAULT)
                 }
             }
-        }
+        })
 
         nextButton.setOnClickListener {
             viewModel.setEnterPrice(false)
@@ -71,5 +77,12 @@ class ItemFragment : Fragment() {
 
     private fun enableEnterPrice(bool: Boolean) {
 
+    }
+
+    private fun calculateLeftover(subtotal: Double?, num: Double) {
+        if (subtotal != null) {
+            val leftover: String = (subtotal - num).toString()
+            leftoverText.text = String.format(resources.getString(R.string.leftover), leftover)
+        }
     }
 }

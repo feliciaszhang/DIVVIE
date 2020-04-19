@@ -50,6 +50,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    private val currentItemPrice = MutableLiveData<Double>()
+    val currentItemPriceObservable: LiveData<Double>
+        get() = currentItemPrice
+
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
@@ -59,16 +63,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         get() = enterPrice
 
     private val subtotal = MutableLiveData<Double>()
-    val subtotalObservable: LiveData<Double>
-        get() = subtotal
 
     private val tax = MutableLiveData<Double>()
-    val taxObservable: LiveData<Double>
-        get() = tax
 
     private val tip = MutableLiveData<Double>()
-    val tipObservable: LiveData<Double>
-        get() = tip
 
     private val total = MutableLiveData<Double>()
     val totalObservable: LiveData<Double>
@@ -79,6 +77,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
         val tip: Double = getTip() ?: AMOUNT_DEFAULT
         total.value = subtotal + tax + tip
+    }
+
+    fun setCurrentItemPrice(num: Double) {
+        currentItemPrice.value = num
     }
 
     fun setDisplayPrices(bool: Boolean) {
@@ -112,7 +114,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         setTotal()
     }
 
-    fun getTip(): Double? {
+    private fun getTip(): Double? {
         return tip.value
     }
 }
