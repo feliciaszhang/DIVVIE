@@ -2,6 +2,8 @@ package com.example.divvie.fragments
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,8 +57,6 @@ class InputFragment : Fragment() {
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { displaySubtotal(it) })
-        viewModel.taxObservable.observe(viewLifecycleOwner, Observer{  displayTax(it) })
 
         upButton.setOnClickListener {
             var num = numberOfPeopleText.text.toString().toInt()
@@ -74,24 +74,52 @@ class InputFragment : Fragment() {
             }
         }
 
-        editSubtotalText.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                if (editSubtotalText.text.toString() != "") {
-                    nextButton.isEnabled = true
-                    val num = editSubtotalText.text.toString().toDouble()
-                    viewModel.setSubtotal(num)
-                }
-            }
-        }
+//        editSubtotalText.setOnFocusChangeListener { v, hasFocus ->
+//            if (!hasFocus) {
+//                if (editSubtotalText.text.toString() != "") {
+//                    nextButton.isEnabled = true
+//                    val num = editSubtotalText.text.toString().toDouble()
+//                    viewModel.setSubtotal(num)
+//                }
+//            }
+//        }
 
-        editTaxText.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                if (editTaxText.text.toString() != "") {
-                    val num = editTaxText.text.toString().toDouble()
-                    viewModel.setTax(num)
+        editSubtotalText.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val num = editSubtotalText.text.toString()
+                if (num != "") {
+                    nextButton.isEnabled = true
+                    viewModel.setSubtotal(num.toDouble())
+                } else {
+                    nextButton.isEnabled = false
+                    viewModel.setSubtotal(AMOUNT_DEFAULT)
                 }
             }
-        }
+        })
+
+//        editTaxText.setOnFocusChangeListener { v, hasFocus ->
+//            if (!hasFocus) {
+//                if (editTaxText.text.toString() != "") {
+//                    val num = editTaxText.text.toString().toDouble()
+//                    viewModel.setTax(num)
+//                }
+//            }
+//        }
+
+        editTaxText.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val num = editTaxText.text.toString()
+                if (num != "") {
+                    viewModel.setTax(num.toDouble())
+                } else {
+                    viewModel.setTax(AMOUNT_DEFAULT)
+                }
+            }
+        })
 
         nextButton.setOnClickListener {
             editSubtotalText.isEnabled = false
@@ -116,6 +144,6 @@ class InputFragment : Fragment() {
     }
 
     private fun displayTax(num: Double) {
-        editTaxText.hint = num.toString()
+        editTaxText.setText(num.toString())
     }
 }
