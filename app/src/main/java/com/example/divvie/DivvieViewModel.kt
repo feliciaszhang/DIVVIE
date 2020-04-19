@@ -11,10 +11,13 @@ import com.example.divvie.database.Person
 import java.util.*
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
-    var currentItem: Item? = null
-    // TODO implement getter and setter
+    private var currentItem: Item? = null
 
-    val itemStack: Stack<Item> = Stack()
+    fun setCurrentItem(item: Item) {
+        currentItem = item
+    }
+
+    private val itemStack: Stack<Item> = Stack()
 
     private val dao = DivvieDatabase.getInstance(application).dao()
 
@@ -22,7 +25,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getAllPerson() = dao.getAllPerson()
 
-    fun findPerson(id: Int) = dao.findPerson(id)
+    private fun findPerson(id: Int) = dao.findPerson(id)
 
     fun insertPerson(person: Person) { dao.insertPerson(person) }
 
@@ -32,7 +35,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
 
-    fun updatePerson(person: Person) {dao.updatePerson(person)}
+    private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
     fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
@@ -46,12 +49,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun split(index: Int) {
         val currentPrice = getCurrentItemPrice()
         val item = currentItem
-        if (currentItem != null) {
+        if (item != null) {
             val selectedPerson = findPerson(index)
-            item!!.listOfIndex.add(index)
+            item.listOfIndex.add(index)
             val splitBetween = item.listOfIndex.size
             item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
-            itemStack.push(currentItem)
+            itemStack.push(item)
             selectedPerson.subtotal += item.splitPrice!!
             updatePerson(selectedPerson)
             // TODO update all people in listOfIndex

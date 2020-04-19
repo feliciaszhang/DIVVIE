@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.setTip(AMOUNT_DEFAULT)
         viewModel.setSelectPerson(false)
         viewModel.setCurrentItemPrice(AMOUNT_DEFAULT)
-        viewModel.currentItem = Item()
+        viewModel.setCurrentItem(Item())
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
