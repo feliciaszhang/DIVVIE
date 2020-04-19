@@ -10,7 +10,7 @@ import com.example.divvie.*
 data class Person (
     @PrimaryKey
     @ColumnInfo(name = ID) var id: Int,
-    @ColumnInfo(name = SUBTOTAL) var subtotal: Double = 0.0,
-    @ColumnInfo(name = TAX) var tax: Double = 0.0,
-    @ColumnInfo(name = TIP) var tip: Double = 0.0
+    @ColumnInfo(name = SUBTOTAL) var subtotal: Double = AMOUNT_DEFAULT,
+    @ColumnInfo(name = TAX) var tax: Double = AMOUNT_DEFAULT,
+    @ColumnInfo(name = TIP) var tip: Double = AMOUNT_DEFAULT
 )

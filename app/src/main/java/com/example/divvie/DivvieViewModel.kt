@@ -25,15 +25,22 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
-            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: 0.0
+            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
+            updatePerson(person)
+        }
+    }
+
+    fun clearPersonalSubtotal() {
+        for (person in getAllPersonStatic()) {
+            person.subtotal = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }
 
     fun calculatePersonResult() {
         for (person in getAllPersonStatic()) {
-            val tax: Double = getTax() ?: 0.0
-            val tip: Double = getTip() ?: 0.0
+            val tax: Double = getTax() ?: AMOUNT_DEFAULT
+            val tip: Double = getTip() ?: AMOUNT_DEFAULT
             val ratio = person.subtotal / getSubtotal()!!
             person.tax = ratio * tax
             person.tip = ratio * tip
@@ -62,9 +69,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         get() = total
 
     private fun setTotal() {
-        val subtotal: Double = getSubtotal() ?: 0.0
-        val tax: Double = getTax() ?: 0.0
-        val tip: Double = getTip() ?: 0.0
+        val subtotal: Double = getSubtotal() ?: AMOUNT_DEFAULT
+        val tax: Double = getTax() ?: AMOUNT_DEFAULT
+        val tip: Double = getTip() ?: AMOUNT_DEFAULT
         total.value = subtotal + tax + tip
     }
 
