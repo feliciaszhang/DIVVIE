@@ -48,6 +48,8 @@ class InputFragment : Fragment() {
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
         viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
 
+        editTaxText.hint = AMOUNT_DEFAULT.toString()
+
         upButton.setOnClickListener {
             val num = viewModel.getNumberOfPeopleStatic()
             if (num < MAX_NUMBER_OF_PEOPLE) {

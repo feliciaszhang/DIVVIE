@@ -36,9 +36,7 @@ class BowlsFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.bowls_fragment, container, false)
         bowlsList = fragment.findViewById(R.id.bowls)
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-            val view = bowlsList.getChildAt(i)
-            val image: ImageView = view.findViewById(R.id.imageView)
-            changeColor(image, Color.LTGRAY)
+            changeColor(bowlsList.getChildAt(i), Color.LTGRAY)
         }
         return fragment
     }
@@ -50,22 +48,14 @@ class BowlsFragment : Fragment() {
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updateBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { greyoutBowls(it) })
-
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-            val view = bowlsList.getChildAt(i)
-            val image: ImageView = view.findViewById(R.id.imageView)
-            val currency: TextView = view.findViewById(R.id.currency)
-            val priceAmount: TextView = view.findViewById(R.id.price_amount)
-            view.setOnClickListener {
-                currency.setTextColor(Color.WHITE)
-                priceAmount.setTextColor(Color.WHITE)
-                changeColor(image, Color.WHITE)
-                viewModel.split(i)
-            }
-        }
     }
 
-    private fun changeColor(image: ImageView, color: Int) {
+    private fun changeColor(view: View, color: Int) {
+        val image: ImageView = view.findViewById(R.id.imageView)
+        val currency: TextView = view.findViewById(R.id.currency)
+        val priceAmount: TextView = view.findViewById(R.id.price_amount)
+        currency.setTextColor(color)
+        priceAmount.setTextColor(color)
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
@@ -105,13 +95,12 @@ class BowlsFragment : Fragment() {
         if (bool) {
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
+                changeColor(view, Color.DKGRAY)
                 view.isClickable = true
-                val image: ImageView = view.findViewById(R.id.imageView)
-                val currency: TextView = view.findViewById(R.id.currency)
-                val priceAmount: TextView = view.findViewById(R.id.price_amount)
-                currency.setTextColor(Color.DKGRAY)
-                priceAmount.setTextColor(Color.DKGRAY)
-                changeColor(image, Color.DKGRAY)
+                view.setOnClickListener {
+                    changeColor(view, Color.WHITE)
+                    viewModel.split(i)
+                }
             }
         }
     }
