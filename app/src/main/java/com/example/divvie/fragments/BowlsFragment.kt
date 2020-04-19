@@ -26,10 +26,8 @@ class BowlsFragment : Fragment() {
     companion object {
         fun newInstance() = BowlsFragment()
     }
-
     private lateinit var viewModel: DivvieViewModel
     private lateinit var bowlsList: LinearLayout
-    private var numberOfBowls: Int = NUMBER_OF_PEOPLE_DEFAULT
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +40,6 @@ class BowlsFragment : Fragment() {
             val image: ImageView = view.findViewById(R.id.imageView)
             changeColor(image, Color.LTGRAY)
         }
-
         return fragment
     }
 
@@ -82,7 +79,6 @@ class BowlsFragment : Fragment() {
                 view.visibility = View.GONE
             }
         }
-        numberOfBowls = num
     }
 
     private fun displayPrices(bool: Boolean) {
