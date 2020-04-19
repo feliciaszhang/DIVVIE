@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
 import com.example.divvie.NUMBER_OF_PEOPLE_DEFAULT
+import com.example.divvie.database.Item
 import com.example.divvie.database.Person
 import kotlinx.android.synthetic.main.bowl.*
 
@@ -51,9 +53,35 @@ class BowlsFragment : Fragment() {
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updateBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { greyoutBowls(it) })
+
+        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+            val view = bowlsList.getChildAt(i)
+            val image: ImageView = view.findViewById(R.id.imageView)
+            val currency: TextView = view.findViewById(R.id.currency)
+            val priceAmount: TextView = view.findViewById(R.id.price_amount)
+            view.setOnClickListener {
+                currency.setTextColor(Color.WHITE)
+                priceAmount.setTextColor(Color.WHITE)
+                changeColor(image, Color.WHITE)
+                split(viewModel.getCurrentItemPrice(), viewModel.currentItem, i)
+            }
+        }
     }
 
-    fun changeColor(image: ImageView, color: Int) {
+    private fun split(currentPrice: Double?, currentItem: Item?, index: Int) {
+        if (currentItem != null) {
+            val selectedPerson = viewModel.findPerson(index)
+            currentItem.listOfIndex.add(index)
+            val splitBetween = currentItem.listOfIndex.size
+            currentItem.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
+            viewModel.itemStack.push(currentItem)
+            selectedPerson.subtotal += currentItem.splitPrice!!
+            viewModel.updatePerson(selectedPerson)
+            // TODO update all people in listOfIndex
+        }
+    }
+
+    private fun changeColor(image: ImageView, color: Int) {
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 

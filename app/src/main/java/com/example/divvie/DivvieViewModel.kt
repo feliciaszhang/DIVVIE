@@ -6,14 +6,22 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.divvie.database.DivvieDatabase
+import com.example.divvie.database.Item
 import com.example.divvie.database.Person
+import java.util.*
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
+    var currentItem: Item? = null
+
+    val itemStack: Stack<Item> = Stack()
+
     private val dao = DivvieDatabase.getInstance(application).dao()
 
     private fun getAllPersonStatic() = dao.getAllPersonStatic()
 
     fun getAllPerson() = dao.getAllPerson()
+
+    fun findPerson(id: Int) = dao.findPerson(id)
 
     fun insertPerson(person: Person) { dao.insertPerson(person) }
 

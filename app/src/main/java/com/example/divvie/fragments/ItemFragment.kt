@@ -33,7 +33,6 @@ class ItemFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
-    private val itemStack: Stack<Item> = Stack()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +86,7 @@ class ItemFragment : Fragment() {
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
             itemText.text = viewModel.getCurrentItemPrice().toString()
+            viewModel.currentItem = Item()
             doneButton.isEnabled = false
         }
     }

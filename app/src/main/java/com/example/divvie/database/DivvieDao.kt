@@ -12,6 +12,9 @@ interface DivvieDao {
     @Query("SELECT * FROM PERSON")
     fun getAllPersonStatic(): Array<Person>
 
+    @Query("SELECT * FROM PERSON WHERE ID = :id")
+    fun findPerson(id: Int): Person
+
     @Query("SELECT * from PERSON ORDER BY ID ASC")
     fun getAllPerson() : LiveData<List<Person>>
 
