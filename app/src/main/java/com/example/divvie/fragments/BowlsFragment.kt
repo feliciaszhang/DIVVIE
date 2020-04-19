@@ -39,8 +39,8 @@ class BowlsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
+        viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updateBowls(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
-        viewModel.getAllPerson2().observe(viewLifecycleOwner, Observer { updateBowls(it) })
     }
 
     private fun displayBowls(num: Int) {

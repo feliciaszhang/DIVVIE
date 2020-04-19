@@ -10,10 +10,10 @@ interface DivvieDao {
     fun insertPerson(vararg person: Person)
 
     @Query("SELECT * FROM PERSON")
-    fun getAllPerson(): Array<Person>
+    fun getAllPersonStatic(): Array<Person>
 
     @Query("SELECT * from PERSON ORDER BY ID ASC")
-    fun getAllPerson2() : LiveData<List<Person>>
+    fun getAllPerson() : LiveData<List<Person>>
 
     @Delete
     fun deletePerson(vararg person: Person)

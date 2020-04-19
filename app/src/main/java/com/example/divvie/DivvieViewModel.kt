@@ -11,9 +11,9 @@ import com.example.divvie.database.Person
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = DivvieDatabase.getInstance(application).dao()
 
-    fun insertPerson(person: Person) { dao.insertPerson(person) }
+    private fun getAllPersonStatic() = dao.getAllPersonStatic()
 
-    fun getAllPerson() = dao.getAllPerson()
+    fun insertPerson(person: Person) { dao.insertPerson(person) }
 
     fun deletePerson(person: Person) = dao.deletePerson(person)
 
@@ -21,14 +21,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun updatePerson(person: Person) {dao.updatePerson(person)}
 
-    fun splitEqually(num: Int) {
-        for (person in getAllPerson()) {
-            person.subtotal = getSubtotal()?.div(num) ?: 0.0
+    fun splitEqually() {
+        for (person in getAllPersonStatic()) {
+            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: 0.0
             updatePerson(person)
         }
     }
 
-    fun getAllPerson2() = dao.getAllPerson2()
+    fun getAllPerson() = dao.getAllPerson()
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>

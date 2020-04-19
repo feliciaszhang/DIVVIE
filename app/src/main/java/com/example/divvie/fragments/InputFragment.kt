@@ -98,7 +98,7 @@ class InputFragment : Fragment() {
             editSubtotalText.isEnabled = false
             editTaxText.isEnabled = false
             viewModel.setDisplayPrices(true)
-            viewModel.splitEqually(numberOfPeople)
+            viewModel.splitEqually()
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()
