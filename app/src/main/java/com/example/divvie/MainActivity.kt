@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
+        viewModel.setTip(AMOUNT_DEFAULT)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())

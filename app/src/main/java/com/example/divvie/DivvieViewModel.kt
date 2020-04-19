@@ -86,7 +86,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     val totalObservable: LiveData<Double>
         get() = total
 
-    private fun setTotal() {
+    fun setTotal() {
         val subtotal: Double = getSubtotal() ?: AMOUNT_DEFAULT
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
         val tip: Double = getTip() ?: AMOUNT_DEFAULT
@@ -129,7 +129,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun setTip(num: Double) {
         tip.value = num
-        setTotal()
     }
 
     private fun getTip(): Double? {

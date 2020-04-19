@@ -27,7 +27,6 @@ class SplitFragment : Fragment() {
         equalButton = fragment.findViewById(R.id.split_equally_button)
         individualButton = fragment.findViewById(R.id.split_individually_button)
         backButton = fragment.findViewById(R.id.back_button)
-
         return fragment
     }
 

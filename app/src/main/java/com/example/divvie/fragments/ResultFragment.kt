@@ -25,7 +25,7 @@ class ResultFragment : Fragment() {
     private lateinit var tax: TextView
     private lateinit var tip: EditText
     private lateinit var total: TextView
-    private lateinit var start_over: Button
+    private lateinit var startOver: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,17 +36,17 @@ class ResultFragment : Fragment() {
         tax = fragment.findViewById(R.id.tax_amount)
         tip = fragment.findViewById(R.id.edit_tip)
         total = fragment.findViewById(R.id.total_amount)
-        start_over = fragment.findViewById(R.id.start_over)
-
+        startOver = fragment.findViewById(R.id.start_over)
         return fragment
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.setTip(AMOUNT_DEFAULT)
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer{  displayTotal(it) })
+
         subtotal.text = viewModel.getSubtotal().toString()
+
         tax.text = viewModel.getTax().toString()
 
         tip.addTextChangedListener(object: TextWatcher {
@@ -59,6 +59,7 @@ class ResultFragment : Fragment() {
                 } else {
                     viewModel.setTip(AMOUNT_DEFAULT)
                 }
+                viewModel.setTotal()
                 viewModel.calculatePersonResult()
             }
         })
