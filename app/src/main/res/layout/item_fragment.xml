@@ -33,6 +33,14 @@
             android:text="@string/back" />
 
         <Button
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/undo"
+            android:visibility="gone"/>
+
+        <Button
             android:id="@+id/clear_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -32,6 +32,14 @@
             android:inputType="numberDecimal"
             android:textSize="@dimen/large_text_size" />
 
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/large_text_size"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
     <TextView
@@ -41,10 +49,25 @@
         android:text="@string/leftover"
         android:textSize="@dimen/small_text_size" />
 
+    <TextView
+        android:id="@+id/tap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tap"
+        android:textSize="@dimen/small_text_size"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/next" />
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/done"
+        android:visibility="gone"/>
 
 </LinearLayout>

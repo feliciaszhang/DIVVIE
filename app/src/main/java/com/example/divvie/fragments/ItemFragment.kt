@@ -16,6 +16,7 @@ import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
 import com.example.divvie.database.Item
+import kotlinx.android.synthetic.main.item_fragment.*
 import java.util.Stack
 
 class ItemFragment : Fragment() {
@@ -24,9 +25,13 @@ class ItemFragment : Fragment() {
     }
     private lateinit var viewModel: DivvieViewModel
     private lateinit var editItemText: EditText
+    private lateinit var itemText: TextView
     private lateinit var leftoverText: TextView
+    private lateinit var tap: TextView
     private lateinit var nextButton: Button
+    private lateinit var doneButton: Button
     private lateinit var backButton: Button
+    private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
     private val itemStack: Stack<Item> = Stack()
 
@@ -36,9 +41,13 @@ class ItemFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.item_fragment, container, false)
         editItemText = fragment.findViewById(R.id.edit_item)
+        itemText = fragment.findViewById(R.id.item_text)
         leftoverText = fragment.findViewById(R.id.leftover)
+        tap = fragment.findViewById(R.id.tap)
         nextButton = fragment.findViewById(R.id.next)
+        doneButton = fragment.findViewById(R.id.done)
         backButton = fragment.findViewById(R.id.back)
+        undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
 
         nextButton.isEnabled = false
@@ -51,8 +60,7 @@ class ItemFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         val subtotal = viewModel.getSubtotal()
         leftoverText.text = String.format(resources.getString(R.string.leftover), subtotal.toString())
-        viewModel.setEnterPrice(true)
-        viewModel.enterPriceObservable.observe(viewLifecycleOwner, Observer { enableEnterPrice(it) })
+        viewModel.setSelectPerson(false)
         viewModel.currentItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
@@ -71,18 +79,26 @@ class ItemFragment : Fragment() {
         })
 
         nextButton.setOnClickListener {
-            viewModel.setEnterPrice(false)
+            viewModel.setSelectPerson(true)
+            editItemText.visibility = View.GONE
+            leftoverText.visibility = View.GONE
+            nextButton.visibility = View.GONE
+            itemText.visibility = View.VISIBLE
+            tap.visibility = View.VISIBLE
+            doneButton.visibility = View.VISIBLE
+            itemText.text = viewModel.getCurrentItemPrice().toString()
+            doneButton.isEnabled = false
         }
-    }
-
-    private fun enableEnterPrice(bool: Boolean) {
-
     }
 
     private fun calculateLeftover(subtotal: Double?, num: Double) {
         if (subtotal != null) {
-            val leftover: String = (subtotal - num).toString()
-            leftoverText.text = String.format(resources.getString(R.string.leftover), leftover)
+            val leftover: Double = subtotal - num
+            leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
+            if (leftover < 0) {
+                nextButton.isEnabled = false
+            }
+            // TODO show user this cannot be negative
         }
     }
 }

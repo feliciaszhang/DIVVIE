@@ -85,6 +85,7 @@ class InputFragment : Fragment() {
                 } else {
                     nextButton.isEnabled = false
                     viewModel.setSubtotal(AMOUNT_DEFAULT)
+                    // TODO show user this cannot be 0
                 }
             }
         })

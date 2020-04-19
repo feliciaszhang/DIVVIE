@@ -58,9 +58,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
 
-    private val enterPrice = MutableLiveData<Boolean>()
-    val enterPriceObservable: LiveData<Boolean>
-        get() = enterPrice
+    private val selectPerson = MutableLiveData<Boolean>()
+    val selectPersonObservable: LiveData<Boolean>
+        get() = selectPerson
 
     private val subtotal = MutableLiveData<Double>()
 
@@ -83,12 +83,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         currentItemPrice.value = num
     }
 
+    fun getCurrentItemPrice(): Double? {
+        return currentItemPrice.value
+    }
+
     fun setDisplayPrices(bool: Boolean) {
         displayPrices.value = bool
     }
 
-    fun setEnterPrice(bool: Boolean) {
-        enterPrice.value = bool
+    fun setSelectPerson(bool: Boolean) {
+        selectPerson.value = bool
     }
 
     fun setSubtotal(num: Double) {
