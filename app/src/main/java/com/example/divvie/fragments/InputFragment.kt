@@ -20,7 +20,6 @@ class InputFragment : Fragment() {
     companion object {
         fun newInstance() = InputFragment()
     }
-
     private lateinit var viewModel: DivvieViewModel
     private lateinit var numberOfPeopleText: TextView
     private lateinit var upButton: ImageButton
@@ -28,7 +27,6 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
-    private var numberOfPeople = NUMBER_OF_PEOPLE_DEFAULT
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,36 +39,26 @@ class InputFragment : Fragment() {
         editSubtotalText = fragment.findViewById(R.id.edit_subtotal)
         editTaxText = fragment.findViewById(R.id.edit_tax)
         nextButton = fragment.findViewById(R.id.next)
-
-        nextButton.isEnabled = false
-
         return fragment
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.setDisplayPrices(false)
-        for (i in 0 until numberOfPeople) {
-            viewModel.insertPerson(Person(id = i))
-        }
-        viewModel.setSubtotal(AMOUNT_DEFAULT)
-        viewModel.setTax(AMOUNT_DEFAULT)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
+        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
 
         upButton.setOnClickListener {
-            var num = numberOfPeopleText.text.toString().toInt()
+            val num = viewModel.getNumberOfPeopleStatic()
             if (num < MAX_NUMBER_OF_PEOPLE) {
-                num += 1
-                viewModel.insertPerson(Person(id = num - 1))
+                viewModel.insertPerson(Person(id = num))
             }
         }
 
         downButton.setOnClickListener {
-            var num = numberOfPeopleText.text.toString().toInt()
+            val num = viewModel.getNumberOfPeopleStatic()
             if (num > MIN_NUMBER_OF_PEOPLE) {
-                num -= 1
-                viewModel.deletePerson(Person(id = num))
+                viewModel.deletePerson(Person(id = num - 1))
             }
         }
 
@@ -81,10 +69,8 @@ class InputFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val num = editSubtotalText.text.toString()
                 if (num != "") {
-                    nextButton.isEnabled = true
                     viewModel.setSubtotal(num.toDouble())
                 } else {
-                    nextButton.isEnabled = false
                     viewModel.setSubtotal(AMOUNT_DEFAULT)
                     // TODO show user this cannot be 0
                 }
@@ -105,8 +91,6 @@ class InputFragment : Fragment() {
         })
 
         nextButton.setOnClickListener {
-            editSubtotalText.isEnabled = false
-            editTaxText.isEnabled = false
             viewModel.setDisplayPrices(true)
             viewModel.splitPretaxEqually()
             fragmentManager!!.beginTransaction().replace(
@@ -118,7 +102,10 @@ class InputFragment : Fragment() {
     }
 
     private fun displayNumberOfPeople(num: Int) {
-        numberOfPeople = num
         numberOfPeopleText.text = num.toString()
+    }
+
+    private fun enableNextButton(subtotal: Double) {
+        nextButton.isEnabled = subtotal != AMOUNT_DEFAULT
     }
 }

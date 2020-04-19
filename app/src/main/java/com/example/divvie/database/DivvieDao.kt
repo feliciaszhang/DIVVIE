@@ -24,6 +24,9 @@ interface DivvieDao {
     @Query("SELECT COUNT(*) FROM PERSON")
     fun getNumberOfPeople(): LiveData<Int>
 
+    @Query("SELECT COUNT(*) FROM PERSON")
+    fun getNumberOfPeopleStatic(): Int
+
     @Update
     fun updatePerson(vararg person: Person)
 }
