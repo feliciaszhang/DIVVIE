@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.divvie.database.Item
 import com.example.divvie.database.Person
 import com.example.divvie.fragments.BowlsFragment
 import com.example.divvie.fragments.InputFragment
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.setSubtotal(AMOUNT_DEFAULT)
         viewModel.setTax(AMOUNT_DEFAULT)
         viewModel.setTip(AMOUNT_DEFAULT)
+        viewModel.setSelectPerson(false)
+        viewModel.setCurrentItemPrice(AMOUNT_DEFAULT)
+        viewModel.currentItem = Item()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())

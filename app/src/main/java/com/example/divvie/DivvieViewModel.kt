@@ -12,6 +12,7 @@ import java.util.*
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     var currentItem: Item? = null
+    // TODO implement getter and setter
 
     val itemStack: Stack<Item> = Stack()
 
@@ -39,6 +40,21 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.tax = AMOUNT_DEFAULT
             person.tip = AMOUNT_DEFAULT
             updatePerson(person)
+        }
+    }
+
+    fun split(index: Int) {
+        val currentPrice = getCurrentItemPrice()
+        val item = currentItem
+        if (currentItem != null) {
+            val selectedPerson = findPerson(index)
+            item!!.listOfIndex.add(index)
+            val splitBetween = item.listOfIndex.size
+            item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
+            itemStack.push(currentItem)
+            selectedPerson.subtotal += item.splitPrice!!
+            updatePerson(selectedPerson)
+            // TODO update all people in listOfIndex
         }
     }
 

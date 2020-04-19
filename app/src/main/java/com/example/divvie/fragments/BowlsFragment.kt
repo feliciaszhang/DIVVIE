@@ -63,21 +63,8 @@ class BowlsFragment : Fragment() {
                 currency.setTextColor(Color.WHITE)
                 priceAmount.setTextColor(Color.WHITE)
                 changeColor(image, Color.WHITE)
-                split(viewModel.getCurrentItemPrice(), viewModel.currentItem, i)
+                viewModel.split(i)
             }
-        }
-    }
-
-    private fun split(currentPrice: Double?, currentItem: Item?, index: Int) {
-        if (currentItem != null) {
-            val selectedPerson = viewModel.findPerson(index)
-            currentItem.listOfIndex.add(index)
-            val splitBetween = currentItem.listOfIndex.size
-            currentItem.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
-            viewModel.itemStack.push(currentItem)
-            selectedPerson.subtotal += currentItem.splitPrice!!
-            viewModel.updatePerson(selectedPerson)
-            // TODO update all people in listOfIndex
         }
     }
 

@@ -48,9 +48,6 @@ class ItemFragment : Fragment() {
         backButton = fragment.findViewById(R.id.back)
         undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
-
-        nextButton.isEnabled = false
-
         return fragment
     }
 
@@ -58,9 +55,9 @@ class ItemFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         val subtotal = viewModel.getSubtotal()
-        leftoverText.text = String.format(resources.getString(R.string.leftover), subtotal.toString())
-        viewModel.setSelectPerson(false)
+        leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
         viewModel.currentItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
+        viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -68,10 +65,8 @@ class ItemFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val num = editItemText.text.toString()
                 if (num != "") {
-                    nextButton.isEnabled = true
                     viewModel.setCurrentItemPrice(num.toDouble())
                 } else {
-                    nextButton.isEnabled = false
                     viewModel.setCurrentItemPrice(AMOUNT_DEFAULT)
                 }
             }
@@ -79,19 +74,11 @@ class ItemFragment : Fragment() {
 
         nextButton.setOnClickListener {
             viewModel.setSelectPerson(true)
-            editItemText.visibility = View.GONE
-            leftoverText.visibility = View.GONE
-            nextButton.visibility = View.GONE
-            itemText.visibility = View.VISIBLE
-            tap.visibility = View.VISIBLE
-            doneButton.visibility = View.VISIBLE
-            itemText.text = viewModel.getCurrentItemPrice().toString()
-            viewModel.currentItem = Item()
-            doneButton.isEnabled = false
         }
     }
 
     private fun calculateLeftover(subtotal: Double?, num: Double) {
+        nextButton.isEnabled = num != AMOUNT_DEFAULT
         if (subtotal != null) {
             val leftover: Double = subtotal - num
             leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
@@ -99,6 +86,18 @@ class ItemFragment : Fragment() {
                 nextButton.isEnabled = false
             }
             // TODO show user this cannot be negative
+        }
+    }
+
+    private fun disableViews(bool: Boolean) {
+        if (bool) {
+            editItemText.visibility = View.GONE
+            leftoverText.visibility = View.GONE
+            nextButton.visibility = View.GONE
+            itemText.visibility = View.VISIBLE
+            tap.visibility = View.VISIBLE
+            doneButton.visibility = View.VISIBLE
+            itemText.text = viewModel.getCurrentItemPrice().toString()
         }
     }
 }
