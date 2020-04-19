@@ -62,7 +62,6 @@
                 android:id="@+id/currency2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/currency"
                 android:textSize="@dimen/textSize" />
 
@@ -70,7 +69,6 @@
                 android:id="@+id/tax_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="@dimen/textSize" />
         </LinearLayout>
     </LinearLayout>

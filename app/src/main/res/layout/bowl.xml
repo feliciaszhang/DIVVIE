@@ -8,14 +8,12 @@
         android:id="@+id/imageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_weight="1"
         app:srcCompat="@drawable/bowl" />
 
     <LinearLayout
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:orientation="horizontal"
         android:visibility="gone">
 
@@ -23,7 +21,6 @@
             android:id="@+id/currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/currency"
             android:textSize="@dimen/small_textSize" />
 
@@ -31,7 +28,6 @@
             android:id="@+id/price_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textSize="@dimen/small_textSize" />
     </LinearLayout>
 

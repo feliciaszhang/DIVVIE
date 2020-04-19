@@ -10,20 +10,17 @@
         android:id="@+id/split_equally_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/equally" />
 
     <Button
         android:id="@+id/split_individually_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/individually" />
 
     <Button
         android:id="@+id/back_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/back" />
 </LinearLayout>
