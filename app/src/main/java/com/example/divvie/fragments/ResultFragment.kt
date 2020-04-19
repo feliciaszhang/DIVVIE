@@ -53,6 +53,7 @@ class ResultFragment : Fragment() {
                 if (tip.text.toString() != "") {
                     val num = tip.text.toString().toDouble()
                     viewModel.setTip(num)
+                    viewModel.calculatePersonResult()
                 }
             }
         }

@@ -41,4 +41,10 @@
         android:text="@string/leftover"
         android:textSize="@dimen/small_text_size" />
 
+    <Button
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next" />
+
 </LinearLayout>
