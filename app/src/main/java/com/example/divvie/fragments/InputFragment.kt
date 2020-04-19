@@ -74,16 +74,6 @@ class InputFragment : Fragment() {
             }
         }
 
-//        editSubtotalText.setOnFocusChangeListener { v, hasFocus ->
-//            if (!hasFocus) {
-//                if (editSubtotalText.text.toString() != "") {
-//                    nextButton.isEnabled = true
-//                    val num = editSubtotalText.text.toString().toDouble()
-//                    viewModel.setSubtotal(num)
-//                }
-//            }
-//        }
-
         editSubtotalText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -98,15 +88,6 @@ class InputFragment : Fragment() {
                 }
             }
         })
-
-//        editTaxText.setOnFocusChangeListener { v, hasFocus ->
-//            if (!hasFocus) {
-//                if (editTaxText.text.toString() != "") {
-//                    val num = editTaxText.text.toString().toDouble()
-//                    viewModel.setTax(num)
-//                }
-//            }
-//        }
 
         editTaxText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -137,13 +118,5 @@ class InputFragment : Fragment() {
     private fun displayNumberOfPeople(num: Int) {
         numberOfPeople = num
         numberOfPeopleText.text = num.toString()
-    }
-
-    private fun displaySubtotal(num: Double) {
-        editSubtotalText.hint = num.toString()
-    }
-
-    private fun displayTax(num: Double) {
-        editTaxText.setText(num.toString())
     }
 }

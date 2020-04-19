@@ -1,6 +1,8 @@
 package com.example.divvie.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,32 +45,23 @@ class ResultFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setTip(AMOUNT_DEFAULT)
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { displaySubtotal(it) })
-        viewModel.taxObservable.observe(viewLifecycleOwner, Observer{  displayTax(it) })
-        viewModel.tipObservable.observe(viewLifecycleOwner, Observer{  displayTip(it) })
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer{  displayTotal(it) })
+        subtotal.text = viewModel.getSubtotal().toString()
+        tax.text = viewModel.getTax().toString()
 
-        tip.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                if (tip.text.toString() != "") {
-                    val num = tip.text.toString().toDouble()
-                    viewModel.setTip(num)
-                    viewModel.calculatePersonResult()
+        tip.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val num = tip.text.toString()
+                if (num != "") {
+                    viewModel.setTip(num.toDouble())
+                } else {
+                    viewModel.setTip(AMOUNT_DEFAULT)
                 }
+                viewModel.calculatePersonResult()
             }
-        }
-    }
-
-    private fun displaySubtotal(num: Double) {
-        subtotal.text = num.toString()
-    }
-
-    private fun displayTax(num: Double) {
-        tax.text = num.toString()
-    }
-
-    private fun displayTip(num: Double) {
-        tip.hint = num.toString()
+        })
     }
 
     private fun displayTotal(num: Double) {
