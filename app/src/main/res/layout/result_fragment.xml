@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/subtotal"
-            android:textSize="@dimen/small_textSize" />
+            android:textSize="@dimen/normal_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,14 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
 
             <TextView
                 android:id="@+id/subtotal_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
         </LinearLayout>
     </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tax"
-            android:textSize="@dimen/small_textSize" />
+            android:textSize="@dimen/normal_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,13 +63,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
 
             <TextView
                 android:id="@+id/tax_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
         </LinearLayout>
     </LinearLayout>
 
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tip"
-            android:textSize="@dimen/small_textSize" />
+            android:textSize="@dimen/normal_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,14 +96,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
 
             <EditText
                 android:id="@+id/edit_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
         </LinearLayout>
     </LinearLayout>
 
@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/total"
-            android:textSize="@dimen/small_textSize" />
+            android:textSize="@dimen/normal_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,13 +130,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
 
             <TextView
                 android:id="@+id/total_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/textSize" />
+                android:textSize="@dimen/large_text_size" />
         </LinearLayout>
     </LinearLayout>
 

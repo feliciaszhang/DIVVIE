@@ -7,10 +7,10 @@
 
 
     <TextView
-        android:id="@+id/subtotal_text"
+        android:id="@+id/item_price_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subtotal"
+        android:text="@string/item_price"
         android:textSize="@dimen/normal_text_size" />
 
     <LinearLayout
@@ -26,10 +26,19 @@
             android:textSize="@dimen/large_text_size" />
 
         <EditText
-            android:id="@+id/edit_subtotal"
+            android:id="@+id/edit_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:textSize="@dimen/large_text_size" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/leftover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/leftover"
+        android:textSize="@dimen/small_text_size" />
+
 </LinearLayout>

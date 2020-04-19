@@ -9,6 +9,11 @@
     <string name="subtotal">Subtotal</string>
     <string name="tax">Tax</string>
     <string name="tip">Tip</string>
+    <string name="item_price">Item Price</string>
     <string name="total">Total</string>
+    <string name="leftover">$ %1$d leftover</string>
+    <string name="calculate">Calculate</string>
+    <string name="undo">Undo</string>
+    <string name="clear_all">Clear All</string>
     <string name="number_of_people">Number Of People</string>
 </resources>
