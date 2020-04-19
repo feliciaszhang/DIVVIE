@@ -26,7 +26,7 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
-    private var numberOfPeople = 0
+    private var numberOfPeople = NUMBER_OF_PEOPLE_DEFAULT
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +49,7 @@ class InputFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.setDisplayPrices(false)
-        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
+        for (i in 0 until numberOfPeople) {
             viewModel.insertPerson(Person(id = i))
         }
         viewModel.setSubtotal(AMOUNT_DEFAULT)

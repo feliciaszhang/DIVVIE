@@ -33,6 +33,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun clearPersonalSubtotal() {
         for (person in getAllPersonStatic()) {
             person.subtotal = AMOUNT_DEFAULT
+            person.tax = AMOUNT_DEFAULT
+            person.tip = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }
