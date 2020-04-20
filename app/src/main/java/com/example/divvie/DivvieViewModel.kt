@@ -9,6 +9,7 @@ import com.example.divvie.database.DivvieDatabase
 import com.example.divvie.database.Item
 import com.example.divvie.database.Person
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     private var currentItem: Item? = null
@@ -18,6 +19,28 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private val itemStack: Stack<Item> = Stack()
+
+    private val listOfSelected = MutableLiveData<ArrayList<Int>>()
+    val listOfSelectedObservable: LiveData<ArrayList<Int>>
+        get() = listOfSelected
+
+    fun resetListOfSelected() {
+        val list = listOfSelected.value ?: ArrayList()
+        list.clear()
+        listOfSelected.value = list
+    }
+
+    fun alterListOfSelected(i: Int) {
+        var list = listOfSelected.value
+        if (list != null && list.contains(i)) {
+            list.remove(i)
+        } else if (list == null) {
+            list = ArrayList(i)
+        } else {
+            list.add(i)
+        }
+        listOfSelected.value = list
+    }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
 
@@ -46,9 +69,33 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+//    fun split(index: Int) {
+//        val currentPrice = getCurrentItemPrice()
+//        val item = currentItem
+//        if (item != null) {
+//            val selectedPerson = findPerson(index)
+//            item.listOfIndex.add(index)
+//            val splitBetween = item.listOfIndex.size
+//            item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
+//            itemStack.push(item)
+//            selectedPerson.subtotal += item.splitPrice!!
+//            updatePerson(selectedPerson)
+//        }
+//    }
+
     fun split(index: Int) {
         val currentPrice = getCurrentItemPrice()
         val item = currentItem
+        val list = listOfSelected.value
+        if (list != null && list.contains(index)) {
+            if (item != null) {
+                val splitBetween = list.size
+                item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
+                item.listOfIndex = list
+                itemStack.push(item)
+
+            }
+        }
         if (item != null) {
             val selectedPerson = findPerson(index)
             item.listOfIndex.add(index)

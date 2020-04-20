@@ -45,9 +45,10 @@ class BowlsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
-        viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updateBowls(it) })
+        viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
-        viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { greyoutBowls(it) })
+        viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
+        viewModel.listOfSelectedObservable.observe(viewLifecycleOwner, Observer { split(it) })
     }
 
     private fun changeColor(view: View, color: Int) {
@@ -81,7 +82,7 @@ class BowlsFragment : Fragment() {
         }
     }
 
-    private fun updateBowls(list: List<Person>) {
+    private fun updatePrices(list: List<Person>) {
         for (i in list.indices) {
             val person = list[i]
             val view = bowlsList.getChildAt(i)
@@ -91,17 +92,29 @@ class BowlsFragment : Fragment() {
         }
     }
 
-    private fun greyoutBowls(bool: Boolean) {
+    private fun clickableBowls(bool: Boolean) {
         if (bool) {
+            viewModel.resetListOfSelected()
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
                 changeColor(view, Color.DKGRAY)
                 view.isClickable = true
                 view.setOnClickListener {
-                    changeColor(view, Color.WHITE)
-                    viewModel.split(i)
+                    viewModel.alterListOfSelected(i)
                 }
             }
+        }
+    }
+
+    private fun split(listOfIndex: ArrayList<Int>) {
+        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+            val view = bowlsList.getChildAt(i)
+            if (listOfIndex.contains(i)) {
+                changeColor(view, Color.WHITE)
+            } else {
+                changeColor(view,Color.DKGRAY)
+            }
+            viewModel.split(i)
         }
     }
 }
