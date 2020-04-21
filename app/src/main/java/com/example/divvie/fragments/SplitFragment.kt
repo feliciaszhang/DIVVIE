@@ -41,7 +41,7 @@ class SplitFragment : Fragment() {
         }
 
         individualButton.setOnClickListener {
-            viewModel.clearPersonalSubtotal()
+            viewModel.clearPersonalData()
             fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ItemFragment.newInstance())
                 .commit()
         }

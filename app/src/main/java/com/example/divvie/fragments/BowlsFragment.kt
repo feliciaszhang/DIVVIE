@@ -44,7 +44,7 @@ class BowlsFragment : Fragment() {
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
-        viewModel.selectedPersonListObservable.observe(viewLifecycleOwner, Observer { split(it) })
+        viewModel.itemMapObservable.observe(viewLifecycleOwner, Observer { split(it) })
     }
 
     private fun changeColor(view: View, color: Int) {
@@ -83,20 +83,20 @@ class BowlsFragment : Fragment() {
             val person = list[i]
             val view = bowlsList.getChildAt(i)
             val priceAmount: TextView = view.findViewById(R.id.price_amount)
-            val personalTotal = person.subtotal + person.tax + person.tip
+            val personalTotal = person.subtotal + person.tax + person.tip + person.tempPrice
             priceAmount.text = personalTotal.toString()
         }
     }
 
     private fun clickableBowls(bool: Boolean) {
         if (bool) {
-            viewModel.resetListOfSelected()
+            viewModel.resetItemMap()
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
                 changeColor(view, Color.DKGRAY)
                 view.isClickable = true
                 view.setOnClickListener {
-                    viewModel.alterListOfSelected(i)
+                    viewModel.alterItemMap(i)
                 }
             }
         } else {

@@ -9,7 +9,6 @@ import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     // TODO organize this plz
@@ -22,46 +21,35 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun commitItem() {
         itemStack.push(finalItem!!)
-        for (i in personTempHash.keys) {
-            val person = findPerson(i)
-            person.subtotal += personTempHash[i]!![SPLIT_PRICE]!!
+        for (person in getAllPersonStatic()) {
+            person.subtotal += person.tempPrice
+            person.tempPrice = 0.0
             updatePerson(person)
         }
     }
 
-    private var personTempHash: HashMap<Int, MutableMap<String, Double>> = HashMap()
-
-    private fun convertToPersonTempHash(): HashMap<Int, MutableMap<String, Double>> {
-        val hash: HashMap<Int, MutableMap<String, Double>> = HashMap()
-        for (person in getAllPersonStatic()) {
-            hash[person.id] = mutableMapOf(SUBTOTAL to person.subtotal, SPLIT_PRICE to AMOUNT_DEFAULT)
-        }
-        return hash
-    }
-
     private val itemStack: Stack<Item> = Stack()
 
-    private val selectedPersonList = MutableLiveData<ArrayList<Int>>()
-    val selectedPersonListObservable: LiveData<ArrayList<Int>>
-        get() = selectedPersonList
+    private val itemMap = MutableLiveData<ArrayList<Int>>()
+    val itemMapObservable: LiveData<ArrayList<Int>>
+        get() = itemMap
 
-    fun resetListOfSelected() {
-        val list = selectedPersonList.value ?: ArrayList()
-        list.clear()
-        personTempHash = convertToPersonTempHash()
-        selectedPersonList.value = list
+    fun resetItemMap() {
+        val map = itemMap.value ?: ArrayList()
+        map.clear()
+        itemMap.value = map
     }
 
-    fun alterListOfSelected(i: Int) {
-        var list = selectedPersonList.value
-        if (list != null && list.contains(i)) {
-            list.remove(i)
-        } else if (list == null) {
-            list = ArrayList(i)
+    fun alterItemMap(i: Int) {
+        var map = itemMap.value
+        if (map != null && map.contains(i)) {
+            map.remove(i)
+        } else if (map == null) {
+            map = ArrayList(i)
         } else {
-            list.add(i)
+            map.add(i)
         }
-        selectedPersonList.value = list
+        itemMap.value = map
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
@@ -87,6 +75,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
             person.tip = AMOUNT_DEFAULT
+            person.tempPrice = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }
@@ -95,21 +84,24 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         // TODO make local val so we don't calc this every time
         val basePrice = getTempItemPrice()
         val item = finalItem
-        val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
+        val splitPrice = basePrice!!.div(itemMap.value!!.size)
         if (item != null) {
             item.basePrice = basePrice
             item.splitPrice = splitPrice
-            if (selectedPersonList.value!!.contains(index)) {
-                personTempHash[index]!![SPLIT_PRICE] = splitPrice
+            if (itemMap.value!!.contains(index)) {
+                val person = findPerson(index)
+                person.tempPrice = splitPrice
+                updatePerson(person)
             }
         }
     }
 
-    fun clearPersonalSubtotal() {
+    fun clearPersonalData() {
         for (person in getAllPersonStatic()) {
             person.subtotal = AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
             person.tip = AMOUNT_DEFAULT
+            person.tempPrice = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }

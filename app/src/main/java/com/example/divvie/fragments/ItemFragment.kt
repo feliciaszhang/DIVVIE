@@ -55,7 +55,7 @@ class ItemFragment : Fragment() {
         leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
         viewModel.tempItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
-        viewModel.selectedPersonListObservable.observe(viewLifecycleOwner, Observer { doneSelectingPerson(it) })
+        viewModel.itemMapObservable.observe(viewLifecycleOwner, Observer { doneSelectingPerson(it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}

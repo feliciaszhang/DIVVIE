@@ -12,5 +12,6 @@ data class Person (
     @ColumnInfo(name = ID) var id: Int,
     @ColumnInfo(name = SUBTOTAL) var subtotal: Double = AMOUNT_DEFAULT,
     @ColumnInfo(name = TAX) var tax: Double = AMOUNT_DEFAULT,
-    @ColumnInfo(name = TIP) var tip: Double = AMOUNT_DEFAULT
+    @ColumnInfo(name = TIP) var tip: Double = AMOUNT_DEFAULT,
+    @ColumnInfo(name = TEMP_PRICE) var tempPrice: Double = AMOUNT_DEFAULT
 )
