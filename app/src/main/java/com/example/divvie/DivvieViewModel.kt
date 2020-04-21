@@ -14,14 +14,14 @@ import kotlin.collections.HashMap
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     // TODO organize this plz
 
-    private var currentItem: Item? = null
+    private var finalItem: Item? = null
 
-    fun setCurrentItem(item: Item) {
-        currentItem = item
+    fun setFinalItem(item: Item) {
+        finalItem = item
     }
 
     fun commitItem() {
-        itemStack.push(currentItem!!)
+        itemStack.push(finalItem!!)
         for (i in personTempHash.keys) {
             val person = findPerson(i)
             person.subtotal += personTempHash[i]!![SPLIT_PRICE]!!
@@ -93,8 +93,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun split(index: Int) {
         // TODO make local val so we don't calc this every time
-        val basePrice = getCurrentItemPrice()
-        val item = currentItem
+        val basePrice = getTempItemPrice()
+        val item = finalItem
         val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
         if (item != null) {
             item.basePrice = basePrice
@@ -125,9 +125,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val currentItemPrice = MutableLiveData<Double>()
-    val currentItemPriceObservable: LiveData<Double>
-        get() = currentItemPrice
+    private val tempItemPrice = MutableLiveData<Double>()
+    val tempItemPriceObservable: LiveData<Double>
+        get() = tempItemPrice
 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
@@ -156,12 +156,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         total.value = subtotal + tax + tip
     }
 
-    fun setCurrentItemPrice(num: Double) {
-        currentItemPrice.value = num
+    fun setTempItemPrice(num: Double) {
+        tempItemPrice.value = num
     }
 
-    fun getCurrentItemPrice(): Double? {
-        return currentItemPrice.value
+    fun getTempItemPrice(): Double? {
+        return tempItemPrice.value
     }
 
     fun setDisplayPrices(bool: Boolean) {
