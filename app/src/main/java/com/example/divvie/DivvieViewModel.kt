@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,8 +28,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val personTempHash: HashMap<Int, MutableMap<String, Double>>
-        get() = convertToPersonTempHash()
+    private var personTempHash: HashMap<Int, MutableMap<String, Double>> = HashMap()
 
     private fun convertToPersonTempHash(): HashMap<Int, MutableMap<String, Double>> {
         val hash: HashMap<Int, MutableMap<String, Double>> = HashMap()
@@ -89,21 +89,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-//    fun split(index: Int) {
-//        val currentPrice = getCurrentItemPrice()
-//        val item = currentItem
-//        if (item != null) {
-//            val selectedPerson = findPerson(index)
-//            item.listOfIndex.add(index)
-//            val splitBetween = item.listOfIndex.size
-//            item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
-//            itemStack.push(item)
-//            selectedPerson.subtotal += item.splitPrice!!
-//            updatePerson(selectedPerson)
-//        }
-//    }
-
     fun split(index: Int) {
+        // TODO make local val so we don't calc this every time
         val basePrice = getCurrentItemPrice()
         val item = currentItem
         val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
@@ -111,9 +98,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             item.basePrice = basePrice
             item.splitPrice = splitPrice
             if (selectedPersonList.value!!.contains(index)) {
+                personTempHash = convertToPersonTempHash()
                 personTempHash[index]!![SPLIT_PRICE] = splitPrice
-            } else {
-                personTempHash
             }
         }
     }
