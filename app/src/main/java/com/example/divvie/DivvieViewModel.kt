@@ -47,6 +47,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun resetListOfSelected() {
         val list = selectedPersonList.value ?: ArrayList()
         list.clear()
+        personTempHash = convertToPersonTempHash()
         selectedPersonList.value = list
     }
 
@@ -98,7 +99,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             item.basePrice = basePrice
             item.splitPrice = splitPrice
             if (selectedPersonList.value!!.contains(index)) {
-                personTempHash = convertToPersonTempHash()
                 personTempHash[index]!![SPLIT_PRICE] = splitPrice
             }
         }
