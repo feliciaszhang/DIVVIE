@@ -14,13 +14,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
+import com.example.divvie.TempViewModel
 
 class ItemFragment : Fragment() {
     companion object {
         fun newInstance() = ItemFragment()
     }
-    private lateinit var viewModel: DivvieViewModel
+    private lateinit var viewModel: TempViewModel
     private lateinit var editItemText: EditText
     private lateinit var itemText: TextView
     private lateinit var leftoverText: TextView
@@ -50,7 +50,7 @@ class ItemFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
         val subtotal = viewModel.getSubtotal()
         leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
         viewModel.currentItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })

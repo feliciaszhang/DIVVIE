@@ -15,14 +15,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
+import com.example.divvie.TempViewModel
 import com.example.divvie.database.Person
 
 class BowlsFragment : Fragment() {
     companion object {
         fun newInstance() = BowlsFragment()
     }
-    private lateinit var viewModel: DivvieViewModel
+    private lateinit var viewModel: TempViewModel
     private lateinit var bowlsList: LinearLayout
 
     override fun onCreateView(
@@ -39,7 +39,7 @@ class BowlsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })

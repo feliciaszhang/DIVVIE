@@ -8,13 +8,13 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
+import com.example.divvie.TempViewModel
 
 class SplitFragment : Fragment() {
     companion object {
         fun newInstance() = SplitFragment()
     }
-    private lateinit var viewModel: DivvieViewModel
+    private lateinit var viewModel: TempViewModel
     private lateinit var equalButton: Button
     private lateinit var individualButton: Button
     private lateinit var backButton: Button
@@ -32,7 +32,7 @@ class SplitFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
 
         equalButton.setOnClickListener {
             viewModel.calculatePersonResult()

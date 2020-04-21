@@ -20,7 +20,7 @@ class InputFragment : Fragment() {
     companion object {
         fun newInstance() = InputFragment()
     }
-    private lateinit var viewModel: DivvieViewModel
+    private lateinit var viewModel: TempViewModel
     private lateinit var numberOfPeopleText: TextView
     private lateinit var upButton: ImageButton
     private lateinit var downButton: ImageButton
@@ -44,7 +44,7 @@ class InputFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
         viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
 

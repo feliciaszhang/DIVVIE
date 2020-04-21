@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
-import com.example.divvie.DivvieViewModel
+import com.example.divvie.TempViewModel
 import com.example.divvie.R
 
 class ResultFragment : Fragment() {
     companion object {
         fun newInstance() = ResultFragment()
     }
-    private lateinit var viewModel: DivvieViewModel
+    private lateinit var viewModel: TempViewModel
     private lateinit var subtotal: TextView
     private lateinit var tax: TextView
     private lateinit var tip: EditText
@@ -42,7 +42,7 @@ class ResultFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer{  displayTotal(it) })
 
         subtotal.text = viewModel.getSubtotal().toString()
