@@ -20,7 +20,7 @@ class InputFragment : Fragment() {
     companion object {
         fun newInstance() = InputFragment()
     }
-    private lateinit var viewModel: TempViewModel
+    private var viewModel = InputViewModel(activity!!.application, InputViewState())
     private lateinit var numberOfPeopleText: TextView
     private lateinit var upButton: ImageButton
     private lateinit var downButton: ImageButton
@@ -44,25 +44,14 @@ class InputFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
-        viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
+        viewModel = ViewModelProviders.of(activity!!).get(InputViewModel::class.java)
+        viewModel.viewStateObservable.observeForever { render(it) }
 
         editTaxText.hint = AMOUNT_DEFAULT.toString()
 
-        upButton.setOnClickListener {
-            val num = viewModel.getNumberOfPeopleStatic()
-            if (num < MAX_NUMBER_OF_PEOPLE) {
-                viewModel.insertPerson(Person(id = num))
-            }
-        }
+        upButton.setOnClickListener { viewModel.onEvent(InputViewEvent.InsertPerson) }
 
-        downButton.setOnClickListener {
-            val num = viewModel.getNumberOfPeopleStatic()
-            if (num > MIN_NUMBER_OF_PEOPLE) {
-                viewModel.deletePerson(Person(id = num - 1))
-            }
-        }
+        downButton.setOnClickListener { viewModel.onEvent(InputViewEvent.RemovePerson) }
 
         editSubtotalText.addTextChangedListener(object: TextWatcher {
             // TODO remind user it's pretax
@@ -71,10 +60,9 @@ class InputFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val num = editSubtotalText.text.toString()
                 if (num != "") {
-                    viewModel.setSubtotal(num.toDouble())
+                    viewModel.onEvent(InputViewEvent.EnterSubtotal(num.toDouble()))
                 } else {
-                    viewModel.setSubtotal(AMOUNT_DEFAULT)
-                    // TODO show user this cannot be 0
+                    viewModel.onEvent(InputViewEvent.EnterSubtotal(AMOUNT_DEFAULT))
                 }
             }
         })
@@ -85,29 +73,23 @@ class InputFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val num = editTaxText.text.toString()
                 if (num != "") {
-                    viewModel.setTax(num.toDouble())
+                    viewModel.onEvent(InputViewEvent.EnterTax(num.toDouble()))
                 } else {
-                    viewModel.setTax(AMOUNT_DEFAULT)
+                    viewModel.onEvent(InputViewEvent.EnterTax(AMOUNT_DEFAULT))
                 }
             }
         })
 
         nextButton.setOnClickListener {
-            viewModel.setDisplayPrices(true)
-            viewModel.splitPretaxEqually()
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()
-            )
-                .commit()
+            ).commit()
         }
     }
 
-    private fun displayNumberOfPeople(num: Int) {
-        numberOfPeopleText.text = num.toString()
-    }
-
-    private fun enableNextButton(subtotal: Double) {
-        nextButton.isEnabled = subtotal != AMOUNT_DEFAULT
+    private fun render(viewState: InputViewState) {
+        numberOfPeopleText.text = viewState.numberOfPeople.toString()
+        nextButton.isEnabled = viewState.subtotal != AMOUNT_DEFAULT
     }
 }

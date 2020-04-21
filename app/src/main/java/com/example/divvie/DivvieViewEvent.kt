@@ -3,9 +3,8 @@ package com.example.divvie
 sealed class InputViewEvent {
     object InsertPerson: InputViewEvent()
     object RemovePerson: InputViewEvent()
-    object EnterSubtotal: InputViewEvent()
-    object EnterTax: InputViewEvent()
-    object Next: InputViewEvent()
+    data class EnterSubtotal(val sub: Double): InputViewEvent()
+    data class EnterTax(val tax: Double): InputViewEvent()
 }
 
 sealed class SplitViewEvent {

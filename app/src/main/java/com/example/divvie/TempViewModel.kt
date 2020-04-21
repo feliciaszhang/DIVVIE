@@ -65,23 +65,7 @@ class TempViewModel(application: Application) : AndroidViewModel(application) {
         selectedPersonList.value = list
     }
 
-    private val dao = DivvieDatabase.getInstance(application).dao()
 
-    private fun getAllPersonStatic() = dao.getAllPersonStatic()
-
-    fun getAllPerson() = dao.getAllPerson()
-
-    private fun findPerson(id: Int) = dao.findPerson(id)
-
-    fun insertPerson(person: Person) { dao.insertPerson(person) }
-
-    fun deletePerson(person: Person) = dao.deletePerson(person)
-
-    fun getNumberOfPeople() = dao.getNumberOfPeople()
-
-    fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
-
-    private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
     fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
