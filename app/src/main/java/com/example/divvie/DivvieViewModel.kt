@@ -13,6 +13,8 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
+    // TODO organize this plz
+
     private var currentItem: Item? = null
 
     fun setCurrentItem(item: Item) {

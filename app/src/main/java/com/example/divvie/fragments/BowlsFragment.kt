@@ -99,6 +99,12 @@ class BowlsFragment : Fragment() {
                     viewModel.alterListOfSelected(i)
                 }
             }
+        } else {
+            for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+                val view = bowlsList.getChildAt(i)
+                changeColor(view, Color.LTGRAY)
+                view.isClickable = false
+            }
         }
     }
 
