@@ -1,6 +1,8 @@
 package com.example.divvie.database
 
+import com.example.divvie.AMOUNT_DEFAULT
+
 data class Item (
-    var listOfIndex: ArrayList<Int> = ArrayList(),
+    var basePrice: Double = AMOUNT_DEFAULT,
     var splitPrice: Double? = null
 )

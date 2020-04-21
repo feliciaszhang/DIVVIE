@@ -1,7 +1,6 @@
 package com.example.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +9,7 @@ import com.example.divvie.database.Item
 import com.example.divvie.database.Person
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     private var currentItem: Item? = null
@@ -18,20 +18,40 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         currentItem = item
     }
 
+    fun commitItem() {
+        itemStack.push(currentItem!!)
+        for (i in personTempHash.keys) {
+            val person = findPerson(i)
+            person.subtotal += personTempHash[i]!![SPLIT_PRICE]!!
+            updatePerson(person)
+        }
+    }
+
+    private val personTempHash: HashMap<Int, MutableMap<String, Double>>
+        get() = convertToPersonTempHash()
+
+    private fun convertToPersonTempHash(): HashMap<Int, MutableMap<String, Double>> {
+        val hash: HashMap<Int, MutableMap<String, Double>> = HashMap()
+        for (person in getAllPersonStatic()) {
+            hash[person.id] = mutableMapOf(SUBTOTAL to person.subtotal, SPLIT_PRICE to AMOUNT_DEFAULT)
+        }
+        return hash
+    }
+
     private val itemStack: Stack<Item> = Stack()
 
-    private val listOfSelected = MutableLiveData<ArrayList<Int>>()
-    val listOfSelectedObservable: LiveData<ArrayList<Int>>
-        get() = listOfSelected
+    private val selectedPersonList = MutableLiveData<ArrayList<Int>>()
+    val selectedPersonListObservable: LiveData<ArrayList<Int>>
+        get() = selectedPersonList
 
     fun resetListOfSelected() {
-        val list = listOfSelected.value ?: ArrayList()
+        val list = selectedPersonList.value ?: ArrayList()
         list.clear()
-        listOfSelected.value = list
+        selectedPersonList.value = list
     }
 
     fun alterListOfSelected(i: Int) {
-        var list = listOfSelected.value
+        var list = selectedPersonList.value
         if (list != null && list.contains(i)) {
             list.remove(i)
         } else if (list == null) {
@@ -39,7 +59,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         } else {
             list.add(i)
         }
-        listOfSelected.value = list
+        selectedPersonList.value = list
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
@@ -84,27 +104,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 //    }
 
     fun split(index: Int) {
-        val currentPrice = getCurrentItemPrice()
+        val basePrice = getCurrentItemPrice()
         val item = currentItem
-        val list = listOfSelected.value
-        if (list != null && list.contains(index)) {
-            if (item != null) {
-                val splitBetween = list.size
-                item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
-                item.listOfIndex = list
-                itemStack.push(item)
-
-            }
-        }
+        val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
         if (item != null) {
-            val selectedPerson = findPerson(index)
-            item.listOfIndex.add(index)
-            val splitBetween = item.listOfIndex.size
-            item.splitPrice = currentPrice?.div(splitBetween) ?: currentPrice
-            itemStack.push(item)
-            selectedPerson.subtotal += item.splitPrice!!
-            updatePerson(selectedPerson)
-            // TODO update all people in listOfIndex
+            item.basePrice = basePrice
+            item.splitPrice = splitPrice
+            if (selectedPersonList.value!!.contains(index)) {
+                personTempHash[index]!![SPLIT_PRICE] = splitPrice
+            } else {
+                personTempHash
+            }
         }
     }
 

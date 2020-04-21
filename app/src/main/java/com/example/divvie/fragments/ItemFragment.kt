@@ -15,9 +15,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
-import com.example.divvie.database.Item
-import kotlinx.android.synthetic.main.item_fragment.*
-import java.util.Stack
 
 class ItemFragment : Fragment() {
     companion object {
@@ -58,6 +55,7 @@ class ItemFragment : Fragment() {
         leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
         viewModel.currentItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
+        viewModel.selectedPersonListObservable.observe(viewLifecycleOwner, Observer { doneSelectingPerson(it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -74,6 +72,11 @@ class ItemFragment : Fragment() {
 
         nextButton.setOnClickListener {
             viewModel.setSelectPerson(true)
+        }
+
+        doneButton.setOnClickListener {
+            viewModel.setSelectPerson(false)
+            viewModel.commitItem()
         }
     }
 
@@ -98,6 +101,18 @@ class ItemFragment : Fragment() {
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
             itemText.text = viewModel.getCurrentItemPrice().toString()
+        } else {
+            editItemText.visibility = View.VISIBLE
+            leftoverText.visibility = View.VISIBLE
+            nextButton.visibility = View.VISIBLE
+            itemText.visibility = View.GONE
+            tap.visibility = View.GONE
+            doneButton.visibility = View.GONE
+            editItemText.text.clear()
         }
+    }
+
+    private fun doneSelectingPerson(listOfIndex: ArrayList<Int>) {
+        doneButton.isEnabled = listOfIndex.size != 0
     }
 }

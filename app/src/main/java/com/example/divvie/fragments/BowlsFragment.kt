@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
-import com.example.divvie.NUMBER_OF_PEOPLE_DEFAULT
-import com.example.divvie.database.Item
 import com.example.divvie.database.Person
-import kotlinx.android.synthetic.main.bowl.*
 
 class BowlsFragment : Fragment() {
     companion object {
@@ -48,7 +44,7 @@ class BowlsFragment : Fragment() {
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
-        viewModel.listOfSelectedObservable.observe(viewLifecycleOwner, Observer { split(it) })
+        viewModel.selectedPersonListObservable.observe(viewLifecycleOwner, Observer { split(it) })
     }
 
     private fun changeColor(view: View, color: Int) {
