@@ -23,9 +23,8 @@ data class ResultViewState(
 )
 
 data class BowlsViewState(
-    val color: Int = Color.LTGRAY,
     val isClickable: Boolean = false,
     val displayPrices: Boolean = false,
-    val numberOfBowls: Int
+    val numberOfBowls: Int = NUMBER_OF_PEOPLE_DEFAULT
 )
 

@@ -1,4 +1,4 @@
-package com.example.divvie.fragments
+package com.example.divvie.viewModels
 
 import android.app.Application
 import com.example.divvie.*

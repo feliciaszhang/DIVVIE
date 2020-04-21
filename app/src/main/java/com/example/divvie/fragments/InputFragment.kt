@@ -12,15 +12,15 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.divvie.*
-import com.example.divvie.database.Person
+import com.example.divvie.viewModels.InputViewModel
 
 class InputFragment : Fragment() {
     companion object {
         fun newInstance() = InputFragment()
     }
-    private var viewModel = InputViewModel(activity!!.application, InputViewState())
+    private var viewModel =
+        InputViewModel(activity!!.application, InputViewState())
     private lateinit var numberOfPeopleText: TextView
     private lateinit var upButton: ImageButton
     private lateinit var downButton: ImageButton

@@ -21,94 +21,94 @@ class TempViewModel(application: Application) : AndroidViewModel(application) {
         currentItem = item
     }
 
-    fun commitItem() {
-        itemStack.push(currentItem!!)
-        for (i in personTempHash.keys) {
-            val person = findPerson(i)
-            person.subtotal += personTempHash[i]!![SPLIT_PRICE]!!
-            updatePerson(person)
-        }
-    }
-
-    private var personTempHash: HashMap<Int, MutableMap<String, Double>> = HashMap()
-
-    private fun convertToPersonTempHash(): HashMap<Int, MutableMap<String, Double>> {
-        val hash: HashMap<Int, MutableMap<String, Double>> = HashMap()
-        for (person in getAllPersonStatic()) {
-            hash[person.id] = mutableMapOf(SUBTOTAL to person.subtotal, SPLIT_PRICE to AMOUNT_DEFAULT)
-        }
-        return hash
-    }
-
-    private val itemStack: Stack<Item> = Stack()
-
-    private val selectedPersonList = MutableLiveData<ArrayList<Int>>()
-    val selectedPersonListObservable: LiveData<ArrayList<Int>>
-        get() = selectedPersonList
-
-    fun resetListOfSelected() {
-        val list = selectedPersonList.value ?: ArrayList()
-        list.clear()
-        personTempHash = convertToPersonTempHash()
-        selectedPersonList.value = list
-    }
-
-    fun alterListOfSelected(i: Int) {
-        var list = selectedPersonList.value
-        if (list != null && list.contains(i)) {
-            list.remove(i)
-        } else if (list == null) {
-            list = ArrayList(i)
-        } else {
-            list.add(i)
-        }
-        selectedPersonList.value = list
-    }
-
-
-
-    fun splitPretaxEqually() {
-        for (person in getAllPersonStatic()) {
-            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
-            person.tax = AMOUNT_DEFAULT
-            person.tip = AMOUNT_DEFAULT
-            updatePerson(person)
-        }
-    }
-
-    fun split(index: Int) {
-        // TODO make local val so we don't calc this every time
-        val basePrice = getCurrentItemPrice()
-        val item = currentItem
-        val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
-        if (item != null) {
-            item.basePrice = basePrice
-            item.splitPrice = splitPrice
-            if (selectedPersonList.value!!.contains(index)) {
-                personTempHash[index]!![SPLIT_PRICE] = splitPrice
-            }
-        }
-    }
-
-    fun clearPersonalSubtotal() {
-        for (person in getAllPersonStatic()) {
-            person.subtotal = AMOUNT_DEFAULT
-            person.tax = AMOUNT_DEFAULT
-            person.tip = AMOUNT_DEFAULT
-            updatePerson(person)
-        }
-    }
-
-    fun calculatePersonResult() {
-        for (person in getAllPersonStatic()) {
-            val tax: Double = getTax() ?: AMOUNT_DEFAULT
-            val tip: Double = getTip() ?: AMOUNT_DEFAULT
-            val ratio = person.subtotal / getSubtotal()!!
-            person.tax = ratio * tax
-            person.tip = ratio * tip
-            updatePerson(person)
-        }
-    }
+//    fun commitItem() {
+//        itemStack.push(currentItem!!)
+//        for (i in personTempHash.keys) {
+//            val person = findPerson(i)
+//            person.subtotal += personTempHash[i]!![SPLIT_PRICE]!!
+//            updatePerson(person)
+//        }
+//    }
+//
+//    private var personTempHash: HashMap<Int, MutableMap<String, Double>> = HashMap()
+//
+//    private fun convertToPersonTempHash(): HashMap<Int, MutableMap<String, Double>> {
+//        val hash: HashMap<Int, MutableMap<String, Double>> = HashMap()
+//        for (person in getAllPersonStatic()) {
+//            hash[person.id] = mutableMapOf(SUBTOTAL to person.subtotal, SPLIT_PRICE to AMOUNT_DEFAULT)
+//        }
+//        return hash
+//    }
+//
+//    private val itemStack: Stack<Item> = Stack()
+//
+//    private val selectedPersonList = MutableLiveData<ArrayList<Int>>()
+//    val selectedPersonListObservable: LiveData<ArrayList<Int>>
+//        get() = selectedPersonList
+//
+//    fun resetListOfSelected() {
+//        val list = selectedPersonList.value ?: ArrayList()
+//        list.clear()
+//        personTempHash = convertToPersonTempHash()
+//        selectedPersonList.value = list
+//    }
+//
+//    fun alterListOfSelected(i: Int) {
+//        var list = selectedPersonList.value
+//        if (list != null && list.contains(i)) {
+//            list.remove(i)
+//        } else if (list == null) {
+//            list = ArrayList(i)
+//        } else {
+//            list.add(i)
+//        }
+//        selectedPersonList.value = list
+//    }
+//
+//
+//
+//    fun splitPretaxEqually() {
+//        for (person in getAllPersonStatic()) {
+//            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
+//            person.tax = AMOUNT_DEFAULT
+//            person.tip = AMOUNT_DEFAULT
+//            updatePerson(person)
+//        }
+//    }
+//
+//    fun split(index: Int) {
+//        // TODO make local val so we don't calc this every time
+//        val basePrice = getCurrentItemPrice()
+//        val item = currentItem
+//        val splitPrice = basePrice!!.div(selectedPersonList.value!!.size)
+//        if (item != null) {
+//            item.basePrice = basePrice
+//            item.splitPrice = splitPrice
+//            if (selectedPersonList.value!!.contains(index)) {
+//                personTempHash[index]!![SPLIT_PRICE] = splitPrice
+//            }
+//        }
+//    }
+//
+//    fun clearPersonalSubtotal() {
+//        for (person in getAllPersonStatic()) {
+//            person.subtotal = AMOUNT_DEFAULT
+//            person.tax = AMOUNT_DEFAULT
+//            person.tip = AMOUNT_DEFAULT
+//            updatePerson(person)
+//        }
+//    }
+//
+//    fun calculatePersonResult() {
+//        for (person in getAllPersonStatic()) {
+//            val tax: Double = getTax() ?: AMOUNT_DEFAULT
+//            val tip: Double = getTip() ?: AMOUNT_DEFAULT
+//            val ratio = person.subtotal / getSubtotal()!!
+//            person.tax = ratio * tax
+//            person.tip = ratio * tip
+//            updatePerson(person)
+//        }
+//    }
 
     private val currentItemPrice = MutableLiveData<Double>()
     val currentItemPriceObservable: LiveData<Double>

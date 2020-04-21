@@ -62,7 +62,7 @@ class ResultFragment : Fragment() {
                     viewModel.setTip(AMOUNT_DEFAULT)
                 }
                 viewModel.setTotal()
-                viewModel.calculatePersonResult()
+               // viewModel.calculatePersonResult()
             }
         })
     }

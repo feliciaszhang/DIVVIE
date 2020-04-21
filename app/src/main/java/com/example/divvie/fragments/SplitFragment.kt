@@ -34,17 +34,17 @@ class SplitFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(TempViewModel::class.java)
 
-        equalButton.setOnClickListener {
-            viewModel.calculatePersonResult()
-            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ResultFragment.newInstance())
-                .commit()
-        }
-
-        individualButton.setOnClickListener {
-            viewModel.clearPersonalSubtotal()
-            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ItemFragment.newInstance())
-                .commit()
-        }
+//        equalButton.setOnClickListener {
+//            viewModel.calculatePersonResult()
+//            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ResultFragment.newInstance())
+//                .commit()
+//        }
+//
+//        individualButton.setOnClickListener {
+//            viewModel.clearPersonalSubtotal()
+//            fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, ItemFragment.newInstance())
+//                .commit()
+//        }
 
         backButton.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())

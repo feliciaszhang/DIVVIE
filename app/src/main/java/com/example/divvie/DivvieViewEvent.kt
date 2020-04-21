@@ -29,6 +29,7 @@ sealed class ResultViewEvent {
 }
 
 sealed class BowlsViewEvent {
+    object DisplayBowls: BowlsViewEvent()
     object ClickBowl: BowlsViewEvent()
     object DisplayBreakdown: BowlsViewEvent()
 }
