@@ -23,7 +23,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         itemStack.push(finalItem!!)
         for (person in getAllPersonStatic()) {
             person.subtotal += person.tempPrice
-            person.tempPrice = 0.0
+            person.tempPrice = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }
@@ -88,11 +88,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         if (item != null) {
             item.basePrice = basePrice
             item.splitPrice = splitPrice
+            val person = findPerson(index)
             if (itemMap.value!!.contains(index)) {
-                val person = findPerson(index)
                 person.tempPrice = splitPrice
-                updatePerson(person)
+            } else {
+                person.tempPrice = AMOUNT_DEFAULT
             }
+            updatePerson(person)
         }
     }
 

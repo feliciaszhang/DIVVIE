@@ -109,7 +109,7 @@ class BowlsFragment : Fragment() {
     }
 
     private fun split(listOfIndex: ArrayList<Int>) {
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+        for (i in 0 until viewModel.getNumberOfPeopleStatic()) {
             val view = bowlsList.getChildAt(i)
             if (listOfIndex.contains(i)) {
                 changeColor(view, Color.WHITE)
