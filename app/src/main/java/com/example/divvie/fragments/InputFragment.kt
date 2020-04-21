@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.divvie.*
-import com.example.divvie.database.Person
+import com.example.divvie.data.Person
 
 class InputFragment : Fragment() {
     companion object {

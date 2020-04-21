@@ -1,4 +1,4 @@
-package com.example.divvie.database
+package com.example.divvie.data
 
 import com.example.divvie.AMOUNT_DEFAULT
 

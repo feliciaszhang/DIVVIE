@@ -2,10 +2,9 @@ package com.example.divvie
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.database.Item
-import com.example.divvie.database.Person
+import com.example.divvie.data.Item
+import com.example.divvie.data.Person
 import com.example.divvie.fragments.BowlsFragment
 import com.example.divvie.fragments.InputFragment
 

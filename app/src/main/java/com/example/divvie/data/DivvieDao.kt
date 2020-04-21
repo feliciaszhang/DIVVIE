@@ -1,4 +1,4 @@
-package com.example.divvie.database
+package com.example.divvie.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

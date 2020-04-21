@@ -1,4 +1,4 @@
-package com.example.divvie.database
+package com.example.divvie.data
 
 import android.content.Context
 import androidx.room.Database

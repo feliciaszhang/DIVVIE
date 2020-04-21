@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
-import com.example.divvie.database.Person
+import com.example.divvie.data.Person
 
 class BowlsFragment : Fragment() {
     companion object {
