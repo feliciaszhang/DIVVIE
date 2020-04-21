@@ -8,19 +8,27 @@ import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     // TODO organize this plz
 
-    private var finalItem: Item? = null
+    private var tempItem = MutableLiveData<Item>()
+    val tempItemObservable: LiveData<Item>
+        get() = tempItem
 
-    fun setFinalItem(item: Item) {
-        finalItem = item
+    fun getTempItem(): Item? {
+        return tempItem.value
+    }
+
+    fun setTempItem(item: Item) {
+        tempItem.value = item
     }
 
     fun commitItem() {
-        itemStack.push(finalItem!!)
+        val temp = tempItem.value!!
+        temp.finalSplitPrice = temp.tempSplitPrice
+        temp.tempSplitPrice = AMOUNT_DEFAULT
+        itemStack.push(tempItem.value)
         for (person in getAllPersonStatic()) {
             person.subtotal += person.tempPrice
             person.tempPrice = AMOUNT_DEFAULT
@@ -30,26 +38,24 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private val itemStack: Stack<Item> = Stack()
 
-    private val itemMap = MutableLiveData<ArrayList<Int>>()
-    val itemMapObservable: LiveData<ArrayList<Int>>
-        get() = itemMap
 
-    fun resetItemMap() {
-        val map = itemMap.value ?: ArrayList()
-        map.clear()
-        itemMap.value = map
+    fun resetTempItem() {
+        val temp = tempItem.value ?: Item()
+        temp.listOfIndex.clear()
+        tempItem.value = temp
     }
 
-    fun alterItemMap(i: Int) {
-        var map = itemMap.value
-        if (map != null && map.contains(i)) {
-            map.remove(i)
-        } else if (map == null) {
-            map = ArrayList(i)
+    fun alterTempItem(i: Int) {
+        val temp = tempItem.value
+        val list = temp!!.listOfIndex
+        if (list.contains(i)) {
+            list.remove(i)
         } else {
-            map.add(i)
+            list.add(i)
         }
-        itemMap.value = map
+        val basePrice = temp.basePrice
+        temp.tempSplitPrice = basePrice.div(list.size)
+        tempItem.value = temp
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
@@ -81,16 +87,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun split(index: Int) {
-        // TODO make local val so we don't calc this every time
-        val basePrice = getTempItemPrice()
-        val item = finalItem
-        val splitPrice = basePrice!!.div(itemMap.value!!.size)
+        val item = tempItem.value
         if (item != null) {
-            item.basePrice = basePrice
-            item.splitPrice = splitPrice
             val person = findPerson(index)
-            if (itemMap.value!!.contains(index)) {
-                person.tempPrice = splitPrice
+            if (item.listOfIndex.contains(index)) {
+                person.tempPrice = item.tempSplitPrice
             } else {
                 person.tempPrice = AMOUNT_DEFAULT
             }
@@ -119,10 +120,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val tempItemPrice = MutableLiveData<Double>()
-    val tempItemPriceObservable: LiveData<Double>
-        get() = tempItemPrice
-
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
@@ -148,14 +145,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
         val tip: Double = getTip() ?: AMOUNT_DEFAULT
         total.value = subtotal + tax + tip
-    }
-
-    fun setTempItemPrice(num: Double) {
-        tempItemPrice.value = num
-    }
-
-    fun getTempItemPrice(): Double? {
-        return tempItemPrice.value
     }
 
     fun setDisplayPrices(bool: Boolean) {

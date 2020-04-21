@@ -53,19 +53,21 @@ class ItemFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         val subtotal = viewModel.getSubtotal()
         leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
-        viewModel.tempItemPriceObservable.observe(viewLifecycleOwner, Observer { calculateLeftover(subtotal, it) })
+        viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(subtotal, it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
-        viewModel.itemMapObservable.observe(viewLifecycleOwner, Observer { doneSelectingPerson(it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val num = editItemText.text.toString()
+                val temp = viewModel.getTempItem()
                 if (num != "") {
-                    viewModel.setTempItemPrice(num.toDouble())
+                    temp!!.basePrice = num.toDouble()
+                    viewModel.setTempItem(temp)
                 } else {
-                    viewModel.setTempItemPrice(AMOUNT_DEFAULT)
+                    temp!!.basePrice = AMOUNT_DEFAULT
+                    viewModel.setTempItem(temp)
                 }
             }
         })
@@ -80,7 +82,8 @@ class ItemFragment : Fragment() {
         }
     }
 
-    private fun calculateLeftover(subtotal: Double?, num: Double) {
+    private fun setTemp(subtotal: Double?, num: Double, listOfIndex: ArrayList<Int>) {
+        doneButton.isEnabled = listOfIndex.size != 0
         nextButton.isEnabled = num != AMOUNT_DEFAULT
         if (subtotal != null) {
             val leftover: Double = subtotal - num
@@ -100,7 +103,7 @@ class ItemFragment : Fragment() {
             itemText.visibility = View.VISIBLE
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
-            itemText.text = viewModel.getTempItemPrice().toString()
+            itemText.text = viewModel.getTempItem()!!.basePrice.toString()
         } else {
             editItemText.visibility = View.VISIBLE
             leftoverText.visibility = View.VISIBLE
@@ -110,9 +113,5 @@ class ItemFragment : Fragment() {
             doneButton.visibility = View.GONE
             editItemText.text.clear()
         }
-    }
-
-    private fun doneSelectingPerson(listOfIndex: ArrayList<Int>) {
-        doneButton.isEnabled = listOfIndex.size != 0
     }
 }

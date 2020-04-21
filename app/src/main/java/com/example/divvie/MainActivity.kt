@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.setTax(AMOUNT_DEFAULT)
         viewModel.setTip(AMOUNT_DEFAULT)
         viewModel.setSelectPerson(false)
-        viewModel.setTempItemPrice(AMOUNT_DEFAULT)
-        viewModel.setFinalItem(Item())
+        viewModel.setTempItem(Item())
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
