@@ -44,7 +44,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun resetTempItem() {
         val temp = tempItem.value ?: Item()
-        temp!!.listOfIndex.clear()
+        temp.listOfIndex.clear()
         tempItem.value = temp
     }
 

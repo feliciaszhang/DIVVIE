@@ -65,9 +65,6 @@ class ItemFragment : Fragment() {
                 if (num != "") {
                     temp!!.basePrice = num.toDouble()
                     viewModel.setTempItem(temp)
-                } else {
-                    temp!!.basePrice = AMOUNT_DEFAULT
-                    viewModel.setTempItem(temp)
                 }
             }
         })
