@@ -44,7 +44,6 @@ class BowlsFragment : Fragment() {
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
-        viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { split(it.listOfIndex) })
     }
 
     private fun changeColor(view: View, color: Int) {
@@ -90,6 +89,7 @@ class BowlsFragment : Fragment() {
 
     private fun clickableBowls(bool: Boolean) {
         if (bool) {
+            viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { split(it.listOfIndex) })
             viewModel.resetTempItem()
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
@@ -100,6 +100,7 @@ class BowlsFragment : Fragment() {
                 }
             }
         } else {
+            viewModel.tempItemObservable.removeObservers(viewLifecycleOwner)
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
                 changeColor(view, Color.LTGRAY)

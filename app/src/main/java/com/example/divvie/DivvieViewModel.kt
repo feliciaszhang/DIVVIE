@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     // TODO organize this plz
@@ -28,7 +30,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val temp = tempItem.value!!
         temp.finalSplitPrice = temp.tempSplitPrice
         temp.tempSplitPrice = AMOUNT_DEFAULT
-        itemStack.push(tempItem.value)
+        itemStack.push(temp)
+        tempItem.value = Item()
         for (person in getAllPersonStatic()) {
             person.subtotal += person.tempPrice
             person.tempPrice = AMOUNT_DEFAULT
@@ -41,7 +44,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun resetTempItem() {
         val temp = tempItem.value ?: Item()
-        temp.listOfIndex.clear()
+        temp!!.listOfIndex.clear()
         tempItem.value = temp
     }
 
