@@ -13,6 +13,17 @@ import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
     // TODO organize this plz
+    private var leftover = MutableLiveData<Double>()
+    val leftoverObservable: LiveData<Double>
+        get() = leftover
+
+    fun getLeftover(): Double? {
+        return leftover.value
+    }
+
+    fun setLeftover(num: Double) {
+        leftover.value = num
+    }
 
     private var tempItem = MutableLiveData<Item>()
     val tempItemObservable: LiveData<Item>
@@ -31,6 +42,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         temp.finalSplitPrice = temp.tempSplitPrice
         temp.tempSplitPrice = AMOUNT_DEFAULT
         itemStack.push(temp)
+        val prevLeftover = leftover.value
+        setLeftover(prevLeftover!! - temp.basePrice)
         tempItem.value = Item()
         for (person in getAllPersonStatic()) {
             person.subtotal += person.tempPrice
@@ -143,7 +156,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     val totalObservable: LiveData<Double>
         get() = total
 
-    fun setTotal() {
+    private fun setTotal() {
         val subtotal: Double = getSubtotal() ?: AMOUNT_DEFAULT
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
         val tip: Double = getTip() ?: AMOUNT_DEFAULT
@@ -161,6 +174,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun setSubtotal(num: Double) {
         subtotal.value = num
         setTotal()
+        setLeftover(num)
     }
 
     fun getSubtotal(): Double? {
@@ -178,6 +192,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     fun setTip(num: Double) {
         tip.value = num
+        setTotal()
     }
 
     private fun getTip(): Double? {

@@ -61,7 +61,6 @@ class ResultFragment : Fragment() {
                 } else {
                     viewModel.setTip(AMOUNT_DEFAULT)
                 }
-                viewModel.setTotal()
                 viewModel.calculatePersonResult()
             }
         })

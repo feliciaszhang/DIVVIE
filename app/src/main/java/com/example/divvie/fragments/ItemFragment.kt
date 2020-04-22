@@ -51,9 +51,7 @@ class ItemFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        val subtotal = viewModel.getSubtotal()
-        leftoverText.text = String.format(resources.getString(R.string.leftover), viewModel.getSubtotal().toString())
-        viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(subtotal, it.basePrice, it.listOfIndex) })
+        viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
 
         editItemText.addTextChangedListener(object: TextWatcher {
@@ -65,6 +63,10 @@ class ItemFragment : Fragment() {
                 if (num != "") {
                     temp!!.basePrice = num.toDouble()
                     viewModel.setTempItem(temp)
+                } else {
+                    // this block is causing the bug gg
+                    val leftover = viewModel.getLeftover()
+                    viewModel.setLeftover(leftover!!)
                 }
             }
         })
@@ -79,15 +81,13 @@ class ItemFragment : Fragment() {
         }
     }
 
-    private fun setTemp(subtotal: Double?, num: Double, listOfIndex: ArrayList<Int>) {
+    private fun setTemp(num: Double, listOfIndex: ArrayList<Int>) {
         doneButton.isEnabled = listOfIndex.size != 0
         nextButton.isEnabled = num != AMOUNT_DEFAULT
-        if (subtotal != null) {
-            val leftover: Double = subtotal - num
-            leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
-            if (leftover < 0) {
-                nextButton.isEnabled = false
-            }
+        val leftover = viewModel.getLeftover()!! - num
+        leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
+        if (leftover < 0) {
+            nextButton.isEnabled = false
             // TODO show user this cannot be negative
         }
     }

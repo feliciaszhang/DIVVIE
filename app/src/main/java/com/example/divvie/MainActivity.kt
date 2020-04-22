@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.setTip(AMOUNT_DEFAULT)
         viewModel.setSelectPerson(false)
         viewModel.setTempItem(Item())
+        viewModel.setLeftover(AMOUNT_DEFAULT)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
