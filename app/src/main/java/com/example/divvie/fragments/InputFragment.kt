@@ -98,8 +98,7 @@ class InputFragment : Fragment() {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()
-            )
-                .commit()
+            ).commit()
         }
     }
 

@@ -43,6 +43,7 @@ class ResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.calculatePersonResult()
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer{  displayTotal(it) })
 
         subtotal.text = viewModel.getSubtotal().toString()

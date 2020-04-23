@@ -88,8 +88,7 @@ class ItemFragment : Fragment() {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 ResultFragment.newInstance()
-            )
-                .commit()
+            ).commit()
         }
     }
 
