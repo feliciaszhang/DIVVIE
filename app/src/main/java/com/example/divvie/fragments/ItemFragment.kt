@@ -30,6 +30,21 @@ class ItemFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
+    private val textWatcher = object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val num = editItemText.text.toString()
+            val temp = viewModel.getTempItem()
+            if (num != "") {
+                temp!!.basePrice = num.toDouble()
+                viewModel.setTempItem(temp)
+            } else {
+                temp!!.basePrice = AMOUNT_DEFAULT
+                viewModel.setTempItem(temp)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,23 +68,6 @@ class ItemFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
-
-        editItemText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val num = editItemText.text.toString()
-                val temp = viewModel.getTempItem()
-                if (num != "") {
-                    temp!!.basePrice = num.toDouble()
-                    viewModel.setTempItem(temp)
-                } else {
-                    // this block is causing the bug gg
-                    val leftover = viewModel.getLeftover()
-                    viewModel.setLeftover(leftover!!)
-                }
-            }
-        })
 
         nextButton.setOnClickListener {
             viewModel.setSelectPerson(true)
@@ -95,6 +93,7 @@ class ItemFragment : Fragment() {
     private fun disableViews(bool: Boolean) {
         if (bool) {
             editItemText.visibility = View.GONE
+            editItemText.removeTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
             itemText.visibility = View.VISIBLE
@@ -103,12 +102,13 @@ class ItemFragment : Fragment() {
             itemText.text = viewModel.getTempItem()!!.basePrice.toString()
         } else {
             editItemText.visibility = View.VISIBLE
+            editItemText.text.clear()
+            editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.VISIBLE
             nextButton.visibility = View.VISIBLE
             itemText.visibility = View.GONE
             tap.visibility = View.GONE
             doneButton.visibility = View.GONE
-            editItemText.text.clear()
         }
     }
 }
