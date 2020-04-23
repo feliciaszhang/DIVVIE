@@ -27,10 +27,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.setLeftover(AMOUNT_DEFAULT)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.info_fragment_layout, InputFragment.newInstance())
-                .commit()
-            supportFragmentManager.beginTransaction().replace(R.id.bowls_fragment_layout, BowlsFragment.newInstance())
-                .commit()
+            supportFragmentManager.beginTransaction().replace(
+                R.id.info_fragment_layout, InputFragment.newInstance()
+            ).commit()
+            supportFragmentManager.beginTransaction().replace(
+                R.id.bowls_fragment_layout, BowlsFragment.newInstance()
+            ).commit()
         }
     }
 }

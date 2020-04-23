@@ -15,6 +15,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.DivvieViewModel
 import com.example.divvie.R
+import android.content.Intent
+import com.example.divvie.MainActivity
+
 
 class ResultFragment : Fragment() {
     companion object {
@@ -65,6 +68,11 @@ class ResultFragment : Fragment() {
                 viewModel.calculatePersonResult()
             }
         })
+
+        startOver.setOnClickListener {
+            val intent = Intent(context, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun displayTotal(num: Double) {
