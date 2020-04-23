@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,12 +22,14 @@ class ItemFragment : Fragment() {
         fun newInstance() = ItemFragment()
     }
     private lateinit var viewModel: DivvieViewModel
+    private lateinit var layout: LinearLayout
     private lateinit var editItemText: EditText
     private lateinit var itemText: TextView
     private lateinit var leftoverText: TextView
     private lateinit var tap: TextView
     private lateinit var nextButton: Button
     private lateinit var doneButton: Button
+    private lateinit var calculateButton: Button
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
@@ -51,12 +54,14 @@ class ItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.item_fragment, container, false)
+        layout = fragment.findViewById(R.id.item_price_layout)
         editItemText = fragment.findViewById(R.id.edit_item)
         itemText = fragment.findViewById(R.id.item_text)
         leftoverText = fragment.findViewById(R.id.leftover)
         tap = fragment.findViewById(R.id.tap)
         nextButton = fragment.findViewById(R.id.next)
         doneButton = fragment.findViewById(R.id.done)
+        calculateButton = fragment.findViewById(R.id.calculate)
         backButton = fragment.findViewById(R.id.back)
         undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
@@ -68,6 +73,7 @@ class ItemFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
+        viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
 
         nextButton.setOnClickListener {
             viewModel.setSelectPerson(true)
@@ -76,6 +82,14 @@ class ItemFragment : Fragment() {
         doneButton.setOnClickListener {
             viewModel.setSelectPerson(false)
             viewModel.commitItem()
+        }
+
+        calculateButton.setOnClickListener {
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout,
+                ResultFragment.newInstance()
+            )
+                .commit()
         }
     }
 
@@ -109,6 +123,13 @@ class ItemFragment : Fragment() {
             itemText.visibility = View.GONE
             tap.visibility = View.GONE
             doneButton.visibility = View.GONE
+        }
+    }
+
+    private fun splitComplete(leftover: Double) {
+        if (leftover == 0.0) {
+            calculateButton.visibility = View.VISIBLE
+            layout.visibility = View.GONE
         }
     }
 }
