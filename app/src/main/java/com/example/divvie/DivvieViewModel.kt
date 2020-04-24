@@ -12,7 +12,64 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
-    // TODO organize this plz
+
+    fun onEvent(event: DivvieViewEvent) {
+        when (event) {
+            is InputViewEvent.DisplayFragment -> onDisplayInputFragment()
+            is InputViewEvent.InsertPerson -> onInsertPerson()
+            is InputViewEvent.RemovePerson -> onRemovePerson()
+            is InputViewEvent.EnterSubtotal -> onEnterSubtotal(event.input)
+            is InputViewEvent.EnterTax -> onEnterTax(event.input)
+            is InputViewEvent.Next -> onInputNext()
+        }
+    }
+
+    private fun onDisplayInputFragment() {
+        setDisplayPrices(false)
+        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
+            insertPerson(Person(id = i))
+        }
+        setSubtotal(AMOUNT_DEFAULT)
+        setTax(AMOUNT_DEFAULT)
+    }
+
+    private fun onInsertPerson() {
+        val num = getNumberOfPeopleStatic()
+        if (num < MAX_NUMBER_OF_PEOPLE) {
+            insertPerson(Person(id = num))
+        }
+    }
+
+    private fun onRemovePerson() {
+        val num = getNumberOfPeopleStatic()
+        if (num > MIN_NUMBER_OF_PEOPLE) {
+            deletePerson(Person(id = num - 1))
+        }
+    }
+
+    private fun onEnterSubtotal(input: String) {
+        if (input != "") {
+            setSubtotal(input.toDouble())
+        } else {
+            setSubtotal(AMOUNT_DEFAULT)
+            // TODO remind user it's pretax
+            // TODO show user this cannot be 0
+        }
+    }
+
+    private fun onEnterTax(input: String) {
+        if (input != "") {
+            setTax(input.toDouble())
+        } else {
+            setTax(AMOUNT_DEFAULT)
+        }
+    }
+
+    private fun onInputNext() {
+        setDisplayPrices(true)
+        splitPretaxEqually()
+    }
+
     private var leftover = MutableLiveData<Double>()
     val leftoverObservable: LiveData<Double>
         get() = leftover
@@ -147,8 +204,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val subtotal = MutableLiveData<Double>()
     val subtotalObservable: LiveData<Double>
         get() = subtotal
+    fun setSubtotal(num: Double) {
+        subtotal.value = num
+        setTotal()
+        setLeftover(num)
+    }
 
     private val tax = MutableLiveData<Double>()
+    fun setTax(num: Double) {
+        tax.value = num
+        setTotal()
+    }
 
     private val tip = MutableLiveData<Double>()
 
@@ -171,20 +237,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         selectPerson.value = bool
     }
 
-    fun setSubtotal(num: Double) {
-        subtotal.value = num
-        setTotal()
-        setLeftover(num)
-    }
+
 
     fun getSubtotal(): Double? {
         return subtotal.value
     }
 
-    fun setTax(num: Double) {
-        tax.value = num
-        setTotal()
-    }
 
     fun getTax(): Double? {
         return tax.value
