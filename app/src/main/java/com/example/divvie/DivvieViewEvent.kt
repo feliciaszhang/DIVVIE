@@ -25,7 +25,8 @@ sealed class ItemViewEvent {
 }
 
 sealed class ResultViewEvent {
-    object EnterTip: ResultViewEvent()
+    object DisplayFragment: ResultViewEvent()
+    data class EnterTip(val input: String): ResultViewEvent()
     object ToggleFormat: ResultViewEvent()
     object Back: ResultViewEvent()
     object StartOver: ResultViewEvent()

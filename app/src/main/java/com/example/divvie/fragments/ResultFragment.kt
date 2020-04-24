@@ -12,11 +12,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.AMOUNT_DEFAULT
-import com.example.divvie.DivvieViewModel
-import com.example.divvie.R
 import android.content.Intent
-import com.example.divvie.MainActivity
+import com.example.divvie.*
 
 
 class ResultFragment : Fragment() {
@@ -46,9 +43,10 @@ class ResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.calculatePersonResult()
+        viewModel.onEvent(ResultViewEvent.DisplayFragment)
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer{  displayTotal(it) })
 
+        // TODO ViewState
         subtotal.text = viewModel.getSubtotal().toString()
 
         tax.text = viewModel.getTax().toString()
@@ -57,17 +55,12 @@ class ResultFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val num = tip.text.toString()
-                if (num != "") {
-                    viewModel.setTip(num.toDouble())
-                } else {
-                    viewModel.setTip(AMOUNT_DEFAULT)
-                }
-                viewModel.calculatePersonResult()
+                viewModel.onEvent(ResultViewEvent.EnterTip(tip.text.toString()))
             }
         })
 
         startOver.setOnClickListener {
+            viewModel.onEvent(ResultViewEvent.StartOver)
             val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
         }

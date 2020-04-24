@@ -33,6 +33,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun onEvent(event: ResultViewEvent) {
+        when (event) {
+            is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
+            is ResultViewEvent.EnterTip -> onEnterTip(event.input)
+            //TODO is ResultViewEvent.ToggleFormat ->
+            is ResultViewEvent.Back -> onSplitBack()
+            is ResultViewEvent.StartOver -> onStartOver()
+        }
+    }
+
     private fun onDisplayInputFragment() {
         setDisplayPrices(false)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
@@ -89,6 +99,21 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onSplitBack() {}
+
+    private fun onDisplayResultFragment() {
+        calculatePersonResult()
+    }
+
+    private fun onEnterTip(input: String) {
+        if (input != "") {
+            setTip(input.toDouble())
+        } else {
+            setTip(AMOUNT_DEFAULT)
+        }
+        calculatePersonResult()
+    }
+
+    private fun onStartOver() {}
 
     private var leftover = MutableLiveData<Double>()
     val leftoverObservable: LiveData<Double>
@@ -169,7 +194,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
-    fun splitPretaxEqually() {
+    private fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
             person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
@@ -192,7 +217,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun clearPersonalData() {
+    private fun clearPersonalData() {
         for (person in getAllPersonStatic()) {
             person.subtotal = AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
@@ -202,7 +227,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun calculatePersonResult() {
+    private fun calculatePersonResult() {
         for (person in getAllPersonStatic()) {
             val tax: Double = getTax() ?: AMOUNT_DEFAULT
             val tip: Double = getTip() ?: AMOUNT_DEFAULT
@@ -224,24 +249,27 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val subtotal = MutableLiveData<Double>()
     val subtotalObservable: LiveData<Double>
         get() = subtotal
-    fun setSubtotal(num: Double) {
+    private fun setSubtotal(num: Double) {
         subtotal.value = num
         setTotal()
         setLeftover(num)
     }
 
     private val tax = MutableLiveData<Double>()
-    fun setTax(num: Double) {
+    private fun setTax(num: Double) {
         tax.value = num
         setTotal()
     }
 
     private val tip = MutableLiveData<Double>()
+    fun setTip(num: Double) {
+        tip.value = num
+        setTotal()
+    }
 
     private val total = MutableLiveData<Double>()
     val totalObservable: LiveData<Double>
         get() = total
-
     private fun setTotal() {
         val subtotal: Double = getSubtotal() ?: AMOUNT_DEFAULT
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
@@ -268,10 +296,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         return tax.value
     }
 
-    fun setTip(num: Double) {
-        tip.value = num
-        setTotal()
-    }
 
     private fun getTip(): Double? {
         return tip.value
