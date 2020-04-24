@@ -45,6 +45,7 @@ class InputFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.onEvent(InputViewEvent.DisplayFragment)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
         viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
 

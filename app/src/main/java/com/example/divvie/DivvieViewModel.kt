@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun onEvent(event: DivvieViewEvent) {
+    fun onEvent(event: InputViewEvent) {
         when (event) {
             is InputViewEvent.DisplayFragment -> onDisplayInputFragment()
             is InputViewEvent.InsertPerson -> onInsertPerson()
@@ -21,6 +21,15 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is InputViewEvent.EnterSubtotal -> onEnterSubtotal(event.input)
             is InputViewEvent.EnterTax -> onEnterTax(event.input)
             is InputViewEvent.Next -> onInputNext()
+        }
+    }
+
+    fun onEvent(event: SplitViewEvent) {
+        when (event) {
+            is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
+            is SplitViewEvent.SplitEqually -> onSplitEqually()
+            is SplitViewEvent.EnterIndividually -> onEnterIndividually()
+            is SplitViewEvent.Back -> onSplitBack()
         }
     }
 
@@ -66,9 +75,20 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onInputNext() {
-        setDisplayPrices(true)
         splitPretaxEqually()
     }
+
+    private fun onDisplaySplitFragment() {
+        setDisplayPrices(true)
+    }
+
+    private fun onSplitEqually() {}
+
+    private fun onEnterIndividually() {
+        clearPersonalData()
+    }
+
+    private fun onSplitBack() {}
 
     private var leftover = MutableLiveData<Double>()
     val leftoverObservable: LiveData<Double>

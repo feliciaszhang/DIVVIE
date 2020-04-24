@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.SplitViewEvent
 
 class SplitFragment : Fragment() {
     companion object {
@@ -33,21 +34,24 @@ class SplitFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.onEvent(SplitViewEvent.DisplayFragment)
 
         equalButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.SplitEqually)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, ResultFragment.newInstance()
             ).commit()
         }
 
         individualButton.setOnClickListener {
-            viewModel.clearPersonalData()
+            viewModel.onEvent(SplitViewEvent.EnterIndividually)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, ItemFragment.newInstance()
             ).commit()
         }
 
         backButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.Back)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
