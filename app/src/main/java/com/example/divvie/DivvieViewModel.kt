@@ -101,6 +101,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onSplitBack() {}
 
     private fun onDisplayResultFragment() {
+        setTip(AMOUNT_DEFAULT)
         calculatePersonResult()
     }
 
