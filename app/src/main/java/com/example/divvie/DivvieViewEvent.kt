@@ -17,7 +17,8 @@ sealed class SplitViewEvent {
 }
 
 sealed class ItemViewEvent {
-    object EnterItemPrice: ItemViewEvent()
+    object DisplayFragment: ItemViewEvent()
+    data class EnterItemPrice(val input: String): ItemViewEvent()
     object Next: ItemViewEvent()
     object Done: ItemViewEvent()
     object Back: ItemViewEvent()
@@ -33,6 +34,7 @@ sealed class ResultViewEvent {
 }
 
 sealed class BowlsViewEvent {
+    object DisplayFragment: BowlsViewEvent()
     object DisplayBowls: BowlsViewEvent()
     object ClickBowl: BowlsViewEvent()
     object DisplayBreakdown: BowlsViewEvent()

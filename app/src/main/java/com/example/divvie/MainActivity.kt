@@ -15,9 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         viewModel = ViewModelProviders.of(this).get(DivvieViewModel::class.java)
-        viewModel.setSelectPerson(false)
-        viewModel.setTempItem(Item())
-        viewModel.setLeftover(AMOUNT_DEFAULT)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(

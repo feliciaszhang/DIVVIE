@@ -43,6 +43,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun onEvent(event: ItemViewEvent) {
+        when (event) {
+            is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
+            is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
+            is ItemViewEvent.Back -> onItemBack()
+            is ItemViewEvent.Next -> onItemNext()
+            is ItemViewEvent.ClearAll -> onClearAll()
+            is ItemViewEvent.Done -> onDone()
+        }
+    }
+
     private fun onDisplayInputFragment() {
         setDisplayPrices(false)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
@@ -116,31 +127,52 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onStartOver() {}
 
-    private var leftover = MutableLiveData<Double>()
-    val leftoverObservable: LiveData<Double>
-        get() = leftover
+    private fun onDisplayItemFragment() {
+        setSelectPerson(false)
+        setTempItem(Item())
+    }
+
+    private fun onEnterItemPrice(input: String) {
+        val temp = tempItem.value
+        if (input != "") {
+            temp!!.basePrice = input.toDouble()
+            setTempItem(temp)
+        } else {
+            temp!!.basePrice = AMOUNT_DEFAULT
+            setTempItem(temp)
+        }
+    }
+
+    private fun onItemNext() {
+        setSelectPerson(true)
+    }
+
+    private fun onDone() {
+        setSelectPerson(false)
+        commitItem()
+    }
+
+    private fun onItemBack() {}
+
+    private fun onClearAll() {}
+    ////////////////////////////////////////////////////
+
+
 
     fun getLeftover(): Double? {
         return leftover.value
     }
 
-    fun setLeftover(num: Double) {
-        leftover.value = num
-    }
 
-    private var tempItem = MutableLiveData<Item>()
-    val tempItemObservable: LiveData<Item>
-        get() = tempItem
+
+
 
     fun getTempItem(): Item? {
         return tempItem.value
     }
 
-    fun setTempItem(item: Item) {
-        tempItem.value = item
-    }
 
-    fun commitItem() {
+    private fun commitItem() {
         val temp = tempItem.value!!
         temp.finalSplitPrice = temp.tempSplitPrice
         temp.tempSplitPrice = AMOUNT_DEFAULT
@@ -242,10 +274,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
+    private fun setDisplayPrices(bool: Boolean) {
+        displayPrices.value = bool
+    }
 
     private val selectPerson = MutableLiveData<Boolean>()
     val selectPersonObservable: LiveData<Boolean>
         get() = selectPerson
+    fun setSelectPerson(bool: Boolean) {
+        selectPerson.value = bool
+    }
 
     private val subtotal = MutableLiveData<Double>()
     val subtotalObservable: LiveData<Double>
@@ -263,7 +301,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private val tip = MutableLiveData<Double>()
-    fun setTip(num: Double) {
+    private fun setTip(num: Double) {
         tip.value = num
         setTotal()
     }
@@ -278,13 +316,21 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         total.value = subtotal + tax + tip
     }
 
-    fun setDisplayPrices(bool: Boolean) {
-        displayPrices.value = bool
+    private var leftover = MutableLiveData<Double>()
+    val leftoverObservable: LiveData<Double>
+        get() = leftover
+    private fun setLeftover(num: Double) {
+        leftover.value = num
     }
 
-    fun setSelectPerson(bool: Boolean) {
-        selectPerson.value = bool
+    private var tempItem = MutableLiveData<Item>()
+    val tempItemObservable: LiveData<Item>
+        get() = tempItem
+    private fun setTempItem(item: Item) {
+        tempItem.value = item
     }
+
+
 
 
 

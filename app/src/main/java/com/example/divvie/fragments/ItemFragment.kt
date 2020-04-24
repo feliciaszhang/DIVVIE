@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.ItemViewEvent
 
 class ItemFragment : Fragment() {
     companion object {
@@ -35,15 +36,7 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val num = editItemText.text.toString()
-            val temp = viewModel.getTempItem()
-            if (num != "") {
-                temp!!.basePrice = num.toDouble()
-                viewModel.setTempItem(temp)
-            } else {
-                temp!!.basePrice = AMOUNT_DEFAULT
-                viewModel.setTempItem(temp)
-            }
+            viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
         }
     }
 
@@ -67,17 +60,17 @@ class ItemFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.onEvent(ItemViewEvent.DisplayFragment)
         viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
         viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
 
         nextButton.setOnClickListener {
-            viewModel.setSelectPerson(true)
+            viewModel.onEvent(ItemViewEvent.Next)
         }
 
         doneButton.setOnClickListener {
-            viewModel.setSelectPerson(false)
-            viewModel.commitItem()
+            viewModel.onEvent(ItemViewEvent.Done)
         }
     }
 
