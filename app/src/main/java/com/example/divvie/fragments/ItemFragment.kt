@@ -13,7 +13,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
 import com.example.divvie.ItemViewEvent
@@ -76,7 +75,7 @@ class ItemFragment : Fragment() {
 
     private fun setTemp(num: Double, listOfIndex: ArrayList<Int>) {
         doneButton.isEnabled = listOfIndex.size != 0
-        nextButton.isEnabled = num != AMOUNT_DEFAULT
+        nextButton.isEnabled = num != 0.0
         val leftover = viewModel.getLeftover()!! - num
         leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
         if (leftover < 0) {

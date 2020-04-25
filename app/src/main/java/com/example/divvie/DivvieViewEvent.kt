@@ -35,7 +35,6 @@ sealed class ResultViewEvent {
 
 sealed class BowlsViewEvent {
     object DisplayFragment: BowlsViewEvent()
-    object DisplayBowls: BowlsViewEvent()
-    object ClickBowl: BowlsViewEvent()
+    data class ClickBowl(val index: Int): BowlsViewEvent()
     object DisplayBreakdown: BowlsViewEvent()
 }

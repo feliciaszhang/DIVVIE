@@ -9,7 +9,7 @@ interface DivvieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerson(vararg person: Person)
 
-    @Query("SELECT * FROM PERSON")
+    @Query("SELECT * FROM PERSON ORDER BY ID ASC")
     fun getAllPersonStatic(): Array<Person>
 
     @Query("SELECT * FROM PERSON WHERE ID = :id")
