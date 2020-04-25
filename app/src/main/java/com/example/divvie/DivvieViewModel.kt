@@ -153,7 +153,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onUndo() {
-        removeFromStack()
+        if (selectPerson.value!!) {
+            setSelectPerson(false)
+            removeTempItem()
+        } else {
+            removeFromStack()
+        }
     }
 
     private fun onItemBack() {
@@ -163,7 +168,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onClearAll() {}
-    ////////////////////////////////////////////////////
+
+    private fun removeTempItem() {
+        val removedItem = tempItem.value!!
+        for (index in removedItem.listOfIndex) {
+            val person = findPerson(index)
+            person.tempPrice = 0.0
+            updatePerson(person)
+        }
+        tempItem.value = Item()
+    }
 
     private fun removeFromStack() {
         val stack = itemStack.value!!
@@ -176,7 +190,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             updatePerson(person)
         }
         itemStack.value = stack
-        Log.d("///////////", itemStack.value.toString())
     }
 
     private fun commitItem() {
@@ -206,10 +219,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val basePrice = alteredItem.basePrice
         alteredItem.tempSplitPrice = basePrice / listOfIndex.size
         tempItem.value = alteredItem
-        for (index in alteredItem.listOfIndex) {
-            val person = findPerson(index)
-            person.tempPrice = alteredItem.tempSplitPrice
-            updatePerson(person)
+        for (person in getAllPersonStatic()) {
+            if (person.id in alteredItem.listOfIndex) {
+                person.tempPrice = alteredItem.tempSplitPrice
+                updatePerson(person)
+            } else {
+                person.tempPrice = 0.0
+                updatePerson(person)
+            }
         }
     }
 
