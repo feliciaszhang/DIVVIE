@@ -57,6 +57,7 @@ class BowlAdapter(
         currency = rowView.findViewById(R.id.currency)
         priceAmount = rowView.findViewById(R.id.price_amount)
         val person = listOfPerson!![position]
+        image.setImageResource(R.drawable.bowl)
         displayPrices(person)
         if (clickable != null && clickable == true) {
             changeColor(bowlRow, Color.DKGRAY)

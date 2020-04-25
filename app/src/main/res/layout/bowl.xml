@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bowlRow">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:srcCompat="@drawable/bowl" />
+        android:layout_height="48dp" />
 
     <LinearLayout
         android:id="@+id/price"
