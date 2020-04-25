@@ -84,7 +84,11 @@ class BowlsFragment : Fragment() {
             val person = list[i]
             val view = bowlsList.getChildAt(i)
             val priceAmount: TextView = view.findViewById(R.id.price_amount)
-            val personalTotal = person.subtotal + person.tax + person.tip + person.tempPrice
+            val personalSubtotal = person.subtotal ?: 0.0
+            val personalTax = person.tax ?: 0.0
+            val personalTip = person.tip ?: 0.0
+            val personalTempPrice = person.tempPrice ?: 0.0
+            val personalTotal = personalSubtotal + personalTax + personalTip + personalTempPrice
             priceAmount.text = personalTotal.toString()
         }
     }

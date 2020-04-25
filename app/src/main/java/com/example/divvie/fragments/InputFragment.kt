@@ -83,6 +83,6 @@ class InputFragment : Fragment() {
     }
 
     private fun enableNextButton(subtotal: Double) {
-        nextButton.isEnabled = subtotal != AMOUNT_DEFAULT
+        nextButton.isEnabled = subtotal != 0.0
     }
 }
