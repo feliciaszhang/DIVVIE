@@ -1,7 +1,6 @@
 package com.example.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -40,10 +39,15 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is ItemViewEvent.Done -> onDone()
 
             is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
+            is BowlsViewEvent.ClickBowl -> onClickBowl(event.i)
         }
     }
 
     private fun onDisplayBowlFragment() {}
+
+    private fun onClickBowl(i: Int) {
+        alterTempItem(i)
+    }
 
     private fun onDisplayInputFragment() {
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
@@ -164,14 +168,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private val itemStack: Stack<Item> = Stack()
 
-
-    fun resetTempItem() {
-        val temp = tempItem.value ?: Item()
-        temp.listOfIndex.clear()
-        tempItem.value = temp
-    }
-
-    fun alterTempItem(i: Int) {
+    private fun alterTempItem(i: Int) {
         val temp = tempItem.value
         val list = temp!!.listOfIndex
         if (list.contains(i)) {
@@ -180,19 +177,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             list.add(i)
         }
         val basePrice = temp.basePrice
-        temp.tempSplitPrice = basePrice.div(list.size)
+        temp.tempSplitPrice = basePrice / list.size
         tempItem.value = temp
-    }
-
-    fun split(index: Int) {
-        val item = tempItem.value
-        val person = findPerson(index)
-        if (item!!.listOfIndex.contains(index)) {
-            person.tempPrice = item.tempSplitPrice
-        } else {
-            person.tempPrice = null
+        for (index in temp.listOfIndex) {
+            val person = findPerson(index)
+            person.tempPrice = temp.tempSplitPrice
+            updatePerson(person)
         }
-        updatePerson(person)
     }
 
     private fun splitPretaxEqually() {
@@ -282,21 +273,21 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun getAllPersonStatic() = dao.getAllPersonStatic()
 
-    fun getAllPerson() = dao.getAllPerson()
-
     private fun findPerson(id: Int) = dao.findPerson(id)
 
     private fun insertPerson(person: Person) { dao.insertPerson(person) }
 
     private fun deletePerson(person: Person) = dao.deletePerson(person)
 
+    private fun updatePerson(person: Person) {dao.updatePerson(person)}
+
+    private fun deleteAllPerson() {dao.deleteAllPerson()}
+
     fun getNumberOfPeople() = dao.getNumberOfPeople()
 
     fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
 
-    private fun updatePerson(person: Person) {dao.updatePerson(person)}
-
-    private fun deleteAllPerson() {dao.deleteAllPerson()}
+    fun getAllPerson() = dao.getAllPerson()
 
 
     fun getSubtotal(): Double? {
