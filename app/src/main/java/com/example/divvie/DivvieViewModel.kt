@@ -45,7 +45,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onDisplayBowlFragment() {}
+    private fun onDisplayBowlFragment() {
+        for (person in getAllPersonStatic()) {
+            val temp = Person(person.id, null, null, null, null)
+            updatePerson(temp)
+        }
+    }
 
     private fun onClickBowl(i: Int) {
         alterTempItem(i)

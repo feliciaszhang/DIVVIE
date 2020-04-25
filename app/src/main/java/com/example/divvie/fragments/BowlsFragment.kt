@@ -56,7 +56,6 @@ class BowlsFragment : Fragment() {
     }
 
     private fun displayBowlState(list: List<Person>) {
-        //TODO but where bowls > 4 will display previous tax + tip before last crash
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
             val view = bowlsList.getChildAt(i)
             if (i < list.size) {
