@@ -27,8 +27,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
             is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
             is ResultViewEvent.EnterTip -> onEnterTip(event.input)
-            //TODO is ResultViewEvent.ToggleFormat ->
-            is ResultViewEvent.Back -> onSplitBack()
+            is ResultViewEvent.ToggleFormat -> onToggleFormat()
+            is ResultViewEvent.Back -> onResultBack()
             is ResultViewEvent.StartOver -> onStartOver()
 
             is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
@@ -114,6 +114,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
         calculatePersonResult()
     }
+
+    private fun onToggleFormat() {}
+
+    private fun onResultBack() {}
 
     private fun onStartOver() {
         deleteAllPerson()

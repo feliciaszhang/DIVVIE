@@ -102,6 +102,7 @@
                 android:id="@+id/edit_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="0.0"
                 android:inputType="numberDecimal"
                 android:textSize="@dimen/large_text_size" />
         </LinearLayout>
