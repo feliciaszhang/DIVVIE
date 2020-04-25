@@ -166,8 +166,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val itemStack: Stack<Item> = Stack()
-
     private fun alterTempItem(i: Int) {
         val temp = tempItem.value
         val list = temp!!.listOfIndex
@@ -269,6 +267,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         tempItem.value = item
     }
 
+    private val itemStack: Stack<Item> = Stack()
+
     private val dao = DivvieDatabase.getInstance(application).dao()
 
     private fun getAllPersonStatic() = dao.getAllPersonStatic()
@@ -283,9 +283,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun deleteAllPerson() {dao.deleteAllPerson()}
 
-    fun getNumberOfPeople() = dao.getNumberOfPeople()
+    private fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
 
-    fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
+    fun getNumberOfPeople() = dao.getNumberOfPeople()
 
     fun getAllPerson() = dao.getAllPerson()
 
