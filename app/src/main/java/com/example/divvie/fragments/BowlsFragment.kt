@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.divvie.BowlsViewEvent
 import com.example.divvie.MAX_NUMBER_OF_PEOPLE
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
@@ -40,6 +41,7 @@ class BowlsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.onEvent(BowlsViewEvent.DisplayFragment)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
         viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })

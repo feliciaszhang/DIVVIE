@@ -9,11 +9,10 @@ import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun onEvent(event: InputViewEvent) {
+    fun onEvent(event: DivvieViewEvent) {
         when (event) {
             is InputViewEvent.DisplayFragment -> onDisplayInputFragment()
             is InputViewEvent.InsertPerson -> onInsertPerson()
@@ -21,41 +20,34 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is InputViewEvent.EnterSubtotal -> onEnterSubtotal(event.input)
             is InputViewEvent.EnterTax -> onEnterTax(event.input)
             is InputViewEvent.Next -> onInputNext()
-        }
-    }
 
-    fun onEvent(event: SplitViewEvent) {
-        when (event) {
             is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
             is SplitViewEvent.SplitEqually -> onSplitEqually()
             is SplitViewEvent.EnterIndividually -> onEnterIndividually()
             is SplitViewEvent.Back -> onSplitBack()
-        }
-    }
 
-    fun onEvent(event: ResultViewEvent) {
-        when (event) {
             is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
             is ResultViewEvent.EnterTip -> onEnterTip(event.input)
             //TODO is ResultViewEvent.ToggleFormat ->
             is ResultViewEvent.Back -> onSplitBack()
             is ResultViewEvent.StartOver -> onStartOver()
-        }
-    }
 
-    fun onEvent(event: ItemViewEvent) {
-        when (event) {
             is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
             is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
             is ItemViewEvent.Back -> onItemBack()
             is ItemViewEvent.Next -> onItemNext()
             is ItemViewEvent.ClearAll -> onClearAll()
             is ItemViewEvent.Done -> onDone()
+
+            is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
         }
     }
 
-    private fun onDisplayInputFragment() {
+    private fun onDisplayBowlFragment() {
         setDisplayPrices(false)
+    }
+
+    private fun onDisplayInputFragment() {
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
             insertPerson(Person(id = i))
         }
@@ -158,20 +150,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     ////////////////////////////////////////////////////
 
 
-
-    fun getLeftover(): Double? {
-        return leftover.value
-    }
-
-
-
-
-
-    fun getTempItem(): Item? {
-        return tempItem.value
-    }
-
-
     private fun commitItem() {
         val temp = tempItem.value!!
         temp.finalSplitPrice = temp.tempSplitPrice
@@ -209,34 +187,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         tempItem.value = temp
     }
 
-    private val dao = DivvieDatabase.getInstance(application).dao()
-
-    private fun getAllPersonStatic() = dao.getAllPersonStatic()
-
-    fun getAllPerson() = dao.getAllPerson()
-
-    private fun findPerson(id: Int) = dao.findPerson(id)
-
-    fun insertPerson(person: Person) { dao.insertPerson(person) }
-
-    fun deletePerson(person: Person) = dao.deletePerson(person)
-
-    fun getNumberOfPeople() = dao.getNumberOfPeople()
-
-    fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
-
-    private fun updatePerson(person: Person) {dao.updatePerson(person)}
-
-    private fun splitPretaxEqually() {
-        for (person in getAllPersonStatic()) {
-            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
-            person.tax = AMOUNT_DEFAULT
-            person.tip = AMOUNT_DEFAULT
-            person.tempPrice = AMOUNT_DEFAULT
-            updatePerson(person)
-        }
-    }
-
     fun split(index: Int) {
         val item = tempItem.value
         if (item != null) {
@@ -246,6 +196,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             } else {
                 person.tempPrice = AMOUNT_DEFAULT
             }
+            updatePerson(person)
+        }
+    }
+
+    private fun splitPretaxEqually() {
+        for (person in getAllPersonStatic()) {
+            person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
+            person.tax = AMOUNT_DEFAULT
+            person.tip = AMOUNT_DEFAULT
+            person.tempPrice = AMOUNT_DEFAULT
             updatePerson(person)
         }
     }
@@ -281,7 +241,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val selectPerson = MutableLiveData<Boolean>()
     val selectPersonObservable: LiveData<Boolean>
         get() = selectPerson
-    fun setSelectPerson(bool: Boolean) {
+    private fun setSelectPerson(bool: Boolean) {
         selectPerson.value = bool
     }
 
@@ -330,8 +290,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         tempItem.value = item
     }
 
+    private val dao = DivvieDatabase.getInstance(application).dao()
 
+    private fun getAllPersonStatic() = dao.getAllPersonStatic()
 
+    fun getAllPerson() = dao.getAllPerson()
+
+    private fun findPerson(id: Int) = dao.findPerson(id)
+
+    private fun insertPerson(person: Person) { dao.insertPerson(person) }
+
+    private fun deletePerson(person: Person) = dao.deletePerson(person)
+
+    fun getNumberOfPeople() = dao.getNumberOfPeople()
+
+    fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
+
+    private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
 
     fun getSubtotal(): Double? {
@@ -346,6 +321,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun getTip(): Double? {
         return tip.value
+    }
+
+    fun getLeftover(): Double? {
+        return leftover.value
+    }
+
+    fun getTempItem(): Item? {
+        return tempItem.value
     }
 }
 

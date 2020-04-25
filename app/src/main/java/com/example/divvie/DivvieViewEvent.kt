@@ -1,6 +1,8 @@
 package com.example.divvie
 
-sealed class InputViewEvent {
+open class DivvieViewEvent
+
+sealed class InputViewEvent: DivvieViewEvent() {
     object DisplayFragment: InputViewEvent()
     object InsertPerson: InputViewEvent()
     object RemovePerson: InputViewEvent()
@@ -9,14 +11,14 @@ sealed class InputViewEvent {
     object Next: InputViewEvent()
 }
 
-sealed class SplitViewEvent {
+sealed class SplitViewEvent: DivvieViewEvent() {
     object DisplayFragment: SplitViewEvent()
     object SplitEqually: SplitViewEvent()
     object EnterIndividually: SplitViewEvent()
     object Back: SplitViewEvent()
 }
 
-sealed class ItemViewEvent {
+sealed class ItemViewEvent: DivvieViewEvent() {
     object DisplayFragment: ItemViewEvent()
     data class EnterItemPrice(val input: String): ItemViewEvent()
     object Next: ItemViewEvent()
@@ -25,7 +27,7 @@ sealed class ItemViewEvent {
     object ClearAll: ItemViewEvent()
 }
 
-sealed class ResultViewEvent {
+sealed class ResultViewEvent: DivvieViewEvent() {
     object DisplayFragment: ResultViewEvent()
     data class EnterTip(val input: String): ResultViewEvent()
     object ToggleFormat: ResultViewEvent()
@@ -33,7 +35,7 @@ sealed class ResultViewEvent {
     object StartOver: ResultViewEvent()
 }
 
-sealed class BowlsViewEvent {
+sealed class BowlsViewEvent: DivvieViewEvent() {
     object DisplayFragment: BowlsViewEvent()
     object DisplayBowls: BowlsViewEvent()
     object ClickBowl: BowlsViewEvent()
