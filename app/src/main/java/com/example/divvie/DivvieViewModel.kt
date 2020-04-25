@@ -152,7 +152,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         commitItem()
     }
 
-    private fun onUndo() {}
+    private fun onUndo() {
+        removeFromStack()
+    }
 
     private fun onItemBack() {
         tempItem.value = Item()
@@ -163,14 +165,27 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onClearAll() {}
     ////////////////////////////////////////////////////
 
+    private fun removeFromStack() {
+        val stack = itemStack.value!!
+        val removedItem = stack.pop()
+        val prevLeftover = leftover.value
+        setLeftover(prevLeftover!! + removedItem.basePrice)
+        for (index in removedItem.listOfIndex) {
+            val person = findPerson(index)
+            person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
+            updatePerson(person)
+        }
+        itemStack.value = stack
+        Log.d("///////////", itemStack.value.toString())
+    }
 
     private fun commitItem() {
-        val temp = tempItem.value!!
-        temp.finalSplitPrice = temp.tempSplitPrice
-        temp.tempSplitPrice = 0.0
-        pushToStack(temp)
+        val pushedItem = tempItem.value!!
+        pushedItem.finalSplitPrice = pushedItem.tempSplitPrice
+        pushedItem.tempSplitPrice = 0.0
+        pushToStack(pushedItem)
         val prevLeftover = leftover.value
-        setLeftover(prevLeftover!! - temp.basePrice)
+        setLeftover(prevLeftover!! - pushedItem.basePrice)
         tempItem.value = Item()
         for (person in getAllPersonStatic()) {
             val personalTemp = person.tempPrice ?: 0.0
@@ -181,19 +196,19 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun alterTempItem(i: Int) {
-        val temp = tempItem.value
-        val list = temp!!.listOfIndex
-        if (list.contains(i)) {
-            list.remove(i)
+        val alteredItem = tempItem.value
+        val listOfIndex = alteredItem!!.listOfIndex
+        if (listOfIndex.contains(i)) {
+            listOfIndex.remove(i)
         } else {
-            list.add(i)
+            listOfIndex.add(i)
         }
-        val basePrice = temp.basePrice
-        temp.tempSplitPrice = basePrice / list.size
-        tempItem.value = temp
-        for (index in temp.listOfIndex) {
+        val basePrice = alteredItem.basePrice
+        alteredItem.tempSplitPrice = basePrice / listOfIndex.size
+        tempItem.value = alteredItem
+        for (index in alteredItem.listOfIndex) {
             val person = findPerson(index)
-            person.tempPrice = temp.tempSplitPrice
+            person.tempPrice = alteredItem.tempSplitPrice
             updatePerson(person)
         }
     }
