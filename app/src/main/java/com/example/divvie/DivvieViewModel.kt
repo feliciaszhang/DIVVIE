@@ -12,32 +12,167 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
-    // TODO organize this plz
-    private var leftover = MutableLiveData<Double>()
-    val leftoverObservable: LiveData<Double>
-        get() = leftover
+
+    fun onEvent(event: InputViewEvent) {
+        when (event) {
+            is InputViewEvent.DisplayFragment -> onDisplayInputFragment()
+            is InputViewEvent.InsertPerson -> onInsertPerson()
+            is InputViewEvent.RemovePerson -> onRemovePerson()
+            is InputViewEvent.EnterSubtotal -> onEnterSubtotal(event.input)
+            is InputViewEvent.EnterTax -> onEnterTax(event.input)
+            is InputViewEvent.Next -> onInputNext()
+        }
+    }
+
+    fun onEvent(event: SplitViewEvent) {
+        when (event) {
+            is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
+            is SplitViewEvent.SplitEqually -> onSplitEqually()
+            is SplitViewEvent.EnterIndividually -> onEnterIndividually()
+            is SplitViewEvent.Back -> onSplitBack()
+        }
+    }
+
+    fun onEvent(event: ResultViewEvent) {
+        when (event) {
+            is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
+            is ResultViewEvent.EnterTip -> onEnterTip(event.input)
+            //TODO is ResultViewEvent.ToggleFormat ->
+            is ResultViewEvent.Back -> onSplitBack()
+            is ResultViewEvent.StartOver -> onStartOver()
+        }
+    }
+
+    fun onEvent(event: ItemViewEvent) {
+        when (event) {
+            is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
+            is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
+            is ItemViewEvent.Back -> onItemBack()
+            is ItemViewEvent.Next -> onItemNext()
+            is ItemViewEvent.ClearAll -> onClearAll()
+            is ItemViewEvent.Done -> onDone()
+        }
+    }
+
+    private fun onDisplayInputFragment() {
+        setDisplayPrices(false)
+        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
+            insertPerson(Person(id = i))
+        }
+        setSubtotal(AMOUNT_DEFAULT)
+        setTax(AMOUNT_DEFAULT)
+    }
+
+    private fun onInsertPerson() {
+        val num = getNumberOfPeopleStatic()
+        if (num < MAX_NUMBER_OF_PEOPLE) {
+            insertPerson(Person(id = num))
+        }
+    }
+
+    private fun onRemovePerson() {
+        val num = getNumberOfPeopleStatic()
+        if (num > MIN_NUMBER_OF_PEOPLE) {
+            deletePerson(Person(id = num - 1))
+        }
+    }
+
+    private fun onEnterSubtotal(input: String) {
+        if (input != "") {
+            setSubtotal(input.toDouble())
+        } else {
+            setSubtotal(AMOUNT_DEFAULT)
+            // TODO remind user it's pretax
+            // TODO show user this cannot be 0
+        }
+    }
+
+    private fun onEnterTax(input: String) {
+        if (input != "") {
+            setTax(input.toDouble())
+        } else {
+            setTax(AMOUNT_DEFAULT)
+        }
+    }
+
+    private fun onInputNext() {
+        splitPretaxEqually()
+    }
+
+    private fun onDisplaySplitFragment() {
+        setDisplayPrices(true)
+    }
+
+    private fun onSplitEqually() {}
+
+    private fun onEnterIndividually() {
+        clearPersonalData()
+    }
+
+    private fun onSplitBack() {}
+
+    private fun onDisplayResultFragment() {
+        setTip(AMOUNT_DEFAULT)
+        calculatePersonResult()
+    }
+
+    private fun onEnterTip(input: String) {
+        if (input != "") {
+            setTip(input.toDouble())
+        } else {
+            setTip(AMOUNT_DEFAULT)
+        }
+        calculatePersonResult()
+    }
+
+    private fun onStartOver() {}
+
+    private fun onDisplayItemFragment() {
+        setSelectPerson(false)
+        setTempItem(Item())
+    }
+
+    private fun onEnterItemPrice(input: String) {
+        val temp = tempItem.value
+        if (input != "") {
+            temp!!.basePrice = input.toDouble()
+            setTempItem(temp)
+        } else {
+            temp!!.basePrice = AMOUNT_DEFAULT
+            setTempItem(temp)
+        }
+    }
+
+    private fun onItemNext() {
+        setSelectPerson(true)
+    }
+
+    private fun onDone() {
+        setSelectPerson(false)
+        commitItem()
+    }
+
+    private fun onItemBack() {}
+
+    private fun onClearAll() {}
+    ////////////////////////////////////////////////////
+
+
 
     fun getLeftover(): Double? {
         return leftover.value
     }
 
-    fun setLeftover(num: Double) {
-        leftover.value = num
-    }
 
-    private var tempItem = MutableLiveData<Item>()
-    val tempItemObservable: LiveData<Item>
-        get() = tempItem
+
+
 
     fun getTempItem(): Item? {
         return tempItem.value
     }
 
-    fun setTempItem(item: Item) {
-        tempItem.value = item
-    }
 
-    fun commitItem() {
+    private fun commitItem() {
         val temp = tempItem.value!!
         temp.finalSplitPrice = temp.tempSplitPrice
         temp.tempSplitPrice = AMOUNT_DEFAULT
@@ -92,7 +227,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
-    fun splitPretaxEqually() {
+    private fun splitPretaxEqually() {
         for (person in getAllPersonStatic()) {
             person.subtotal = getSubtotal()?.div(getAllPersonStatic().size) ?: AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
@@ -115,7 +250,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun clearPersonalData() {
+    private fun clearPersonalData() {
         for (person in getAllPersonStatic()) {
             person.subtotal = AMOUNT_DEFAULT
             person.tax = AMOUNT_DEFAULT
@@ -125,7 +260,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun calculatePersonResult() {
+    private fun calculatePersonResult() {
         for (person in getAllPersonStatic()) {
             val tax: Double = getTax() ?: AMOUNT_DEFAULT
             val tip: Double = getTip() ?: AMOUNT_DEFAULT
@@ -139,23 +274,41 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private val displayPrices = MutableLiveData<Boolean>()
     val displayPricesObservable: LiveData<Boolean>
         get() = displayPrices
+    private fun setDisplayPrices(bool: Boolean) {
+        displayPrices.value = bool
+    }
 
     private val selectPerson = MutableLiveData<Boolean>()
     val selectPersonObservable: LiveData<Boolean>
         get() = selectPerson
+    fun setSelectPerson(bool: Boolean) {
+        selectPerson.value = bool
+    }
 
     private val subtotal = MutableLiveData<Double>()
     val subtotalObservable: LiveData<Double>
         get() = subtotal
+    private fun setSubtotal(num: Double) {
+        subtotal.value = num
+        setTotal()
+        setLeftover(num)
+    }
 
     private val tax = MutableLiveData<Double>()
+    private fun setTax(num: Double) {
+        tax.value = num
+        setTotal()
+    }
 
     private val tip = MutableLiveData<Double>()
+    private fun setTip(num: Double) {
+        tip.value = num
+        setTotal()
+    }
 
     private val total = MutableLiveData<Double>()
     val totalObservable: LiveData<Double>
         get() = total
-
     private fun setTotal() {
         val subtotal: Double = getSubtotal() ?: AMOUNT_DEFAULT
         val tax: Double = getTax() ?: AMOUNT_DEFAULT
@@ -163,37 +316,33 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         total.value = subtotal + tax + tip
     }
 
-    fun setDisplayPrices(bool: Boolean) {
-        displayPrices.value = bool
+    private var leftover = MutableLiveData<Double>()
+    val leftoverObservable: LiveData<Double>
+        get() = leftover
+    private fun setLeftover(num: Double) {
+        leftover.value = num
     }
 
-    fun setSelectPerson(bool: Boolean) {
-        selectPerson.value = bool
+    private var tempItem = MutableLiveData<Item>()
+    val tempItemObservable: LiveData<Item>
+        get() = tempItem
+    private fun setTempItem(item: Item) {
+        tempItem.value = item
     }
 
-    fun setSubtotal(num: Double) {
-        subtotal.value = num
-        setTotal()
-        setLeftover(num)
-    }
+
+
+
 
     fun getSubtotal(): Double? {
         return subtotal.value
     }
 
-    fun setTax(num: Double) {
-        tax.value = num
-        setTotal()
-    }
 
     fun getTax(): Double? {
         return tax.value
     }
 
-    fun setTip(num: Double) {
-        tip.value = num
-        setTotal()
-    }
 
     private fun getTip(): Double? {
         return tip.value

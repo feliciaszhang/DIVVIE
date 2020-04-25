@@ -15,16 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         viewModel = ViewModelProviders.of(this).get(DivvieViewModel::class.java)
-        viewModel.setDisplayPrices(false)
-        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            viewModel.insertPerson(Person(id = i))
-        }
-        viewModel.setSubtotal(AMOUNT_DEFAULT)
-        viewModel.setTax(AMOUNT_DEFAULT)
-        viewModel.setTip(AMOUNT_DEFAULT)
-        viewModel.setSelectPerson(false)
-        viewModel.setTempItem(Item())
-        viewModel.setLeftover(AMOUNT_DEFAULT)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(

@@ -16,20 +16,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.AMOUNT_DEFAULT
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.ItemViewEvent
 
 class ItemFragment : Fragment() {
     companion object {
         fun newInstance() = ItemFragment()
     }
     private lateinit var viewModel: DivvieViewModel
-    private lateinit var layout: LinearLayout
     private lateinit var editItemText: EditText
     private lateinit var itemText: TextView
     private lateinit var leftoverText: TextView
     private lateinit var tap: TextView
     private lateinit var nextButton: Button
     private lateinit var doneButton: Button
-    private lateinit var calculateButton: Button
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
@@ -37,15 +36,7 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val num = editItemText.text.toString()
-            val temp = viewModel.getTempItem()
-            if (num != "") {
-                temp!!.basePrice = num.toDouble()
-                viewModel.setTempItem(temp)
-            } else {
-                temp!!.basePrice = AMOUNT_DEFAULT
-                viewModel.setTempItem(temp)
-            }
+            viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
         }
     }
 
@@ -54,14 +45,12 @@ class ItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.item_fragment, container, false)
-        layout = fragment.findViewById(R.id.item_price_layout)
         editItemText = fragment.findViewById(R.id.edit_item)
         itemText = fragment.findViewById(R.id.item_text)
         leftoverText = fragment.findViewById(R.id.leftover)
         tap = fragment.findViewById(R.id.tap)
         nextButton = fragment.findViewById(R.id.next)
         doneButton = fragment.findViewById(R.id.done)
-        calculateButton = fragment.findViewById(R.id.calculate)
         backButton = fragment.findViewById(R.id.back)
         undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
@@ -71,24 +60,17 @@ class ItemFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
+        viewModel.onEvent(ItemViewEvent.DisplayFragment)
         viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
         viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
 
         nextButton.setOnClickListener {
-            viewModel.setSelectPerson(true)
+            viewModel.onEvent(ItemViewEvent.Next)
         }
 
         doneButton.setOnClickListener {
-            viewModel.setSelectPerson(false)
-            viewModel.commitItem()
-        }
-
-        calculateButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout,
-                ResultFragment.newInstance()
-            ).commit()
+            viewModel.onEvent(ItemViewEvent.Done)
         }
     }
 
@@ -127,8 +109,9 @@ class ItemFragment : Fragment() {
 
     private fun splitComplete(leftover: Double) {
         if (leftover == 0.0) {
-            calculateButton.visibility = View.VISIBLE
-            layout.visibility = View.GONE
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, SplitFragment.newInstance()
+            ).commit()
         }
     }
 }
