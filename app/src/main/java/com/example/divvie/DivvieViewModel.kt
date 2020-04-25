@@ -43,9 +43,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onDisplayBowlFragment() {
-        setDisplayPrices(false)
-    }
+    private fun onDisplayBowlFragment() {}
 
     private fun onDisplayInputFragment() {
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
@@ -89,9 +87,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         splitPretaxEqually()
     }
 
-    private fun onDisplaySplitFragment() {
-        setDisplayPrices(true)
-    }
+    private fun onDisplaySplitFragment() {}
 
     private fun onSplitEqually() {}
 
@@ -115,7 +111,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         calculatePersonResult()
     }
 
-    private fun onStartOver() {}
+    private fun onStartOver() {
+        deleteAllPerson()
+    }
 
     private fun onDisplayItemFragment() {
         setSelectPerson(false)
@@ -228,13 +226,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val displayPrices = MutableLiveData<Boolean>()
-    val displayPricesObservable: LiveData<Boolean>
-        get() = displayPrices
-    private fun setDisplayPrices(bool: Boolean) {
-        displayPrices.value = bool
-    }
-
     private val selectPerson = MutableLiveData<Boolean>()
     val selectPersonObservable: LiveData<Boolean>
         get() = selectPerson
@@ -304,6 +295,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
+
+    private fun deleteAllPerson() {dao.deleteAllPerson()}
 
 
     fun getSubtotal(): Double? {

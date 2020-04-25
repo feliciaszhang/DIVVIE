@@ -44,7 +44,6 @@ class BowlsFragment : Fragment() {
         viewModel.onEvent(BowlsViewEvent.DisplayFragment)
         viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayBowls(it) })
         viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { updatePrices(it) })
-        viewModel.displayPricesObservable.observe(viewLifecycleOwner, Observer { displayPrices(it) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
     }
 
@@ -69,27 +68,23 @@ class BowlsFragment : Fragment() {
         }
     }
 
-    private fun displayPrices(bool: Boolean) {
-        if (bool) {
-            for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-                val view = bowlsList.getChildAt(i)
-                val price: LinearLayout = view.findViewById(R.id.price)
-                price.visibility = View.VISIBLE
-            }
-        }
-    }
-
     private fun updatePrices(list: List<Person>) {
         for (i in list.indices) {
             val person = list[i]
             val view = bowlsList.getChildAt(i)
             val priceAmount: TextView = view.findViewById(R.id.price_amount)
-            val personalSubtotal = person.subtotal ?: 0.0
-            val personalTax = person.tax ?: 0.0
-            val personalTip = person.tip ?: 0.0
-            val personalTempPrice = person.tempPrice ?: 0.0
-            val personalTotal = personalSubtotal + personalTax + personalTip + personalTempPrice
-            priceAmount.text = personalTotal.toString()
+            val price: LinearLayout = view.findViewById(R.id.price)
+            val personalSubtotal = person.subtotal
+            if (personalSubtotal == null) {
+                price.visibility = View.GONE
+            } else {
+                price.visibility = View.VISIBLE
+                val personalTax = person.tax ?: 0.0
+                val personalTip = person.tip ?: 0.0
+                val personalTempPrice = person.tempPrice ?: 0.0
+                val personalTotal = personalSubtotal + personalTax + personalTip + personalTempPrice
+                priceAmount.text = personalTotal.toString()
+            }
         }
     }
 
