@@ -24,6 +24,7 @@ sealed class ItemViewEvent: DivvieViewEvent() {
     object Next: ItemViewEvent()
     object Done: ItemViewEvent()
     object Back: ItemViewEvent()
+    object Undo: ItemViewEvent()
     object ClearAll: ItemViewEvent()
 }
 

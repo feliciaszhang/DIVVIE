@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +35,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
             is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
             is ItemViewEvent.Back -> onItemBack()
+            is ItemViewEvent.Undo -> onUndo()
             is ItemViewEvent.Next -> onItemNext()
             is ItemViewEvent.ClearAll -> onClearAll()
             is ItemViewEvent.Done -> onDone()
@@ -91,7 +93,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         splitPretaxEqually()
     }
 
-    private fun onDisplaySplitFragment() {}
+    private fun onDisplaySplitFragment() {
+        setSelectPerson(false)
+    }
 
     private fun onSplitEqually() {}
 
@@ -148,7 +152,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         commitItem()
     }
 
-    private fun onItemBack() {}
+    private fun onUndo() {}
+
+    private fun onItemBack() {
+        tempItem.value = Item()
+        itemStack.value = Stack()
+        splitPretaxEqually()
+    }
 
     private fun onClearAll() {}
     ////////////////////////////////////////////////////
@@ -158,7 +168,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val temp = tempItem.value!!
         temp.finalSplitPrice = temp.tempSplitPrice
         temp.tempSplitPrice = 0.0
-        itemStack.push(temp)
+        pushToStack(temp)
         val prevLeftover = leftover.value
         setLeftover(prevLeftover!! - temp.basePrice)
         tempItem.value = Item()
@@ -271,7 +281,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         tempItem.value = item
     }
 
-    private val itemStack: Stack<Item> = Stack()
+    private val itemStack = MutableLiveData<Stack<Item>>()
+    val itemStackObservable: LiveData<Stack<Item>>
+        get() = itemStack
+    private fun pushToStack(item: Item) {
+        var stack = itemStack.value
+        if (stack == null) {
+            stack = Stack()
+        }
+        stack.push(item)
+        itemStack.value = stack
+    }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
 

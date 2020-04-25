@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -63,6 +62,7 @@ class ItemFragment : Fragment() {
         viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
         viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
         viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
+        viewModel.itemStackObservable.observe(viewLifecycleOwner, Observer { undoOrBack(it.size) })
 
         nextButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.Next)
@@ -70,6 +70,27 @@ class ItemFragment : Fragment() {
 
         doneButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.Done)
+        }
+
+        undoButton.setOnClickListener {
+            viewModel.onEvent(ItemViewEvent.Undo)
+        }
+
+        backButton.setOnClickListener {
+            viewModel.onEvent(ItemViewEvent.Back)
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, SplitFragment.newInstance()
+            ).commit()
+        }
+    }
+
+    private fun undoOrBack(stackSize: Int) {
+        if (stackSize > 0) {
+            undoButton.visibility = View.VISIBLE
+            backButton.visibility = View.GONE
+        } else {
+            undoButton.visibility = View.GONE
+            backButton.visibility = View.VISIBLE
         }
     }
 
