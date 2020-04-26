@@ -53,6 +53,14 @@ class InputFragment : Fragment() {
 
         downButton.setOnClickListener { viewModel.onEvent(InputViewEvent.RemovePerson) }
 
+        if (viewModel.getSubtotal() != null) {
+            editSubtotalText.setText(viewModel.getSubtotal().toString())
+        }
+
+        if (viewModel.getTax() != null) {
+            editTaxText.setText(viewModel.getTax().toString())
+        }
+
         editSubtotalText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -82,7 +90,7 @@ class InputFragment : Fragment() {
         numberOfPeopleText.text = num.toString()
     }
 
-    private fun enableNextButton(subtotal: Double) {
-        nextButton.isEnabled = subtotal != 0.0
+    private fun enableNextButton(subtotal: Double?) {
+        nextButton.isEnabled = subtotal != 0.0 && subtotal != null
     }
 }

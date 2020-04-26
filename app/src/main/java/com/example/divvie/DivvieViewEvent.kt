@@ -2,6 +2,10 @@ package com.example.divvie
 
 open class DivvieViewEvent
 
+sealed class MainEvent: DivvieViewEvent() {
+    object DisplayActivity: MainEvent()
+}
+
 sealed class InputViewEvent: DivvieViewEvent() {
     object DisplayFragment: InputViewEvent()
     object InsertPerson: InputViewEvent()

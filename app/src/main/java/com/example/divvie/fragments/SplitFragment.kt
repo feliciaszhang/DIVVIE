@@ -66,7 +66,6 @@ class SplitFragment : Fragment() {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
-            // TODO previous InputFragment and BowlsFragment
             // TODO back to inputFragment vs. back to ItemFragment
         }
     }
