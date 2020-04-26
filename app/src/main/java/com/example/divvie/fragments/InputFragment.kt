@@ -14,7 +14,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.divvie.*
-import com.example.divvie.data.Person
 
 class InputFragment : Fragment() {
     companion object {
@@ -46,8 +45,7 @@ class InputFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(InputViewEvent.DisplayFragment)
-        viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         upButton.setOnClickListener { viewModel.onEvent(InputViewEvent.InsertPerson) }
 
@@ -78,11 +76,8 @@ class InputFragment : Fragment() {
         }
     }
 
-    private fun displayNumberOfPeople(num: Int) {
-        numberOfPeopleText.text = num.toString()
-    }
-
-    private fun enableNextButton(subtotal: Double) {
-        nextButton.isEnabled = subtotal != 0.0
+    private fun render(viewState: DivvieViewState) {
+        numberOfPeopleText.text = viewState.personList.size.toString()
+        nextButton.isEnabled = viewState.subtotal != 0.0
     }
 }

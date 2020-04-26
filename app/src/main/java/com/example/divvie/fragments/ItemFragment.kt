@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.DivvieViewState
 import com.example.divvie.ItemViewEvent
 
 class ItemFragment : Fragment() {
@@ -59,10 +60,9 @@ class ItemFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(ItemViewEvent.DisplayFragment)
-        viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { setTemp(it.basePrice, it.listOfIndex) })
-        viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { disableViews(it) })
-        viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
-        viewModel.itemStackObservable.observe(viewLifecycleOwner, Observer { undoOrBack(it.size) })
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
+
+        editItemText.addTextChangedListener(textWatcher)
 
         nextButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.Next)
@@ -88,29 +88,27 @@ class ItemFragment : Fragment() {
         }
     }
 
-    private fun undoOrBack(stackSize: Int) {
-        if (stackSize > 0) {
+    private fun render(viewState: DivvieViewState) {
+        if (viewState.leftover == 0.0) {
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, SplitFragment.newInstance()
+            ).commit()
+        }
+        if (viewState.itemStack.size > 0) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
         } else {
             undoButton.visibility = View.GONE
             backButton.visibility = View.VISIBLE
         }
-    }
-
-    private fun setTemp(num: Double, listOfIndex: ArrayList<Int>) {
-        doneButton.isEnabled = listOfIndex.size != 0
-        nextButton.isEnabled = num != 0.0
-        val leftover = viewModel.getLeftover()!! - num
-        leftoverText.text = String.format(resources.getString(R.string.leftover), leftover.toString())
-        if (leftover < 0) {
+        doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
+        nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
+        leftoverText.text = String.format(resources.getString(R.string.leftover), viewState.leftover.toString())
+        if (viewState.leftover!! < 0) {
             nextButton.isEnabled = false
             // TODO show user this cannot be negative
         }
-    }
-
-    private fun disableViews(bool: Boolean) {
-        if (bool) {
+        if (viewState.isClickableBowls) {
             editItemText.visibility = View.GONE
             editItemText.removeTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
@@ -118,7 +116,7 @@ class ItemFragment : Fragment() {
             itemText.visibility = View.VISIBLE
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
-            itemText.text = viewModel.getTempItem()!!.basePrice.toString()
+            itemText.text = viewState.tempItemBasePrice.toString()
         } else {
             editItemText.visibility = View.VISIBLE
             editItemText.text.clear()
@@ -128,14 +126,6 @@ class ItemFragment : Fragment() {
             itemText.visibility = View.GONE
             tap.visibility = View.GONE
             doneButton.visibility = View.GONE
-        }
-    }
-
-    private fun splitComplete(leftover: Double) {
-        if (leftover == 0.0) {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, SplitFragment.newInstance()
-            ).commit()
         }
     }
 }

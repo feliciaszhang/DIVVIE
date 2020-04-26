@@ -57,13 +57,7 @@ class ResultFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(ResultViewEvent.DisplayFragment)
-        viewModel.totalObservable.observe(viewLifecycleOwner, Observer { displayTotal(it) })
-        viewModel.isCurrencyObservable.observe(viewLifecycleOwner, Observer { setTipState(it) })
-
-        // TODO ViewState
-        subtotal.text = viewModel.getSubtotal().toString()
-
-        tax.text = viewModel.getTax().toString()
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         currencyTip.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -103,23 +97,23 @@ class ResultFragment : Fragment() {
         }
     }
 
-    private fun displayTotal(num: Double) {
+    private fun render(viewState: DivvieViewState) {
+        val num = viewState.subtotal + viewState.tax + viewState.tip
+        subtotal.text = viewState.subtotal.toString()
+        tax.text = viewState.tax.toString()
         total.text = num.toString()
-    }
-
-    private fun setTipState(bool: Boolean) {
-        if (bool) {
+        if (viewState.isCurrencyTip) {
             currencyTipGroup.visibility = View.VISIBLE
             percentageTipGroup.visibility = View.GONE
             currencyButton.isEnabled = false
             percentageButton.isEnabled = true
-            currencyTip.setText(viewModel.getTip()?.toString() ?: "")
+            currencyTip.setText(viewState.tip.toString())
         } else {
             currencyTipGroup.visibility = View.GONE
             percentageTipGroup.visibility = View.VISIBLE
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
-            percentageTip.setText(viewModel.getTip()?.div(viewModel.getSubtotal()!!)?.toString() ?: "")
+            percentageTip.setText(viewState.tip.div(viewState.subtotal).toString())
         }
     }
 }

@@ -9,8 +9,13 @@ import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val viewState = MutableLiveData<DivvieViewState>()
+    val viewStateObservable: LiveData<DivvieViewState>
+        get() = viewState
 
     fun onEvent(event: DivvieViewEvent) {
         when (event) {
@@ -24,6 +29,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
             is SplitViewEvent.SplitEqually -> onSplitEqually()
             is SplitViewEvent.EnterIndividually -> onEnterIndividually()
+            is SplitViewEvent.Calculate -> onCalculate()
             is SplitViewEvent.Back -> onSplitBack()
 
             is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
@@ -48,10 +54,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayBowlFragment() {
-        for (person in getAllPersonStatic()) {
+        for (person in DivvieViewState().personList) {
             val temp = Person(person.id, null, null, null, null)
             updatePerson(temp)
         }
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onClickBowl(i: Int) {
@@ -59,31 +66,33 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayInputFragment() {
-        setSubtotal(0.0)
-        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            insertPerson(Person(id = i))
+        for (person in DivvieViewState().personList) {
+            insertPerson(person)
         }
+        viewState.value = DivvieViewState()
     }
 
     private fun onInsertPerson() {
-        val num = getNumberOfPeopleStatic()
+        val num = viewState.value!!.personList.size
         if (num < MAX_NUMBER_OF_PEOPLE) {
             insertPerson(Person(id = num))
         }
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onRemovePerson() {
-        val num = getNumberOfPeopleStatic()
+        val num = viewState.value!!.personList.size
         if (num > MIN_NUMBER_OF_PEOPLE) {
             deletePerson(Person(id = num - 1))
         }
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onEnterSubtotal(input: String) {
         if (input != "") {
-            setSubtotal(input.toDouble())
+            viewState.value = viewState.value!!.copy(subtotal = input.toDouble(), leftover = input.toDouble())
         } else {
-            setSubtotal(0.0)
+            viewState.value = viewState.value!!.copy(subtotal = 0.0, leftover = 0.0)
             // TODO remind user it's pretax
             // TODO show user this cannot be 0
         }
@@ -91,113 +100,122 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onEnterTax(input: String) {
         if (input != "") {
-            setTax(input.toDouble())
+            viewState.value = viewState.value!!.copy(tax = input.toDouble())
         } else {
-            setTax(0.0)
+            viewState.value = viewState.value!!.copy(tax = 0.0)
         }
     }
 
     private fun onInputNext() {
-        if (getTax() == null) {
-            setTax(0.0)
-        }
-        splitPretaxEqually() // in case where ItemFragment navigate to SplitFragment and it's not equal
+        splitPretaxEqually()
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
+        // in case where ItemFragment navigate to SplitFragment and it's not equal
     }
 
     private fun onDisplaySplitFragment() {
-        setSelectPerson(false) // in case where ItemFragment navigate to SplitFragment when selectPerson is true
+        viewState.value = viewState.value!!.copy(isClickableBowls = false)
+        // in case where ItemFragment navigate to SplitFragment when selectPerson is true
     }
 
-    private fun onSplitEqually() {}
+    private fun onSplitEqually() {
+        calculatePersonResult()
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
+    }
 
     private fun onEnterIndividually() {
         clearPersonalData()
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
+    }
+
+    private fun onCalculate() {
+        calculatePersonResult()
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onSplitBack() {
         //TODO split back
     }
 
-    private fun onDisplayResultFragment() {
-        setTip(0.0)
-        setIsCurrency(true)
-        calculatePersonResult()
-    }
+    private fun onDisplayResultFragment() {}
 
     private fun onEnterCurrencyTip(input: String) {
         if (input != "") {
-            setTip(input.toDouble())
+            viewState.value = viewState.value!!.copy(tip = input.toDouble())
         } else {
-            setTip(0.0)
+            viewState.value = viewState.value!!.copy(tip = 0.0)
         }
-        calculatePersonResult()
     }
 
     private fun onEnterPercentageTip(input: String) {
+        val vs = viewState.value!!
         if (input != "") {
-            val subtotal = getSubtotal()!!
-            setTip(input.toDouble() * subtotal)
+            val subtotal = vs.subtotal
+            viewState.value = viewState.value!!.copy(tip = input.toDouble() * subtotal)
         } else {
-            setTip(0.0)
+            viewState.value = viewState.value!!.copy(tip = 0.0)
         }
-        calculatePersonResult()
     }
 
     private fun onSelectCurrency() {
-        setIsCurrency(true)
+        viewState.value = viewState.value!!.copy(isCurrencyTip = true)
     }
 
     private fun onSelectPercentage() {
-        setIsCurrency(false)
+        viewState.value = viewState.value!!.copy(isCurrencyTip = false)
     }
 
     private fun onResultBack() {
         splitPretaxEqually()
-        setLeftover(getSubtotal()!!)
+        val vs = viewState.value!!
+        viewState.value = viewState.value!!.copy(leftover = vs.subtotal)
     }
 
     private fun onStartOver() {
         deleteAllPerson()
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onDisplayItemFragment() {
-        setSelectPerson(false)
-        setTempItem(Item())
+        viewState.value = viewState.value!!.copy(isClickableBowls = false)
     }
 
     private fun onEnterItemPrice(input: String) {
-        val temp = tempItem.value
         if (input != "") {
-            temp!!.basePrice = input.toDouble()
-            setTempItem(temp)
+            viewState.value = viewState.value!!.copy(tempItemBasePrice = input.toDouble())
         } else {
-            temp!!.basePrice = 0.0
-            setTempItem(temp)
+            viewState.value = viewState.value!!.copy(tempItemBasePrice = 0.0)
         }
     }
 
     private fun onItemNext() {
-        setSelectPerson(true)
+        viewState.value = viewState.value!!.copy(isClickableBowls = true)
     }
 
     private fun onDone() {
-        setSelectPerson(false)
         commitItem()
+        viewState.value = viewState.value!!.copy(isClickableBowls = false)
     }
 
     private fun onUndo() {
-        if (selectPerson.value!!) {
-            setSelectPerson(false)
+        if (viewState.value!!.isClickableBowls) {
+            viewState.value = viewState.value!!.copy(isClickableBowls = true)
             removeTempItem()
         } else {
             removeFromStack()
         }
+        viewState.value = viewState.value!!.copy(personList = getAllPersonStatic())
     }
 
     private fun onItemBack() {
-        tempItem.value = Item()
-        itemStack.value = Stack()
         splitPretaxEqually()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic(),
+            tempItemBasePrice = 0.0,
+            tempItemFinalSplitPrice = 0.0,
+            tempItemTempSplitPrice = 0.0,
+            tempItemListOfIndex = ArrayList(),
+            itemStack = Stack()
+        )
     }
 
     private fun onClearAll() {
@@ -205,69 +223,66 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun removeTempItem() {
-        val removedItem = tempItem.value!!
-        for (index in removedItem.listOfIndex) {
+        val vs = viewState.value!!
+        for (index in vs.tempItemListOfIndex) {
             val person = findPerson(index)
             person.tempPrice = 0.0
             updatePerson(person)
         }
-        tempItem.value = Item()
     }
 
     private fun removeFromStack() {
-        val stack = itemStack.value!!
-        val removedItem = stack.pop()
-        val prevLeftover = leftover.value
-        setLeftover(prevLeftover!! + removedItem.basePrice)
+        val vs = viewState.value!!
+        val removedItem = vs.itemStack.pop()
+        val leftover = vs.leftover!!
+        vs.leftover = leftover + removedItem.basePrice
         for (index in removedItem.listOfIndex) {
             val person = findPerson(index)
             person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
             updatePerson(person)
         }
-        itemStack.value = stack
     }
 
     private fun commitItem() {
-        val pushedItem = tempItem.value!!
-        pushedItem.finalSplitPrice = pushedItem.tempSplitPrice
-        pushedItem.tempSplitPrice = 0.0
-        pushToStack(pushedItem)
-        val prevLeftover = leftover.value
-        setLeftover(prevLeftover!! - pushedItem.basePrice)
-        tempItem.value = Item()
-        for (person in getAllPersonStatic()) {
+        val vs = viewState.value!!
+        vs.tempItemFinalSplitPrice = vs.tempItemTempSplitPrice
+        vs.tempItemTempSplitPrice = 0.0
+        vs.itemStack.push(Item(vs.tempItemBasePrice, vs.tempItemFinalSplitPrice, vs.tempItemTempSplitPrice, vs.tempItemListOfIndex))
+        val leftover = vs.leftover!!
+        vs.leftover = leftover - vs.tempItemBasePrice
+        for (person in vs.personList) {
             val personalTemp = person.tempPrice ?: 0.0
             person.subtotal = person.subtotal!! + personalTemp
             person.tempPrice = 0.0
             updatePerson(person)
         }
+        viewState.value = vs
     }
 
     private fun alterTempItem(i: Int) {
-        val alteredItem = tempItem.value
-        val listOfIndex = alteredItem!!.listOfIndex
+        val vs = viewState.value!!
+        val listOfIndex = vs.tempItemListOfIndex
         if (listOfIndex.contains(i)) {
             listOfIndex.remove(i)
         } else {
             listOfIndex.add(i)
         }
-        val basePrice = alteredItem.basePrice
-        alteredItem.tempSplitPrice = basePrice / listOfIndex.size
-        tempItem.value = alteredItem
-        for (person in getAllPersonStatic()) {
-            if (person.id in alteredItem.listOfIndex) {
-                person.tempPrice = alteredItem.tempSplitPrice
-                updatePerson(person)
+        val basePrice = vs.tempItemBasePrice
+        vs.tempItemTempSplitPrice = basePrice / listOfIndex.size
+        for (person in vs.personList) {
+            if (person.id in listOfIndex) {
+                person.tempPrice = vs.tempItemTempSplitPrice
             } else {
                 person.tempPrice = 0.0
-                updatePerson(person)
             }
+            updatePerson(person)
         }
     }
 
     private fun splitPretaxEqually() {
-        for (person in getAllPersonStatic()) {
-            person.subtotal = getSubtotal()!! / getAllPersonStatic().size
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            person.subtotal = vs.subtotal / vs.personList.size
             person.tax = 0.0
             person.tip = 0.0
             person.tempPrice = 0.0
@@ -276,7 +291,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun clearPersonalData() {
-        for (person in getAllPersonStatic()) {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
             person.subtotal = 0.0
             person.tax = 0.0
             person.tip = 0.0
@@ -286,100 +302,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun calculatePersonResult() {
-        for (person in getAllPersonStatic()) {
-            val tax: Double = getTax()!!
-            val tip: Double = getTip()!!
-            val ratio = person.subtotal!! / getSubtotal()!!
-            person.tax = ratio * tax
-            person.tip = ratio * tip
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            val ratio = person.subtotal!! / vs.subtotal
+            person.tax = ratio * vs.tax
+            person.tip = ratio * vs.tip
             updatePerson(person)
         }
-    }
-
-    private val selectPerson = MutableLiveData<Boolean>()
-    val selectPersonObservable: LiveData<Boolean>
-        get() = selectPerson
-    private fun setSelectPerson(bool: Boolean) {
-        selectPerson.value = bool
-    }
-
-    private val subtotal = MutableLiveData<Double>()
-    val subtotalObservable: LiveData<Double>
-        get() = subtotal
-    private fun setSubtotal(num: Double) {
-        subtotal.value = num
-        setTotal()
-        setLeftover(num)
-    }
-    fun getSubtotal(): Double? {
-        return subtotal.value
-    }
-
-    private val tax = MutableLiveData<Double>()
-    private fun setTax(num: Double) {
-        tax.value = num
-        setTotal()
-    }
-    fun getTax(): Double? {
-        return tax.value
-    }
-
-    private val tip = MutableLiveData<Double>()
-    private fun setTip(num: Double) {
-        tip.value = num
-        setTotal()
-    }
-    fun getTip(): Double? {
-        return tip.value
-    }
-
-    private val total = MutableLiveData<Double>()
-    val totalObservable: LiveData<Double>
-        get() = total
-    private fun setTotal() {
-        val subtotal: Double = getSubtotal() ?: 0.0
-        val tax: Double = getTax() ?: 0.0
-        val tip: Double = getTip() ?: 0.0
-        total.value = subtotal + tax + tip
-    }
-
-    private var leftover = MutableLiveData<Double>()
-    val leftoverObservable: LiveData<Double>
-        get() = leftover
-    private fun setLeftover(num: Double) {
-        leftover.value = num
-    }
-    fun getLeftover(): Double? {
-        return leftover.value
-    }
-
-    private var tempItem = MutableLiveData<Item>()
-    val tempItemObservable: LiveData<Item>
-        get() = tempItem
-    private fun setTempItem(item: Item) {
-        tempItem.value = item
-    }
-    fun getTempItem(): Item? {
-        return tempItem.value
-    }
-
-    private val itemStack = MutableLiveData<Stack<Item>>()
-    val itemStackObservable: LiveData<Stack<Item>>
-        get() = itemStack
-    private fun pushToStack(item: Item) {
-        var stack = itemStack.value
-        if (stack == null) {
-            stack = Stack()
-        }
-        stack.push(item)
-        itemStack.value = stack
-    }
-
-    private val isCurrency = MutableLiveData<Boolean>()
-    val isCurrencyObservable: LiveData<Boolean>
-        get() = isCurrency
-    private fun setIsCurrency(bool: Boolean) {
-        isCurrency.value = bool
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
@@ -395,11 +324,5 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
     private fun deleteAllPerson() {dao.deleteAllPerson()}
-
-    private fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
-
-    fun getNumberOfPeople() = dao.getNumberOfPeople()
-
-    fun getAllPerson() = dao.getAllPerson()
 }
 
