@@ -1,7 +1,6 @@
 package com.example.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,8 +26,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is SplitViewEvent.Back -> onSplitBack()
 
             is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
-            is ResultViewEvent.EnterTip -> onEnterTip(event.input)
-            is ResultViewEvent.ToggleFormat -> onToggleFormat()
+            is ResultViewEvent.EnterCurrencyTip -> onEnterCurrencyTip(event.input)
+            is ResultViewEvent.EnterPercentageTip -> onEnterPercentageTip(event.input)
+            is ResultViewEvent.SelectCurrency -> onSelectCurrency()
+            is ResultViewEvent.SelectPercentage -> onSelectPercentage()
             is ResultViewEvent.Back -> onResultBack()
             is ResultViewEvent.StartOver -> onStartOver()
 
@@ -115,10 +116,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onDisplayResultFragment() {
         setTip(0.0)
+        setIsCurrency(true)
         calculatePersonResult()
     }
 
-    private fun onEnterTip(input: String) {
+    private fun onEnterCurrencyTip(input: String) {
         if (input != "") {
             setTip(input.toDouble())
         } else {
@@ -127,7 +129,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         calculatePersonResult()
     }
 
-    private fun onToggleFormat() {}
+    private fun onEnterPercentageTip(input: String) {
+        if (input != "") {
+            val subtotal = getSubtotal()!!
+            setTip(input.toDouble() * subtotal)
+        } else {
+            setTip(0.0)
+        }
+        calculatePersonResult()
+    }
+
+    private fun onSelectCurrency() {
+        setIsCurrency(true)
+    }
+
+    private fun onSelectPercentage() {
+        setIsCurrency(false)
+    }
 
     private fun onResultBack() {}
 
@@ -284,17 +302,26 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         setTotal()
         setLeftover(num)
     }
+    fun getSubtotal(): Double? {
+        return subtotal.value
+    }
 
     private val tax = MutableLiveData<Double>()
     private fun setTax(num: Double) {
         tax.value = num
         setTotal()
     }
+    fun getTax(): Double? {
+        return tax.value
+    }
 
     private val tip = MutableLiveData<Double>()
     private fun setTip(num: Double) {
         tip.value = num
         setTotal()
+    }
+    fun getTip(): Double? {
+        return tip.value
     }
 
     private val total = MutableLiveData<Double>()
@@ -313,12 +340,18 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun setLeftover(num: Double) {
         leftover.value = num
     }
+    fun getLeftover(): Double? {
+        return leftover.value
+    }
 
     private var tempItem = MutableLiveData<Item>()
     val tempItemObservable: LiveData<Item>
         get() = tempItem
     private fun setTempItem(item: Item) {
         tempItem.value = item
+    }
+    fun getTempItem(): Item? {
+        return tempItem.value
     }
 
     private val itemStack = MutableLiveData<Stack<Item>>()
@@ -331,6 +364,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
         stack.push(item)
         itemStack.value = stack
+    }
+
+    private val isCurrency = MutableLiveData<Boolean>()
+    val isCurrencyObservable: LiveData<Boolean>
+        get() = isCurrency
+    private fun setIsCurrency(bool: Boolean) {
+        isCurrency.value = bool
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()
@@ -352,28 +392,5 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun getNumberOfPeople() = dao.getNumberOfPeople()
 
     fun getAllPerson() = dao.getAllPerson()
-
-
-    fun getSubtotal(): Double? {
-        return subtotal.value
-    }
-
-
-    fun getTax(): Double? {
-        return tax.value
-    }
-
-
-    private fun getTip(): Double? {
-        return tip.value
-    }
-
-    fun getLeftover(): Double? {
-        return leftover.value
-    }
-
-    fun getTempItem(): Item? {
-        return tempItem.value
-    }
 }
 

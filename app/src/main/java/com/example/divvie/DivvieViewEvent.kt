@@ -30,8 +30,10 @@ sealed class ItemViewEvent: DivvieViewEvent() {
 
 sealed class ResultViewEvent: DivvieViewEvent() {
     object DisplayFragment: ResultViewEvent()
-    data class EnterTip(val input: String): ResultViewEvent()
-    object ToggleFormat: ResultViewEvent()
+    data class EnterCurrencyTip(val input: String): ResultViewEvent()
+    data class EnterPercentageTip(val input: String): ResultViewEvent()
+    object SelectCurrency: ResultViewEvent()
+    object SelectPercentage: ResultViewEvent()
     object Back: ResultViewEvent()
     object StartOver: ResultViewEvent()
 }
