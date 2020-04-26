@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -58,7 +59,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayInputFragment() {
-        // TODO bug where subtotal isn't null?
+        setSubtotal(0.0)
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
             insertPerson(Person(id = i))
         }
@@ -151,7 +152,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onResultBack() {
-        //TODO result back
+        splitPretaxEqually()
+        setLeftover(getSubtotal()!!)
     }
 
     private fun onStartOver() {
