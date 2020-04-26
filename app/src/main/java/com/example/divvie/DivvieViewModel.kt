@@ -136,7 +136,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onEnterPercentageTip(input: String) {
         if (input != "") {
             val subtotal = getSubtotal()!!
-            setTip(input.toDouble() * subtotal)
+            setTip(input.toDouble() / 100 * subtotal)
         } else {
             setTip(0.0)
         }

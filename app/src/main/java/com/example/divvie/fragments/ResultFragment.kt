@@ -119,7 +119,7 @@ class ResultFragment : Fragment() {
             percentageTipGroup.visibility = View.VISIBLE
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
-            percentageTip.setText(viewModel.getTip()?.div(viewModel.getSubtotal()!!)?.toString() ?: "")
+            percentageTip.setText(viewModel.getTip()?.times(100)?.div(viewModel.getSubtotal()!!)?.toString() ?: "")
         }
     }
 }
