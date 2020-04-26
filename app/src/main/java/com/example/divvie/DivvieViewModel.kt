@@ -95,6 +95,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onInputNext() {
+        if (getTax() == null) {
+            setTax(0.0)
+        }
         splitPretaxEqually()
     }
 
