@@ -34,7 +34,7 @@ class ResultFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.result_fragment, container, false)
         subtotal = fragment.findViewById(R.id.subtotal_amount)
         tax = fragment.findViewById(R.id.tax_amount)
-        tip = fragment.findViewById(R.id.edit_tip)
+        tip = fragment.findViewById(R.id.edit_tip_currency)
         total = fragment.findViewById(R.id.total_amount)
         startOver = fragment.findViewById(R.id.start_over)
         return fragment

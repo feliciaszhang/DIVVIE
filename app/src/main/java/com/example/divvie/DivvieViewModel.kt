@@ -98,11 +98,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         if (getTax() == null) {
             setTax(0.0)
         }
-        splitPretaxEqually()
+        splitPretaxEqually() // in case where ItemFragment navigate to SplitFragment and it's not equal
     }
 
     private fun onDisplaySplitFragment() {
-        setSelectPerson(false)
+        setSelectPerson(false) // in case where ItemFragment navigate to SplitFragment when selectPerson is true
     }
 
     private fun onSplitEqually() {}
