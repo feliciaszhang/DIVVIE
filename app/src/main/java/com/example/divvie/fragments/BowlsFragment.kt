@@ -90,6 +90,7 @@ class BowlsFragment : Fragment() {
                 view.isClickable = true
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
+                    // TODO display breakdown
                 }
             }
         } else {

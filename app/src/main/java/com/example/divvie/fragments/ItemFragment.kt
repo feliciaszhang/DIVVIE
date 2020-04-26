@@ -82,6 +82,10 @@ class ItemFragment : Fragment() {
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
         }
+
+        clearAllButton.setOnClickListener {
+            viewModel.onEvent(ItemViewEvent.ClearAll)
+        }
     }
 
     private fun undoOrBack(stackSize: Int) {

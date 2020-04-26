@@ -58,6 +58,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayInputFragment() {
+        // TODO bug where subtotal isn't null?
         for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
             insertPerson(Person(id = i))
         }
@@ -112,7 +113,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         clearPersonalData()
     }
 
-    private fun onSplitBack() {}
+    private fun onSplitBack() {
+        //TODO split back
+    }
 
     private fun onDisplayResultFragment() {
         setTip(0.0)
@@ -147,7 +150,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         setIsCurrency(false)
     }
 
-    private fun onResultBack() {}
+    private fun onResultBack() {
+        //TODO result back
+    }
 
     private fun onStartOver() {
         deleteAllPerson()
@@ -193,7 +198,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         splitPretaxEqually()
     }
 
-    private fun onClearAll() {}
+    private fun onClearAll() {
+        //TODO clearAll
+    }
 
     private fun removeTempItem() {
         val removedItem = tempItem.value!!

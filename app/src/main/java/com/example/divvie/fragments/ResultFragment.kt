@@ -31,6 +31,7 @@ class ResultFragment : Fragment() {
     private lateinit var currencyButton: Button
     private lateinit var percentageButton: Button
     private lateinit var total: TextView
+    private lateinit var backButton: Button
     private lateinit var startOver: Button
 
     override fun onCreateView(
@@ -47,6 +48,7 @@ class ResultFragment : Fragment() {
         currencyButton = fragment.findViewById(R.id.currencyButton)
         percentageButton = fragment.findViewById(R.id.percentageButton)
         total = fragment.findViewById(R.id.total_amount)
+        backButton = fragment.findViewById(R.id.back)
         startOver = fragment.findViewById(R.id.start_over)
         return fragment
     }
@@ -85,6 +87,13 @@ class ResultFragment : Fragment() {
 
         percentageButton.setOnClickListener {
             viewModel.onEvent(ResultViewEvent.SelectPercentage)
+        }
+
+        backButton.setOnClickListener {
+            viewModel.onEvent(ResultViewEvent.Back)
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, SplitFragment.newInstance()
+            ).commit()
         }
 
         startOver.setOnClickListener {
