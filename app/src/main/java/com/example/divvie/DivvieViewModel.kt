@@ -152,6 +152,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onResultBack() {
+        // TODO split equally?
         splitPretaxEqually()
         setLeftover(getSubtotal()!!)
     }

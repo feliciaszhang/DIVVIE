@@ -60,7 +60,6 @@ class ResultFragment : Fragment() {
         viewModel.totalObservable.observe(viewLifecycleOwner, Observer { displayTotal(it) })
         viewModel.isCurrencyObservable.observe(viewLifecycleOwner, Observer { setTipState(it) })
 
-        // TODO ViewState
         subtotal.text = viewModel.getSubtotal().toString()
 
         tax.text = viewModel.getTax().toString()
