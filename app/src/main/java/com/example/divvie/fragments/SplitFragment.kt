@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.R
 import com.example.divvie.DivvieViewModel
+import com.example.divvie.DivvieViewState
 import com.example.divvie.SplitViewEvent
 
 class SplitFragment : Fragment() {
@@ -38,7 +39,7 @@ class SplitFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(SplitViewEvent.DisplayFragment)
-        viewModel.leftoverObservable.observe(viewLifecycleOwner, Observer { splitComplete(it) })
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         equalButton.setOnClickListener {
             viewModel.onEvent(SplitViewEvent.SplitEqually)
@@ -70,8 +71,8 @@ class SplitFragment : Fragment() {
         }
     }
 
-    private fun splitComplete(leftover: Double) {
-        if (leftover == 0.0) {
+    private fun render(viewState: DivvieViewState) {
+        if (viewState.leftover == 0.0) {
             calculateButton.visibility = View.VISIBLE
             equalButton.visibility = View.GONE
             individualButton.visibility = View.GONE

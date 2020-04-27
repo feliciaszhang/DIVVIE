@@ -46,20 +46,11 @@ class InputFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(InputViewEvent.DisplayFragment)
-        viewModel.getNumberOfPeople().observe(viewLifecycleOwner, Observer { displayNumberOfPeople(it) })
-        viewModel.subtotalObservable.observe(viewLifecycleOwner, Observer { enableNextButton(it) })
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         upButton.setOnClickListener { viewModel.onEvent(InputViewEvent.InsertPerson) }
 
         downButton.setOnClickListener { viewModel.onEvent(InputViewEvent.RemovePerson) }
-
-        if (viewModel.getSubtotal() != null) {
-            editSubtotalText.setText(viewModel.getSubtotal().toString())
-        }
-
-        if (viewModel.getTax() != null) {
-            editTaxText.setText(viewModel.getTax().toString())
-        }
 
         editSubtotalText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -86,11 +77,14 @@ class InputFragment : Fragment() {
         }
     }
 
-    private fun displayNumberOfPeople(num: Int) {
-        numberOfPeopleText.text = num.toString()
-    }
-
-    private fun enableNextButton(subtotal: Double?) {
-        nextButton.isEnabled = subtotal != 0.0 && subtotal != null
+    private fun render(viewState: DivvieViewState) {
+        numberOfPeopleText.text = viewState.personList.size.toString()
+        nextButton.isEnabled = viewState.subtotal != 0.0 && viewState.subtotal != null
+        if (viewState.subtotal != null && !viewState.isSubtotalEditing) {
+            editSubtotalText.setText(viewState.subtotal.toString())
+        }
+        if (viewState.tax != null && !viewState.isTaxEditing) {
+            editTaxText.setText(viewState.tax.toString())
+        }
     }
 }

@@ -57,12 +57,7 @@ class ResultFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(ResultViewEvent.DisplayFragment)
-        viewModel.totalObservable.observe(viewLifecycleOwner, Observer { displayTotal(it) })
-        viewModel.isCurrencyObservable.observe(viewLifecycleOwner, Observer { setTipState(it) })
-
-        subtotal.text = viewModel.getSubtotal().toString()
-
-        tax.text = viewModel.getTax().toString()
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         currencyTip.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -102,23 +97,27 @@ class ResultFragment : Fragment() {
         }
     }
 
-    private fun displayTotal(num: Double) {
-        total.text = num.toString()
-    }
-
-    private fun setTipState(bool: Boolean) {
-        if (bool) {
+    private fun render(viewState: DivvieViewState) {
+        val sub = viewState.subtotal!!
+        val ta = viewState.tax!!
+        val ti = viewState.tip ?: 0.0
+        subtotal.text = sub.toString()
+        tax.text = ta.toString()
+        total.text = (sub + ta + ti).toString()
+        if (viewState.isCurrencyTip) {
             currencyTipGroup.visibility = View.VISIBLE
             percentageTipGroup.visibility = View.GONE
             currencyButton.isEnabled = false
             percentageButton.isEnabled = true
-            currencyTip.setText(viewModel.getTip()?.toString() ?: "")
         } else {
             currencyTipGroup.visibility = View.GONE
             percentageTipGroup.visibility = View.VISIBLE
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
-            percentageTip.setText(viewModel.getTip()?.times(100)?.div(viewModel.getSubtotal()!!)?.toString() ?: "")
+        }
+        if (viewState.tip != null && !viewState.isTipEditing) {
+            currencyTip.setText(viewState.tip.toString())
+            percentageTip.setText((viewState.tip * 100 / sub).toString())
         }
     }
 }

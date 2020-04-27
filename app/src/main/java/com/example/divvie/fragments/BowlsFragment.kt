@@ -13,10 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.BowlsViewEvent
-import com.example.divvie.MAX_NUMBER_OF_PEOPLE
-import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
+import com.example.divvie.*
 import com.example.divvie.data.Person
 
 class BowlsFragment : Fragment() {
@@ -42,8 +39,7 @@ class BowlsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(BowlsViewEvent.DisplayFragment)
-        viewModel.getAllPerson().observe(viewLifecycleOwner, Observer { displayBowlState(it) })
-        viewModel.selectPersonObservable.observe(viewLifecycleOwner, Observer { clickableBowls(it) })
+        viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
     private fun changeColor(view: View, color: Int) {
@@ -55,11 +51,11 @@ class BowlsFragment : Fragment() {
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
-    private fun displayBowlState(list: List<Person>) {
+    private fun render(viewState: DivvieViewState) {
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
             val view = bowlsList.getChildAt(i)
-            if (i < list.size) {
-                val person = list[i]
+            if (i < viewState.personList.size) {
+                val person = viewState.personList[i]
                 val priceAmount: TextView = view.findViewById(R.id.price_amount)
                 val price: LinearLayout = view.findViewById(R.id.price)
                 val personalSubtotal = person.subtotal
@@ -79,37 +75,26 @@ class BowlsFragment : Fragment() {
                 view.visibility = View.GONE
             }
         }
-    }
-
-    private fun clickableBowls(bool: Boolean) {
-        if (bool) {
-            viewModel.tempItemObservable.observe(viewLifecycleOwner, Observer { split(it.listOfIndex) })
+        if (viewState.isClickableBowls) {
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
                 changeColor(view, Color.DKGRAY)
                 view.isClickable = true
+                if (viewState.tempItemListOfIndex.contains(i)) {
+                    changeColor(view, Color.WHITE)
+                } else {
+                    changeColor(view,Color.DKGRAY)
+                }
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
                     // TODO display breakdown
                 }
             }
         } else {
-            viewModel.tempItemObservable.removeObservers(viewLifecycleOwner)
             for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
                 val view = bowlsList.getChildAt(i)
                 changeColor(view, Color.LTGRAY)
                 view.isClickable = false
-            }
-        }
-    }
-
-    private fun split(listOfIndex: ArrayList<Int>) {
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-            val view = bowlsList.getChildAt(i)
-            if (listOfIndex.contains(i)) {
-                changeColor(view, Color.WHITE)
-            } else {
-                changeColor(view,Color.DKGRAY)
             }
         }
     }
