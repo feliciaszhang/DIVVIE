@@ -51,48 +51,44 @@ class BowlsFragment : Fragment() {
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
+    private fun setVisibilityAttributes(i: Int, personList: Array<Person>, view: View) {
+        val person = personList[i]
+        val priceAmount: TextView = view.findViewById(R.id.price_amount)
+        val price: LinearLayout = view.findViewById(R.id.price)
+        val personalSub = person.subtotal
+        if (personalSub != null) {
+            price.visibility = View.VISIBLE
+            val personalTax = person.tax ?: 0.0
+            val personalTip = person.tip ?: 0.0
+            val personalTempPrice = person.tempPrice ?: 0.0
+            val total = personalSub + personalTax + personalTip + personalTempPrice
+            priceAmount.text = total.toString()
+        } else {
+            price.visibility = View.GONE
+        }
+    }
+
     private fun render(viewState: DivvieViewState) {
         for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
             val view = bowlsList.getChildAt(i)
             if (i < viewState.personList.size) {
-                val person = viewState.personList[i]
-                val priceAmount: TextView = view.findViewById(R.id.price_amount)
-                val price: LinearLayout = view.findViewById(R.id.price)
-                val personalSubtotal = person.subtotal
-                if (personalSubtotal == null) {
-                    price.visibility = View.GONE
-                } else {
-                    price.visibility = View.VISIBLE
-                    val personalTax = person.tax ?: 0.0
-                    val personalTip = person.tip ?: 0.0
-                    val personalTempPrice = person.tempPrice ?: 0.0
-                    val personalTotal =
-                        personalSubtotal + personalTax + personalTip + personalTempPrice
-                    priceAmount.text = personalTotal.toString()
-                }
+                setVisibilityAttributes(i, viewState.personList, view)
                 view.visibility = View.VISIBLE
             } else {
                 view.visibility = View.GONE
             }
-        }
-        if (viewState.isClickableBowls) {
-            for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-                val view = bowlsList.getChildAt(i)
-                changeColor(view, Color.DKGRAY)
-                view.isClickable = true
+            if (viewState.isClickableBowls) {
                 if (viewState.tempItemListOfIndex.contains(i)) {
                     changeColor(view, Color.WHITE)
                 } else {
                     changeColor(view,Color.DKGRAY)
                 }
+                view.isClickable = true
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
                     // TODO display breakdown
                 }
-            }
-        } else {
-            for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
-                val view = bowlsList.getChildAt(i)
+            } else {
                 changeColor(view, Color.LTGRAY)
                 view.isClickable = false
             }
