@@ -63,6 +63,8 @@ class ItemFragment : Fragment() {
         viewModel.onEvent(ItemViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
+        editItemText.addTextChangedListener(textWatcher)
+
         nextButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.Next)
         }
@@ -111,6 +113,8 @@ class ItemFragment : Fragment() {
         if (viewState.isClickableBowls) {
             editItemText.visibility = View.GONE
             editItemText.removeTextChangedListener(textWatcher)
+            editItemText.text.clear()
+            editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
             itemText.visibility = View.VISIBLE
@@ -119,7 +123,6 @@ class ItemFragment : Fragment() {
             itemText.text = viewState.tempItemBasePrice.toString()
         } else {
             editItemText.visibility = View.VISIBLE
-            editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.VISIBLE
             nextButton.visibility = View.VISIBLE
             itemText.visibility = View.GONE
