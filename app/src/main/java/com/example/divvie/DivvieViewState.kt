@@ -12,7 +12,7 @@ data class DivvieViewState (
     val isTaxEditing: Boolean = false,
     val isClickableBowls: Boolean = false,
     val personList: Array<Person> = Array(NUMBER_OF_PEOPLE_DEFAULT, {i -> Person(id = i) }),
-    val tip: Double = 0.0,
+    val tip: Double? = null,
     val isTipEditing: Boolean = false,
     val leftover: Double? = null,
     val isCurrencyTip: Boolean = true,

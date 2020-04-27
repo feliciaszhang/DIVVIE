@@ -160,47 +160,75 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayResultFragment() {
-        setTip(0.0)
-        setIsCurrency(true)
         calculatePersonResult()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onEnterCurrencyTip(input: String) {
         if (input != "") {
-            setTip(input.toDouble())
+            viewState.value = viewState.value!!.copy(
+                tip = input.toDouble(),
+                isTipEditing = true
+            )
         } else {
-            setTip(0.0)
+            viewState.value = viewState.value!!.copy(
+                tip = 0.0,
+                isTipEditing = true
+            )
         }
         calculatePersonResult()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onEnterPercentageTip(input: String) {
         if (input != "") {
-            val subtotal = getSubtotal()!!
-            setTip(input.toDouble() / 100 * subtotal)
+            val subtotal = viewState.value!!.subtotal!!
+            viewState.value = viewState.value!!.copy(
+                tip = input.toDouble() / 100 * subtotal,
+                isTipEditing = true
+            )
         } else {
-            setTip(0.0)
+            viewState.value = viewState.value!!.copy(
+                tip = 0.0,
+                isTipEditing = true
+            )
         }
         calculatePersonResult()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onSelectCurrency() {
-        setIsCurrency(true)
+        viewState.value = viewState.value!!.copy(
+            isCurrencyTip = true,
+            isTipEditing = false
+        )
     }
 
     private fun onSelectPercentage() {
-        setIsCurrency(false)
+        viewState.value = viewState.value!!.copy(
+            isCurrencyTip = false,
+            isTipEditing = false
+        )
     }
 
     private fun onResultBack() {
         // TODO split equally?
         splitPretaxEqually()
-        setLeftover(getSubtotal()!!)
+        val subtotal = viewState.value!!.subtotal
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic(),
+            tip = null,
+            leftover = subtotal
+        )
     }
 
-    private fun onStartOver() {
-        deleteAllPerson()
-    }
+    private fun onStartOver() {}
 
     private fun onDisplayItemFragment() {
         setSelectPerson(false)
@@ -341,10 +369,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun calculatePersonResult() {
-        for (person in getAllPersonStatic()) {
-            val tax: Double = getTax()!!
-            val tip: Double = getTip()!!
-            val ratio = person.subtotal!! / getSubtotal()!!
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            val tax = vs.tax!!
+            val tip = vs.tip ?: 0.0
+            val ratio = person.subtotal!! / vs.subtotal!!
             person.tax = ratio * tax
             person.tip = ratio * tip
             updatePerson(person)
@@ -432,13 +461,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         itemStack.value = stack
     }
 
-    private val isCurrency = MutableLiveData<Boolean>()
-    val isCurrencyObservable: LiveData<Boolean>
-        get() = isCurrency
-    private fun setIsCurrency(bool: Boolean) {
-        isCurrency.value = bool
-    }
-
     private val dao = DivvieDatabase.getInstance(application).dao()
 
     private fun getAllPersonStatic() = dao.getAllPersonStatic()
@@ -452,10 +474,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
     private fun deleteAllPerson() {dao.deleteAllPerson()}
-
-    private fun getNumberOfPeopleStatic() = dao.getNumberOfPeopleStatic()
-
-    fun getNumberOfPeople() = dao.getNumberOfPeople()
 
     fun getAllPerson() = dao.getAllPerson()
 }
