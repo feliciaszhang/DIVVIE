@@ -127,24 +127,35 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 tax = 0.0
             )
         }
-        splitPretaxEqually() // in case where ItemFragment navigate to SplitFragment and it's not equal
+        splitPretaxEqually()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
+        // in case where ItemFragment navigate to SplitFragment and it's not equal
     }
 
     private fun onDisplaySplitFragment() {
-        setSelectPerson(false) // in case where ItemFragment navigate to SplitFragment when selectPerson is true
+        viewState.value = viewState.value!!.copy(
+            isClickableBowls = false
+        )
+        // in case where ItemFragment navigate to SplitFragment when selectPerson is true
     }
 
     private fun onSplitEqually() {}
 
     private fun onEnterIndividually() {
         clearPersonalData()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onSplitBack() {
         nullifyPersonalData()
         viewState.value = viewState.value!!.copy(
             isSubtotalEditing = false,
-            isTaxEditing = false
+            isTaxEditing = false,
+            personList = getAllPersonStatic()
         )
     }
 
@@ -308,7 +319,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun clearPersonalData() {
-        for (person in getAllPersonStatic()) {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
             person.subtotal = 0.0
             person.tax = 0.0
             person.tip = 0.0
@@ -318,7 +330,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun nullifyPersonalData() {
-        for (person in getAllPersonStatic()) {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
             person.subtotal = null
             person.tax = null
             person.tip = null
