@@ -12,6 +12,10 @@ import java.util.*
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val viewState = MutableLiveData<DivvieViewState>()
+    val viewStateObservable: LiveData<DivvieViewState>
+        get() = viewState
+
     fun onEvent(event: DivvieViewEvent) {
         when (event) {
             is MainEvent.DisplayActivity -> onDisplayActivity()
@@ -51,9 +55,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onDisplayActivity() {
         deleteAllPerson()
-        setSubtotal(null)
-        for (i in 0 until NUMBER_OF_PEOPLE_DEFAULT) {
-            insertPerson(Person(i, null, null, null, null))
+        viewState.value = DivvieViewState()
+        for (person in viewState.value!!.personList) {
+            insertPerson(person)
         }
     }
 
@@ -66,24 +70,38 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayInputFragment() {}
 
     private fun onInsertPerson() {
-        val num = getNumberOfPeopleStatic()
+        val num = viewState.value!!.personList.size
         if (num < MAX_NUMBER_OF_PEOPLE) {
             insertPerson(Person(id = num))
         }
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onRemovePerson() {
-        val num = getNumberOfPeopleStatic()
+        val num = viewState.value!!.personList.size
         if (num > MIN_NUMBER_OF_PEOPLE) {
             deletePerson(Person(id = num - 1))
         }
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
     }
 
     private fun onEnterSubtotal(input: String) {
         if (input != "") {
-            setSubtotal(input.toDouble())
+            viewState.value = viewState.value!!.copy(
+                subtotal = input.toDouble(),
+                isSubtotalEditing = true,
+                leftover = input.toDouble()
+            )
         } else {
-            setSubtotal(0.0)
+            viewState.value = viewState.value!!.copy(
+                subtotal = 0.0,
+                isSubtotalEditing = true,
+                leftover = 0.0
+            )
             // TODO remind user it's pretax
             // TODO show user this cannot be 0
         }
@@ -91,15 +109,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onEnterTax(input: String) {
         if (input != "") {
-            setTax(input.toDouble())
+            viewState.value = viewState.value!!.copy(
+                tax = input.toDouble(),
+                isTaxEditing = true
+            )
         } else {
-            setTax(0.0)
+            viewState.value = viewState.value!!.copy(
+                tax = 0.0,
+                isTaxEditing = true
+            )
         }
     }
 
     private fun onInputNext() {
-        if (getTax() == null) {
-            setTax(0.0)
+        if (viewState.value!!.tax == null) {
+            viewState.value = viewState.value!!.copy(
+                tax = 0.0
+            )
         }
         splitPretaxEqually() // in case where ItemFragment navigate to SplitFragment and it's not equal
     }
@@ -116,6 +142,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onSplitBack() {
         nullifyPersonalData()
+        viewState.value = viewState.value!!.copy(
+            isSubtotalEditing = false,
+            isTaxEditing = false
+        )
     }
 
     private fun onDisplayResultFragment() {
@@ -267,8 +297,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun splitPretaxEqually() {
-        for (person in getAllPersonStatic()) {
-            person.subtotal = getSubtotal()!! / getAllPersonStatic().size
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            person.subtotal = vs.subtotal!! / vs.personList.size
             person.tax = 0.0
             person.tip = 0.0
             person.tempPrice = 0.0
