@@ -64,8 +64,26 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayBowlFragment() {}
 
     private fun onClickBowl(i: Int) {
-        alterTempItem(i)
+        val vs = viewState.value!!
+        val listOfIndex = vs.tempItemListOfIndex
+        if (listOfIndex.contains(i)) {
+            listOfIndex.remove(i)
+        } else {
+            listOfIndex.add(i)
+        }
+        val basePrice = vs.tempItemBasePrice
+        val tempSplitPrice = basePrice / listOfIndex.size
+        for (person in vs.personList) {
+            if (person.id in listOfIndex) {
+                person.tempPrice = tempSplitPrice
+            } else {
+                person.tempPrice = 0.0
+            }
+            updatePerson(person)
+        }
         viewState.value = viewState.value!!.copy(
+            tempItemTempSplitPrice = tempSplitPrice,
+            tempItemListOfIndex = listOfIndex,
             personList = getAllPersonStatic()
         )
     }
@@ -257,75 +275,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDone() {
-        commitItem()
-        viewState.value = viewState.value!!.copy(
-            isClickableBowls = false,
-            personList = getAllPersonStatic()
-        )
-    }
-
-    private fun onUndo() {
-        if (viewState.value!!.isClickableBowls) {
-            removeTempItem()
-            viewState.value = viewState.value!!.copy(
-                isClickableBowls = false
-            )
-        } else {
-            removeFromStack()
-        }
-        viewState.value = viewState.value!!.copy(
-            personList = getAllPersonStatic()
-        )
-    }
-
-    private fun onItemBack() {
-        splitPretaxEqually()
-        viewState.value = viewState.value!!.copy(
-            tempItemBasePrice = 0.0,
-            tempItemFinalSplitPrice = 0.0,
-            tempItemTempSplitPrice = 0.0,
-            tempItemListOfIndex = ArrayList(),
-            itemStack = Stack(),
-            personList = getAllPersonStatic()
-        )
-    }
-
-    private fun onClearAll() {
-        //TODO clearAll
-    }
-
-    private fun removeTempItem() {
-        val vs = viewState.value!!
-        for (index in vs.tempItemListOfIndex) {
-            val person = findPerson(index)
-            person.tempPrice = 0.0
-            updatePerson(person)
-        }
-        viewState.value = viewState.value!!.copy(
-            tempItemBasePrice = 0.0,
-            tempItemFinalSplitPrice = 0.0,
-            tempItemTempSplitPrice = 0.0,
-            tempItemListOfIndex = ArrayList()
-        )
-    }
-
-    private fun removeFromStack() {
-        val vs = viewState.value!!
-        val removedItem = vs.itemStack.pop()
-        val basePrice = removedItem.basePrice
-        val leftover = vs.leftover!!
-        for (index in removedItem.listOfIndex) {
-            val person = findPerson(index)
-            person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
-            updatePerson(person)
-        }
-        viewState.value = viewState.value!!.copy(
-            itemStack = vs.itemStack,
-            leftover = leftover + basePrice
-        )
-    }
-
-    private fun commitItem() {
         val vs = viewState.value!!
         val basePrice = vs.tempItemBasePrice
         val finalSplitPrice = vs.tempItemTempSplitPrice
@@ -344,32 +293,62 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             tempItemTempSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
             itemStack = vs.itemStack,
-            leftover = leftover - basePrice
+            leftover = leftover - basePrice,
+            isClickableBowls = false,
+            personList = getAllPersonStatic()
         )
     }
 
-    private fun alterTempItem(i: Int) {
-        val vs = viewState.value!!
-        val listOfIndex = vs.tempItemListOfIndex
-        if (listOfIndex.contains(i)) {
-            listOfIndex.remove(i)
-        } else {
-            listOfIndex.add(i)
-        }
-        val basePrice = vs.tempItemBasePrice
-        val tempSplitPrice = basePrice / listOfIndex.size
-        for (person in vs.personList) {
-            if (person.id in listOfIndex) {
-                person.tempPrice = tempSplitPrice
-            } else {
+    private fun onUndo() {
+        // TODO bug where stack isn't tracked??
+        if (viewState.value!!.isClickableBowls) {
+            val vs = viewState.value!!
+            for (index in vs.tempItemListOfIndex) {
+                val person = findPerson(index)
                 person.tempPrice = 0.0
+                updatePerson(person)
             }
-            updatePerson(person)
+            viewState.value = viewState.value!!.copy(
+                tempItemBasePrice = 0.0,
+                tempItemFinalSplitPrice = 0.0,
+                tempItemTempSplitPrice = 0.0,
+                tempItemListOfIndex = ArrayList(),
+                isClickableBowls = false,
+                personList = getAllPersonStatic()
+
+            )
+        } else {
+            val vs = viewState.value!!
+            val removedItem = vs.itemStack.pop()
+            val basePrice = removedItem.basePrice
+            val leftover = vs.leftover!!
+            for (index in removedItem.listOfIndex) {
+                val person = findPerson(index)
+                person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
+                updatePerson(person)
+            }
+            viewState.value = viewState.value!!.copy(
+                itemStack = vs.itemStack,
+                leftover = leftover + basePrice,
+                personList = getAllPersonStatic()
+            )
         }
+    }
+
+    private fun onItemBack() {
+        splitPretaxEqually()
         viewState.value = viewState.value!!.copy(
-            tempItemTempSplitPrice = tempSplitPrice,
-            tempItemListOfIndex = listOfIndex
+            tempItemBasePrice = 0.0,
+            tempItemFinalSplitPrice = 0.0,
+            tempItemTempSplitPrice = 0.0,
+            tempItemListOfIndex = ArrayList(),
+            itemStack = Stack(),
+            personList = getAllPersonStatic()
         )
+    }
+
+    private fun onClearAll() {
+        //TODO clearAll
     }
 
     private fun splitPretaxEqually() {
