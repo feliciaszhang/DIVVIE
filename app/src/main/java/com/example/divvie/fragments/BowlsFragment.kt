@@ -1,5 +1,6 @@
 package com.example.divvie.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -83,14 +84,15 @@ class BowlsFragment : Fragment() {
                 } else {
                     changeColor(view,Color.DKGRAY)
                 }
-                view.isClickable = true
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
-                    // TODO display breakdown
                 }
             } else {
                 changeColor(view, Color.LTGRAY)
-                view.isClickable = false
+                view.setOnClickListener {
+                    val intent = Intent(context, DetailActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
     }

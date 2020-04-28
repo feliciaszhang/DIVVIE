@@ -11,7 +11,7 @@
     <string name="number_of_people">Number Of People</string>
     <string name="tap">Tap on bowl(s) to split this item</string>
 
-<!--    buttons-->
+    <!--    buttons-->
     <string name="next">Next</string>
     <string name="done">Done</string>
     <string name="equally">Split Equally</string>
