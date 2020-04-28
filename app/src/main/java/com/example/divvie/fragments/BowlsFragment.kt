@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
 import com.example.divvie.data.Person
+import java.io.Serializable
 
 class BowlsFragment : Fragment() {
     companion object {
@@ -90,8 +91,9 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, Color.LTGRAY)
                 view.setOnClickListener {
-                    viewModel.onEvent(BowlsViewEvent.DisplayDetail(i))
+                    val person: Serializable = viewModel.onDisplayDetail(i)
                     val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra(PERSON, person)
                     startActivity(intent)
                 }
             }

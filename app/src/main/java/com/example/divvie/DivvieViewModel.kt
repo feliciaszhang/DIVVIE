@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -52,8 +53,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
             is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
             is BowlsViewEvent.ClickBowl -> onClickBowl(event.i)
-            is BowlsViewEvent.DisplayDetail -> onDisplayDetail(event.i)
         }
+    }
+
+    fun onDisplayDetail(i: Int): Person {
+        return findPerson(i)
     }
 
     private fun onDisplayActivity() {
@@ -65,8 +69,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayBowlFragment() {}
-
-    private fun onDisplayDetail(i: Int) {}
 
     private fun onClickBowl(i: Int) {
         val vs = viewState.value!!

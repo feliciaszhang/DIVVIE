@@ -47,5 +47,4 @@ sealed class ResultViewEvent: DivvieViewEvent() {
 sealed class BowlsViewEvent: DivvieViewEvent() {
     object DisplayFragment: BowlsViewEvent()
     data class ClickBowl(val i: Int): BowlsViewEvent()
-    data class DisplayDetail(val i: Int): BowlsViewEvent()
 }
