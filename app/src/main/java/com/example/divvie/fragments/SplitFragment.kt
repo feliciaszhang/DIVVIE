@@ -21,7 +21,8 @@ class SplitFragment : Fragment() {
     private lateinit var equalButton: Button
     private lateinit var individualButton: Button
     private lateinit var calculateButton: Button
-    private lateinit var backButton: Button
+    private lateinit var backToInputButton: Button
+    private lateinit var backToItemButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +32,8 @@ class SplitFragment : Fragment() {
         equalButton = fragment.findViewById(R.id.split_equally_button)
         individualButton = fragment.findViewById(R.id.split_individually_button)
         calculateButton = fragment.findViewById(R.id.calculate)
-        backButton = fragment.findViewById(R.id.back_button)
+        backToInputButton = fragment.findViewById(R.id.back_to_input_button)
+        backToItemButton = fragment.findViewById(R.id.back_to_item_button)
         return fragment
     }
 
@@ -62,20 +64,34 @@ class SplitFragment : Fragment() {
             ).commit()
         }
 
-        backButton.setOnClickListener {
-            viewModel.onEvent(SplitViewEvent.Back)
+        backToInputButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.BackToInput)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
-            // TODO back to inputFragment vs. back to ItemFragment
+        }
+
+        backToItemButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.BackToItem)
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, ItemFragment.newInstance()
+            ).commit()
         }
     }
 
     private fun render(viewState: DivvieViewState) {
         if (viewState.leftover == 0.0) {
             calculateButton.visibility = View.VISIBLE
+            backToItemButton.visibility = View.VISIBLE
+            backToInputButton.visibility = View.GONE
             equalButton.visibility = View.GONE
             individualButton.visibility = View.GONE
+        } else {
+            calculateButton.visibility = View.GONE
+            backToItemButton.visibility = View.GONE
+            backToInputButton.visibility = View.VISIBLE
+            equalButton.visibility = View.VISIBLE
+            individualButton.visibility = View.VISIBLE
         }
     }
 }

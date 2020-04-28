@@ -33,8 +33,15 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/back_button"
+        android:id="@+id/back_to_input_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/back" />
+
+    <Button
+        android:id="@+id/back_to_item_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="@string/back" />
 </LinearLayout>
