@@ -103,7 +103,6 @@ class ItemFragment : Fragment() {
         leftoverText.text = String.format(resources.getString(R.string.leftover), tempLeftover.toString())
         if (tempLeftover < 0) {
             nextButton.isEnabled = false
-            // TODO show user this cannot be negative
         }
         if (viewState.leftover == 0.0) {
             fragmentManager!!.beginTransaction().replace(

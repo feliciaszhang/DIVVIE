@@ -9,6 +9,7 @@ import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -124,7 +125,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 leftover = 0.0
             )
             // TODO remind user it's pretax
-            // TODO show user this cannot be 0
         }
     }
 
@@ -299,42 +299,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onUndo() {
-        // TODO bug where stack isn't tracked??
-        if (viewState.value!!.isClickableBowls) {
-            val vs = viewState.value!!
-            for (index in vs.tempItemListOfIndex) {
-                val person = findPerson(index)
-                person.tempPrice = 0.0
-                updatePerson(person)
-            }
-            viewState.value = viewState.value!!.copy(
-                tempItemBasePrice = 0.0,
-                tempItemFinalSplitPrice = 0.0,
-                tempItemTempSplitPrice = 0.0,
-                tempItemListOfIndex = ArrayList(),
-                isClickableBowls = false,
-                personList = getAllPersonStatic()
-
-            )
-        } else {
-            val vs = viewState.value!!
-            val removedItem = vs.itemStack.pop()
-            val basePrice = removedItem.basePrice
-            val leftover = vs.leftover!!
-            for (index in removedItem.listOfIndex) {
-                val person = findPerson(index)
-                person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
-                updatePerson(person)
-            }
-            viewState.value = viewState.value!!.copy(
-                itemStack = vs.itemStack,
-                leftover = leftover + basePrice,
-                personList = getAllPersonStatic()
-            )
-        }
-    }
-
     private fun onItemBack() {
         splitPretaxEqually()
         viewState.value = viewState.value!!.copy(
@@ -347,8 +311,71 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
+    private fun onUndo() {
+        // TODO bug where stack isn't tracked??
+        val vs = viewState.value!!
+        if (vs.isClickableBowls) {
+            removeTempItemFromPerson()
+            viewState.value = viewState.value!!.copy(
+                tempItemBasePrice = 0.0,
+                tempItemFinalSplitPrice = 0.0,
+                tempItemTempSplitPrice = 0.0,
+                tempItemListOfIndex = ArrayList(),
+                isClickableBowls = false,
+                personList = getAllPersonStatic()
+
+            )
+        } else {
+            val removedItem = vs.itemStack.pop()
+            val basePrice = removedItem.basePrice
+            val leftover = vs.leftover!!
+            removeFinalItemFromPerson(removedItem)
+            viewState.value = viewState.value!!.copy(
+                itemStack = vs.itemStack,
+                leftover = leftover + basePrice,
+                personList = getAllPersonStatic()
+            )
+        }
+    }
+
     private fun onClearAll() {
-        //TODO clearAll
+        val vs = viewState.value!!
+        if (vs.isClickableBowls) {
+            removeTempItemFromPerson()
+            viewState.value = viewState.value!!.copy(
+                tempItemBasePrice = 0.0,
+                tempItemFinalSplitPrice = 0.0,
+                tempItemTempSplitPrice = 0.0,
+                tempItemListOfIndex = ArrayList(),
+                isClickableBowls = false
+            )
+        }
+        while (vs.itemStack.size > 0) {
+            val removedItem = vs.itemStack.pop()
+            removeFinalItemFromPerson(removedItem)
+        }
+        viewState.value = viewState.value!!.copy(
+            itemStack = Stack(),
+            leftover = vs.subtotal,
+            personList = getAllPersonStatic()
+        )
+    }
+
+    private fun removeTempItemFromPerson() {
+        val vs = viewState.value!!
+        for (index in vs.tempItemListOfIndex) {
+            val person = findPerson(index)
+            person.tempPrice = 0.0
+            updatePerson(person)
+        }
+    }
+
+    private fun removeFinalItemFromPerson(removedItem: Item) {
+        for (index in removedItem.listOfIndex) {
+            val person = findPerson(index)
+            person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
+            updatePerson(person)
+        }
     }
 
     private fun splitPretaxEqually() {
