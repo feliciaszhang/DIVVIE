@@ -52,6 +52,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
             is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
             is BowlsViewEvent.ClickBowl -> onClickBowl(event.i)
+            is BowlsViewEvent.DisplayDetail -> onDisplayDetail(event.i)
         }
     }
 
@@ -64,6 +65,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayBowlFragment() {}
+
+    private fun onDisplayDetail(i: Int) {}
 
     private fun onClickBowl(i: Int) {
         val vs = viewState.value!!

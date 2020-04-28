@@ -90,6 +90,7 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, Color.LTGRAY)
                 view.setOnClickListener {
+                    viewModel.onEvent(BowlsViewEvent.DisplayDetail(i))
                     val intent = Intent(context, DetailActivity::class.java)
                     startActivity(intent)
                 }
