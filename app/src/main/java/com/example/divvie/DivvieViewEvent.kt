@@ -19,6 +19,7 @@ sealed class SplitViewEvent: DivvieViewEvent() {
     object DisplayFragment: SplitViewEvent()
     object SplitEqually: SplitViewEvent()
     object EnterIndividually: SplitViewEvent()
+    object Calculate: SplitViewEvent()
     object BackToInput: SplitViewEvent()
     object BackToItem: SplitViewEvent()
 }

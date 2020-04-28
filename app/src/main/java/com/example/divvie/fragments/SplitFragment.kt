@@ -58,6 +58,7 @@ class SplitFragment : Fragment() {
         }
 
         calculateButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.Calculate)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 ResultFragment.newInstance()

@@ -1,6 +1,7 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
             is SplitViewEvent.SplitEqually -> onSplitEqually()
             is SplitViewEvent.EnterIndividually -> onEnterIndividually()
+            is SplitViewEvent.Calculate -> onCalculate()
             is SplitViewEvent.BackToInput -> onSplitBackToInput()
             is SplitViewEvent.BackToItem -> onSplitBackToItem()
 
@@ -171,6 +173,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
+    private fun onCalculate() {}
+
     private fun onSplitBackToInput() {
         nullifyPersonalData()
         viewState.value = viewState.value!!.copy(
@@ -252,12 +256,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onResultBack() {
-        splitPretaxEqually()
-        val subtotal = viewState.value!!.subtotal
+        revertPersonalResult()
         viewState.value = viewState.value!!.copy(
             personList = getAllPersonStatic(),
-            tip = null,
-            leftover = subtotal
+            tip = null
         )
     }
 
@@ -325,7 +327,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onUndo() {
-        // TODO bug where stack isn't tracked??
         val vs = viewState.value!!
         if (vs.isClickableBowls) {
             removeTempItemFromPerson()
@@ -432,6 +433,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             val ratio = person.subtotal!! / vs.subtotal!!
             person.tax = ratio * tax
             person.tip = ratio * tip
+            updatePerson(person)
+        }
+    }
+
+    private fun revertPersonalResult() {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            person.tax = 0.0
+            person.tip = 0.0
+            person.tempPrice = 0.0
             updatePerson(person)
         }
     }
