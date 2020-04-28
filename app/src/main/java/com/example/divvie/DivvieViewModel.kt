@@ -56,7 +56,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun onDisplayDetail(i: Int): Person {
+    fun getPersonDetail(i: Int): Person {
         return findPerson(i)
     }
 

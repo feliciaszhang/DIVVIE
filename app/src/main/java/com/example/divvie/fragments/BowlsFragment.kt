@@ -91,7 +91,7 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, Color.LTGRAY)
                 view.setOnClickListener {
-                    val person: Serializable = viewModel.onDisplayDetail(i)
+                    val person: Serializable = viewModel.getPersonDetail(i)
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra(PERSON, person)
                     startActivity(intent)

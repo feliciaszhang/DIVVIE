@@ -3,11 +3,8 @@ package com.example.divvie
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Gravity
 import android.widget.TextView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.data.Person
 
 class DetailActivity : AppCompatActivity() {
@@ -33,11 +30,11 @@ class DetailActivity : AppCompatActivity() {
         val w = dm.widthPixels
         val h = dm.heightPixels
 
-        window.setLayout((w * 0.8).toInt(), (h * 0.5).toInt())
+        window.setLayout((w * 0.5).toInt(), (h * 0.3).toInt())
 
         val params = window.attributes
         params.gravity = Gravity.CENTER
-        params.x = -100
+        params.x = -(w * 0.5).toInt()
         params.y = 0
 
         window.attributes = params
