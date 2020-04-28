@@ -22,7 +22,7 @@ class SplitFragment : Fragment() {
     private lateinit var individualButton: Button
     private lateinit var calculateButton: Button
     private lateinit var backToInputButton: Button
-    private lateinit var backToItemButton: Button
+    private lateinit var backToEqualButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +33,7 @@ class SplitFragment : Fragment() {
         individualButton = fragment.findViewById(R.id.split_individually_button)
         calculateButton = fragment.findViewById(R.id.calculate)
         backToInputButton = fragment.findViewById(R.id.back_to_input_button)
-        backToItemButton = fragment.findViewById(R.id.back_to_item_button)
+        backToEqualButton = fragment.findViewById(R.id.back_to_equal_button)
         return fragment
     }
 
@@ -72,24 +72,21 @@ class SplitFragment : Fragment() {
             ).commit()
         }
 
-        backToItemButton.setOnClickListener {
-            viewModel.onEvent(SplitViewEvent.BackToItem)
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, ItemFragment.newInstance()
-            ).commit()
+        backToEqualButton.setOnClickListener {
+            viewModel.onEvent(SplitViewEvent.BackToEqual)
         }
     }
 
     private fun render(viewState: DivvieViewState) {
         if (viewState.leftover == 0.0) {
             calculateButton.visibility = View.VISIBLE
-            backToItemButton.visibility = View.VISIBLE
+            backToEqualButton.visibility = View.VISIBLE
             backToInputButton.visibility = View.GONE
             equalButton.visibility = View.GONE
             individualButton.visibility = View.GONE
         } else {
             calculateButton.visibility = View.GONE
-            backToItemButton.visibility = View.GONE
+            backToEqualButton.visibility = View.GONE
             backToInputButton.visibility = View.VISIBLE
             equalButton.visibility = View.VISIBLE
             individualButton.visibility = View.VISIBLE

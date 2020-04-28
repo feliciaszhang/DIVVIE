@@ -1,7 +1,6 @@
 package com.example.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,7 +32,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is SplitViewEvent.EnterIndividually -> onEnterIndividually()
             is SplitViewEvent.Calculate -> onCalculate()
             is SplitViewEvent.BackToInput -> onSplitBackToInput()
-            is SplitViewEvent.BackToItem -> onSplitBackToItem()
+            is SplitViewEvent.BackToEqual -> onSplitBackToEqual()
 
             is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
             is ResultViewEvent.EnterCurrencyTip -> onEnterCurrencyTip(event.input)
@@ -184,16 +183,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onSplitBackToItem() {
+    private fun onSplitBackToEqual() {
+        splitPretaxEqually()
         val vs = viewState.value!!
-        val removedItem = vs.itemStack.pop()
-        val basePrice = removedItem.basePrice
-        val leftover = vs.leftover!!
-        removeFinalItemFromPerson(removedItem)
         viewState.value = viewState.value!!.copy(
-            itemStack = vs.itemStack,
-            leftover = leftover + basePrice,
-            personList = getAllPersonStatic()
+            personList = getAllPersonStatic(),
+            leftover = vs.subtotal,
+            itemStack = Stack()
         )
     }
 

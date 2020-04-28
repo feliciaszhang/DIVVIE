@@ -21,7 +21,7 @@ sealed class SplitViewEvent: DivvieViewEvent() {
     object EnterIndividually: SplitViewEvent()
     object Calculate: SplitViewEvent()
     object BackToInput: SplitViewEvent()
-    object BackToItem: SplitViewEvent()
+    object BackToEqual: SplitViewEvent()
 }
 
 sealed class ItemViewEvent: DivvieViewEvent() {

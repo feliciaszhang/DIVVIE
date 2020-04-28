@@ -39,7 +39,7 @@
         android:text="@string/back" />
 
     <Button
-        android:id="@+id/back_to_item_button"
+        android:id="@+id/back_to_equal_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
