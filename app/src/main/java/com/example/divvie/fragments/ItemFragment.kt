@@ -86,6 +86,7 @@ class ItemFragment : Fragment() {
 
         clearAllButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.ClearAll)
+            // TODO inactive when stack is 0
         }
     }
 

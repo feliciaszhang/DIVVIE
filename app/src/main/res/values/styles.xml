@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -16,7 +16,7 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="AppButton" parent="@style/Widget.AppCompat.Button">
+    <style name="AppButton" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/button_selector</item>
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
