@@ -30,17 +30,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
+            <Button
                 android:id="@+id/up_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/arrow_up_float" />
+                android:text="+"
+                android:textColor="@color/colorSemiLight"
+                android:textSize="@dimen/normal_text_size"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+                android:background="@drawable/button_arrow" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/down_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/arrow_down_float" />
+                android:text="-"
+                android:textColor="@color/colorSemiLight"
+                android:textSize="@dimen/normal_text_size"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+                android:background="@drawable/button_arrow" />
         </LinearLayout>
     </LinearLayout>
 

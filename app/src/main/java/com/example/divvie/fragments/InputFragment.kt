@@ -22,8 +22,8 @@ class InputFragment : Fragment() {
     }
     private lateinit var viewModel: DivvieViewModel
     private lateinit var numberOfPeopleText: TextView
-    private lateinit var upButton: ImageButton
-    private lateinit var downButton: ImageButton
+    private lateinit var upButton: Button
+    private lateinit var downButton: Button
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
