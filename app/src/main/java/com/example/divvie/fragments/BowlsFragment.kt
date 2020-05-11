@@ -32,7 +32,7 @@ class BowlsFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.bowls_fragment, container, false)
         bowlsList = fragment.findViewById(R.id.bowls)
         for (i in 0 until MAX_GUESTS) {
-            changeColor(bowlsList.getChildAt(i), resources.getColor(R.color.colorWhite))
+            changeColor(bowlsList.getChildAt(i), resources.getColor(R.color.colorWhite, context!!.theme))
         }
         return fragment
     }
@@ -81,15 +81,15 @@ class BowlsFragment : Fragment() {
             }
             if (viewState.isClickableBowls) {
                 if (viewState.tempItemListOfIndex.contains(i)) {
-                    changeColor(view, resources.getColor(R.color.colorGreen))
+                    changeColor(view, resources.getColor(R.color.colorGreen, context!!.theme))
                 } else {
-                    changeColor(view, resources.getColor(R.color.colorSemiLight))
+                    changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
                 }
             } else {
-                changeColor(view, Color.WHITE)
+                changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
                 view.setOnClickListener {
                     // TODO edit each name
                     val person: Serializable = viewModel.getPersonDetail(i)
