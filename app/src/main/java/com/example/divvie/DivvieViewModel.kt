@@ -1,7 +1,6 @@
 package com.example.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -99,7 +98,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onInsertPerson() {
         val num = viewState.value!!.personList.size
-        if (num < MAX_NUMBER_OF_PEOPLE) {
+        if (num < MAX_GUESTS) {
             insertPerson(Person(id = num))
         }
         viewState.value = viewState.value!!.copy(
@@ -109,7 +108,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onRemovePerson() {
         val num = viewState.value!!.personList.size
-        if (num > MIN_NUMBER_OF_PEOPLE) {
+        if (num > MIN_GUESTS) {
             deletePerson(Person(id = num - 1))
         }
         viewState.value = viewState.value!!.copy(

@@ -31,7 +31,7 @@ class BowlsFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.bowls_fragment, container, false)
         bowlsList = fragment.findViewById(R.id.bowls)
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+        for (i in 0 until MAX_GUESTS) {
             changeColor(bowlsList.getChildAt(i), Color.LTGRAY)
         }
         return fragment
@@ -71,7 +71,7 @@ class BowlsFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        for (i in 0 until MAX_NUMBER_OF_PEOPLE) {
+        for (i in 0 until MAX_GUESTS) {
             val view = bowlsList.getChildAt(i)
             if (i < viewState.personList.size) {
                 setVisibilityAttributes(i, viewState.personList, view)

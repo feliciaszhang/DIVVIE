@@ -25,10 +25,10 @@ interface DivvieDao {
     fun deleteAllPerson()
 
     @Query("SELECT COUNT(*) FROM PERSON")
-    fun getNumberOfPeople(): LiveData<Int>
+    fun getGuests(): LiveData<Int>
 
     @Query("SELECT COUNT(*) FROM PERSON")
-    fun getNumberOfPeopleStatic(): Int
+    fun getGuestsStatic(): Int
 
     @Update
     fun updatePerson(vararg person: Person)
