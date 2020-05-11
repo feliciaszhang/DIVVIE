@@ -91,6 +91,7 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, Color.WHITE)
                 view.setOnClickListener {
+                    // TODO edit each name
                     val person: Serializable = viewModel.getPersonDetail(i)
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra(PERSON, person)

@@ -11,6 +11,8 @@ import com.example.divvie.fragments.InputFragment
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
+    // TODO format number to 2 decimal
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
