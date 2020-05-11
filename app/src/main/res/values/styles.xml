@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:buttonStyle">@style/AppButton</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
     </style>
 
     <style name="AppTheme.Detail" parent="Theme.AppCompat.NoActionBar">
@@ -16,6 +17,11 @@
 
     <style name="AppButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_selector</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/montserrat</item>
     </style>
 
 </resources>
