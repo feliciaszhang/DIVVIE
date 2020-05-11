@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin"
     android:orientation="vertical"
     tools:context=".fragments.InputFragment">
 
@@ -10,22 +11,22 @@
             android:id="@+id/guests_layout"
             layout="@layout/guests"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/subtotal_layout"
             layout="@layout/subtotal"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/tax_layout"
             layout="@layout/tax"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/next"
