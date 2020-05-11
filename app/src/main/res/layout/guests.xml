@@ -32,20 +32,20 @@
             <Button
                 android:id="@+id/up_button"
                 android:text="+"
-                android:textColor="@color/colorSemiLight"
+                android:textColor="@color/colorWhite"
                 android:textSize="@dimen/normal_text_size"
                 android:layout_width="45dp"
                 android:layout_height="30dp"
-                android:background="@drawable/button_arrow" />
+                android:background="@drawable/arrow_selector" />
 
             <Button
                 android:id="@+id/down_button"
                 android:text="-"
-                android:textColor="@color/colorSemiLight"
+                android:textColor="@color/colorWhite"
                 android:textSize="@dimen/normal_text_size"
                 android:layout_width="45dp"
                 android:layout_height="30dp"
-                android:background="@drawable/button_arrow" />
+                android:background="@drawable/arrow_selector" />
         </LinearLayout>
     </LinearLayout>
 
