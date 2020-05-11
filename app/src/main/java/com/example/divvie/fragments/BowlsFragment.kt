@@ -32,7 +32,7 @@ class BowlsFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.bowls_fragment, container, false)
         bowlsList = fragment.findViewById(R.id.bowls)
         for (i in 0 until MAX_GUESTS) {
-            changeColor(bowlsList.getChildAt(i), Color.LTGRAY)
+            changeColor(bowlsList.getChildAt(i), resources.getColor(R.color.colorWhite))
         }
         return fragment
     }
@@ -81,15 +81,15 @@ class BowlsFragment : Fragment() {
             }
             if (viewState.isClickableBowls) {
                 if (viewState.tempItemListOfIndex.contains(i)) {
-                    changeColor(view, Color.WHITE)
+                    changeColor(view, resources.getColor(R.color.colorGreen))
                 } else {
-                    changeColor(view,Color.DKGRAY)
+                    changeColor(view, resources.getColor(R.color.colorSemiLight))
                 }
                 view.setOnClickListener {
                     viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
                 }
             } else {
-                changeColor(view, Color.LTGRAY)
+                changeColor(view, Color.WHITE)
                 view.setOnClickListener {
                     val person: Serializable = viewModel.getPersonDetail(i)
                     val intent = Intent(context, DetailActivity::class.java)
