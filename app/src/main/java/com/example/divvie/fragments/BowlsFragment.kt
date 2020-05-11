@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,7 +24,7 @@ class BowlsFragment : Fragment() {
         fun newInstance() = BowlsFragment()
     }
     private lateinit var viewModel: DivvieViewModel
-    private lateinit var bowlsList: LinearLayout
+    private lateinit var bowlsList: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

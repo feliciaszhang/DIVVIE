@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,72 +10,92 @@
 
 
     <include
+        android:id="@+id/bowl1"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bowl2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
+        android:id="@+id/bowl2"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl1"
+        app:layout_constraintBottom_toTopOf="@id/bowl3"/>
 
     <include
+        android:id="@+id/bowl3"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl2"
+        app:layout_constraintBottom_toTopOf="@id/bowl4"/>
 
     <include
+        android:id="@+id/bowl4"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl3"
+        app:layout_constraintBottom_toTopOf="@id/bowl5"/>
 
     <include
+        android:id="@+id/bowl5"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl4"
+        app:layout_constraintBottom_toTopOf="@id/bowl6" />
 
     <include
+        android:id="@+id/bowl6"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl5"
+        app:layout_constraintBottom_toTopOf="@id/bowl7" />
 
     <include
+        android:id="@+id/bowl7"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl6"
+        app:layout_constraintBottom_toTopOf="@id/bowl8"/>
 
     <include
+        android:id="@+id/bowl8"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl7"
+        app:layout_constraintBottom_toTopOf="@id/bowl9" />
 
     <include
+        android:id="@+id/bowl9"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl8"
+        app:layout_constraintBottom_toTopOf="@id/bowl10"/>
 
     <include
+        android:id="@+id/bowl10"
         layout="@layout/bowl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bowl9"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
