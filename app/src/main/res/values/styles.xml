@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:buttonStyle">@style/AppButton</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
     </style>
 
@@ -18,6 +19,11 @@
 
     <style name="AppButton" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/button_selector</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/montserrat</item>
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
 

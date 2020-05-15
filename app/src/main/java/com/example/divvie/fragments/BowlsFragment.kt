@@ -1,7 +1,6 @@
 package com.example.divvie.fragments
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
@@ -82,7 +81,7 @@ class BowlsFragment : Fragment() {
             }
             if (viewState.isClickableBowls) {
                 if (viewState.tempItemListOfIndex.contains(i)) {
-                    changeColor(view, resources.getColor(R.color.colorGreen, context!!.theme))
+                    changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
                 } else {
                     changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
