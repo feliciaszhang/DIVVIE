@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO format number to 2 decimal
+    // TODO move to constraint layout
+    // TODO launcher background image
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

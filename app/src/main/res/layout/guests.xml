@@ -30,19 +30,13 @@
 
         <Button
             android:id="@+id/down_button"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/arrow_selector"
-            android:text="-"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/normal_text_size"
-            app:elevation='@dimen/small_margin'
-            tools:layout_editor_absoluteX="341dp"
-            tools:layout_editor_absoluteY="4dp"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/round_remove_white_48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"/>
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
         <TextView
             android:id="@+id/guests"
@@ -56,18 +50,13 @@
 
         <Button
             android:id="@+id/up_button"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/arrow_selector"
-            android:text="+"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/normal_text_size"
-            app:elevation='@dimen/small_margin'
-            tools:layout_editor_absoluteX="341dp"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/round_add_white_48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"/>
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
