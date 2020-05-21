@@ -16,7 +16,7 @@
     <string name="done">Done</string>
     <string name="equally">Split Equally</string>
     <string name="individually">Split Each Item</string>
-    <string name="start_over">Start Over</string>
+    <string name="restart">Restart</string>
     <string name="calculate">Calculate</string>
     <string name="undo">Undo</string>
     <string name="clear_all">Clear All</string>
