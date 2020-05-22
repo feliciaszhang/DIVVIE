@@ -4,9 +4,12 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -53,10 +56,12 @@ class BowlsFragment : Fragment() {
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
-    private fun setVisibilityAttributes(i: Int, personList: Array<Person>, view: View) {
+    private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, view: View) {
         val person = personList[i]
         val priceAmount: TextView = view.findViewById(R.id.price_amount)
         val price: LinearLayout = view.findViewById(R.id.price)
+        val nameEdit: EditText = view.findViewById(R.id.name_edit)
+        val nameText: TextView = view.findViewById(R.id.name_text)
         val personalSub = person.subtotal
         if (personalSub != null) {
             price.visibility = View.VISIBLE
@@ -68,13 +73,30 @@ class BowlsFragment : Fragment() {
         } else {
             price.visibility = View.GONE
         }
+
+        if (editable) {
+            // TODO better performance
+            nameEdit.visibility = View.VISIBLE
+            nameText.visibility = View.GONE
+            nameEdit.addTextChangedListener(object: TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    viewModel.onEvent(BowlsViewEvent.EnterName(i, nameEdit.text.toString()))
+                }
+            })
+        } else {
+            nameEdit.visibility = View.GONE
+            nameText.visibility = View.VISIBLE
+            nameText.text = personList[i].name
+        }
     }
 
     private fun render(viewState: DivvieViewState) {
         for (i in 0 until MAX_GUESTS) {
             val view = bowlsList.getChildAt(i)
             if (i < viewState.personList.size) {
-                setVisibilityAttributes(i, viewState.personList, view)
+                setVisibilityAttributes(i, viewState.personList, viewState.editableName, view)
                 view.visibility = View.VISIBLE
             } else {
                 view.visibility = View.GONE
@@ -91,7 +113,7 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
                 view.setOnClickListener {
-                    // TODO edit each name
+                    // TODO display breakdown
                     val person: Serializable = viewModel.getPersonDetail(i)
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra(PERSON, person)

@@ -46,5 +46,6 @@ sealed class ResultViewEvent: DivvieViewEvent() {
 
 sealed class BowlsViewEvent: DivvieViewEvent() {
     object DisplayFragment: BowlsViewEvent()
+    data class EnterName(val i: Int, val input: String): BowlsViewEvent()
     data class ClickBowl(val i: Int): BowlsViewEvent()
 }

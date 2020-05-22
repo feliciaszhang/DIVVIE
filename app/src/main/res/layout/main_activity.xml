@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="6"
-        android:paddingLeft="@dimen/margin" />
+        android:paddingLeft="@dimen/large_margin" />
 
     <FrameLayout
         android:id="@+id/info_fragment_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:padding="@dimen/margin" />
+        android:padding="@dimen/large_margin" />
 
 </LinearLayout>

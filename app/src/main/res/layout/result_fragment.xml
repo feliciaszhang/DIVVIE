@@ -150,7 +150,7 @@
     <Space
         android:id="@+id/space"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin"
+        android:layout_height="@dimen/large_margin"
         app:layout_constraintBottom_toTopOf="@+id/button_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

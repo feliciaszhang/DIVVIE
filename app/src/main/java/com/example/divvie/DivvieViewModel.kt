@@ -51,6 +51,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is ItemViewEvent.Done -> onDone()
 
             is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
+            is BowlsViewEvent.EnterName -> onEnterName(event.i, event.input)
             is BowlsViewEvent.ClickBowl -> onClickBowl(event.i)
         }
     }
@@ -68,6 +69,15 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayBowlFragment() {}
+
+    private fun onEnterName(i: Int, input: String) {
+        val person = findPerson(i)
+        person.name = input
+        updatePerson(person)
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
+    }
 
     private fun onClickBowl(i: Int) {
         val vs = viewState.value!!
@@ -94,7 +104,11 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onDisplayInputFragment() {}
+    private fun onDisplayInputFragment() {
+        viewState.value = viewState.value!!.copy(
+            editableName = true
+        )
+    }
 
     private fun onInsertPerson() {
         val num = viewState.value!!.personList.size
@@ -154,6 +168,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
         splitPretaxEqually()
         viewState.value = viewState.value!!.copy(
+            editableName = false,
             personList = getAllPersonStatic()
         )
         // in case where ItemFragment navigate to SplitFragment and it's not equal

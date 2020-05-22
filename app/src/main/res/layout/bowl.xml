@@ -10,7 +10,6 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/info"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bowl" />
 
@@ -18,7 +17,7 @@
         android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/small_margin"
+        android:layout_marginStart="@dimen/normal_margin"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:hint="name"
+                android:hint="@string/enter_name"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:textSize="@dimen/small_text_size" />
@@ -71,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/small_text_size" />
 
         </LinearLayout>

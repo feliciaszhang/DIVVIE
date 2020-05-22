@@ -11,6 +11,7 @@ data class DivvieViewState (
     val tax: Double? = null,
     val isTaxEditing: Boolean = false,
     val isClickableBowls: Boolean = false,
+    val editableName: Boolean = true,
     val personList: Array<Person> = Array(GUESTS_DEFAULT, { i -> Person(id = i) }),
     val tip: Double? = null,
     val isTipEditing: Boolean = false,

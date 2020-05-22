@@ -8,6 +8,7 @@ const val MIN_GUESTS = 2
 const val DIVVIEDATABASE = "divvie_database"
 const val PERSON = "person"
 const val ID = "id"
+const val NAME = "name"
 const val SUBTOTAL = "subtotal"
 const val TAX = "tax"
 const val TIP = "tip"

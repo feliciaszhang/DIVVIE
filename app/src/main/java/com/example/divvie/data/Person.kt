@@ -11,6 +11,7 @@ import java.io.Serializable
 data class Person (
     @PrimaryKey
     @ColumnInfo(name = ID) var id: Int,
+    @ColumnInfo(name = NAME) var name: String = "",
     @ColumnInfo(name = SUBTOTAL) var subtotal: Double? = null,
     @ColumnInfo(name = TAX) var tax: Double? = null,
     @ColumnInfo(name = TIP) var tip: Double? = null,
