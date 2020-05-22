@@ -40,7 +40,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             is ResultViewEvent.SelectCurrency -> onSelectCurrency()
             is ResultViewEvent.SelectPercentage -> onSelectPercentage()
             is ResultViewEvent.Back -> onResultBack()
-            is ResultViewEvent.StartOver -> onStartOver()
+            is ResultViewEvent.Restart -> onRestart()
 
             is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
             is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
@@ -129,7 +129,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 isSubtotalEditing = true,
                 leftover = 0.0
             )
-            // TODO remind user it's pretax
         }
     }
 
@@ -263,7 +262,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onStartOver() {}
+    private fun onRestart() {
+        nullifyPersonalData()
+        viewState.value = viewState.value!!.copy(
+            personList = getAllPersonStatic()
+        )
+    }
 
     private fun onDisplayItemFragment() {
         viewState.value = viewState.value!!.copy(

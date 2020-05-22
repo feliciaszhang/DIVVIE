@@ -41,7 +41,7 @@ sealed class ResultViewEvent: DivvieViewEvent() {
     object SelectCurrency: ResultViewEvent()
     object SelectPercentage: ResultViewEvent()
     object Back: ResultViewEvent()
-    object StartOver: ResultViewEvent()
+    object Restart: ResultViewEvent()
 }
 
 sealed class BowlsViewEvent: DivvieViewEvent() {

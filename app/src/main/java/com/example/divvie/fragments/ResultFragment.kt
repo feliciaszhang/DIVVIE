@@ -32,7 +32,7 @@ class ResultFragment : Fragment() {
     private lateinit var percentageButton: Button
     private lateinit var total: TextView
     private lateinit var backButton: Button
-    private lateinit var startOver: Button
+    private lateinit var restart: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +49,7 @@ class ResultFragment : Fragment() {
         percentageButton = fragment.findViewById(R.id.percentageButton)
         total = fragment.findViewById(R.id.total_amount)
         backButton = fragment.findViewById(R.id.back)
-        startOver = fragment.findViewById(R.id.start_over)
+        restart = fragment.findViewById(R.id.restart)
         return fragment
     }
 
@@ -90,10 +90,11 @@ class ResultFragment : Fragment() {
             ).commit()
         }
 
-        startOver.setOnClickListener {
-            viewModel.onEvent(ResultViewEvent.StartOver)
-            val intent = Intent(context, MainActivity::class.java)
-            startActivity(intent)
+        restart.setOnClickListener {
+            viewModel.onEvent(ResultViewEvent.Restart)
+            fragmentManager!!.beginTransaction().replace(
+                R.id.info_fragment_layout, InputFragment.newInstance()
+            ).commit()
         }
     }
 
