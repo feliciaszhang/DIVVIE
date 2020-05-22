@@ -10,6 +10,7 @@
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
+        <item name="android:textColorHint">@color/colorLight</item>
     </style>
 
     <style name="AppTheme.Detail" parent="Theme.AppCompat.NoActionBar">
@@ -46,6 +47,7 @@
     <style name="EditTextStyle" parent="@style/Widget.AppCompat.EditText">
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:backgroundTint">@color/colorLight</item>
     </style>
 
 </resources>

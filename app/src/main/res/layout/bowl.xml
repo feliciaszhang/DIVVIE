@@ -1,43 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/info"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/price"
         app:srcCompat="@drawable/bowl" />
 
-    <LinearLayout
-        android:id="@+id/price"
-        android:layout_margin="@dimen/small_margin"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toRightOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/small_margin"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/currency"
-            android:padding="@dimen/small_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/currency"
-            android:textSize="@dimen/small_text_size" />
+        <LinearLayout
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/name"
+            app:layout_constraintStart_toStartOf="@id/info">
 
-        <TextView
-            android:id="@+id/price_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/small_text_size" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/small_margin"
+                android:text="@string/currency"
+                android:textSize="@dimen/small_text_size" />
+
+            <TextView
+                android:id="@+id/price_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/small_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/info"
+            app:layout_constraintTop_toBottomOf="@id/price">
+
+            <EditText
+                android:id="@+id/name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="name"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textSize="@dimen/small_text_size" />
+
+            <TextView
+                android:id="@+id/name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/small_text_size" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
