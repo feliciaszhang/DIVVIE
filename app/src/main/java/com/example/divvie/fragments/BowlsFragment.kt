@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
 import com.example.divvie.data.Person
 import java.io.Serializable
+import android.view.View.OnFocusChangeListener
 
 class BowlsFragment : Fragment() {
     companion object {
@@ -75,15 +74,10 @@ class BowlsFragment : Fragment() {
         }
 
         if (editable) {
-            // TODO better performance
             nameEdit.visibility = View.VISIBLE
             nameText.visibility = View.GONE
-            nameEdit.addTextChangedListener(object: TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    viewModel.onEvent(BowlsViewEvent.EnterName(i, nameEdit.text.toString()))
-                }
+            nameEdit.onFocusChangeListener = (OnFocusChangeListener { _, hasFocus -> if (!hasFocus) {
+                viewModel.onEvent(BowlsViewEvent.EnterName(i, nameEdit.text.toString())) }
             })
         } else {
             nameEdit.visibility = View.GONE
