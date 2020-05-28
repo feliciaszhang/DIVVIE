@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,7 @@ class BowlsFragment : Fragment() {
         if (editable) {
             nameEdit.visibility = View.VISIBLE
             nameText.visibility = View.GONE
+            nameEdit.setText(personList[i].name)
             nameEdit.onFocusChangeListener = (OnFocusChangeListener { _, hasFocus -> if (!hasFocus) {
                 viewModel.onEvent(BowlsViewEvent.EnterName(i, nameEdit.text.toString())) }
             })
@@ -106,13 +108,13 @@ class BowlsFragment : Fragment() {
                 }
             } else {
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
-                view.setOnClickListener {
-                    // TODO display breakdown
-                    val person: Serializable = viewModel.getPersonDetail(i)
-                    val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(PERSON, person)
-                    startActivity(intent)
-                }
+                // TODO display breakdown
+//                view.setOnClickListener {
+//                    val person: Serializable = viewModel.getPersonDetail(i)
+//                    val intent = Intent(context, DetailActivity::class.java)
+//                    intent.putExtra(PERSON, person)
+//                    startActivity(intent)
+//                }
             }
         }
     }

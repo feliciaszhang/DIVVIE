@@ -56,9 +56,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getPersonDetail(i: Int): Person {
-        return findPerson(i)
-    }
+//    fun getPersonDetail(i: Int): Person {
+//        return findPerson(i)
+//    }
 
     private fun onDisplayActivity() {
         deleteAllPerson()
@@ -71,12 +71,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayBowlFragment() {}
 
     private fun onEnterName(i: Int, input: String) {
-        val person = findPerson(i)
-        person.name = input
-        updatePerson(person)
-        viewState.value = viewState.value!!.copy(
-            personList = getAllPersonStatic()
-        )
+        if (i < getAllPersonStatic().size) {
+            val person = findPerson(i)
+            person.name = input
+            updatePerson(person)
+            viewState.value = viewState.value!!.copy(
+                personList = getAllPersonStatic()
+            )
+        }
     }
 
     private fun onClickBowl(i: Int) {

@@ -46,9 +46,17 @@ class InputFragment : Fragment() {
         viewModel.onEvent(InputViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
-        upButton.setOnClickListener { viewModel.onEvent(InputViewEvent.InsertPerson) }
+        upButton.setOnClickListener {
+            upButton.requestFocusFromTouch()
+            viewModel.onEvent(InputViewEvent.InsertPerson)
+            upButton.clearFocus()
+        }
 
-        downButton.setOnClickListener { viewModel.onEvent(InputViewEvent.RemovePerson) }
+        downButton.setOnClickListener {
+            downButton.requestFocusFromTouch()
+            viewModel.onEvent(InputViewEvent.RemovePerson)
+            downButton.clearFocus()
+        }
 
         editSubtotalText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
