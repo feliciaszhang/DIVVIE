@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -11,17 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/item_price"
-        android:textSize="@dimen/normal_text_size" />
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_price_text">
 
         <TextView
             android:id="@+id/currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
             android:text="@string/currency"
             android:textSize="@dimen/large_text_size" />
 
@@ -30,16 +37,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:selectAllOnFocus="true"
+            android:focusedByDefault="true"
             android:textSize="@dimen/large_text_size" />
-
-        <TextView
-            android:id="@+id/item_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textSize="@dimen/large_text_size"
-            android:visibility="gone"/>
-
     </LinearLayout>
 
     <TextView
@@ -47,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/leftover"
-        android:textSize="@dimen/small_text_size" />
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
 
     <TextView
         android:id="@+id/tap"
@@ -55,19 +56,22 @@
         android:layout_height="wrap_content"
         android:text="@string/tap"
         android:textSize="@dimen/small_text_size"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
 
     <Button
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/next" />
+        android:text="@string/next"
+        app:layout_constraintTop_toBottomOf="@id/leftover"/>
 
     <Button
         android:id="@+id/done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/done"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tap"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@
     <string name="leftover">$%1$s leftover</string>
     <string name="guests">Guests</string>
     <string name="enter_name">enter name</string>
-    <string name="tap">Tap on bowl(s) to split this item</string>
+    <string name="tap">Tap on bowl(s) to split this</string>
 
     <!--    buttons-->
     <string name="next">Next</string>

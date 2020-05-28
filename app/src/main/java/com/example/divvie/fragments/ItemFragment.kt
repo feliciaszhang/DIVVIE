@@ -3,7 +3,6 @@ package com.example.divvie.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,6 @@ class ItemFragment : Fragment() {
     }
     private lateinit var viewModel: DivvieViewModel
     private lateinit var editItemText: EditText
-    private lateinit var itemText: TextView
     private lateinit var leftoverText: TextView
     private lateinit var tap: TextView
     private lateinit var nextButton: Button
@@ -32,13 +30,6 @@ class ItemFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
-    private val textWatcher = object: TextWatcher {
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +37,6 @@ class ItemFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.item_fragment, container, false)
         editItemText = fragment.findViewById(R.id.edit_item)
-        itemText = fragment.findViewById(R.id.item_text)
         leftoverText = fragment.findViewById(R.id.leftover)
         tap = fragment.findViewById(R.id.tap)
         nextButton = fragment.findViewById(R.id.next)
@@ -63,7 +53,13 @@ class ItemFragment : Fragment() {
         viewModel.onEvent(ItemViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
-        editItemText.addTextChangedListener(textWatcher)
+        editItemText.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
+            }
+        })
 
         nextButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Next) }
 
@@ -85,6 +81,7 @@ class ItemFragment : Fragment() {
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
         nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
         clearAllButton.isEnabled = viewState.itemStack.size > 0
+        editItemText.isEnabled = !viewState.isClickableBowls
         if (viewState.itemStack.size > 0) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
@@ -103,21 +100,14 @@ class ItemFragment : Fragment() {
             ).commit()
         }
         if (viewState.isClickableBowls) {
-            editItemText.visibility = View.GONE
-            editItemText.removeTextChangedListener(textWatcher)
-            editItemText.text.clear()
-            editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
-            itemText.visibility = View.VISIBLE
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
-            itemText.text = viewState.tempItemBasePrice.toString()
         } else {
-            editItemText.visibility = View.VISIBLE
+            editItemText.requestFocus()
             leftoverText.visibility = View.VISIBLE
             nextButton.visibility = View.VISIBLE
-            itemText.visibility = View.GONE
             tap.visibility = View.GONE
             doneButton.visibility = View.GONE
         }
