@@ -72,9 +72,7 @@ class SplitFragment : Fragment() {
             ).commit()
         }
 
-        backToEqualButton.setOnClickListener {
-            viewModel.onEvent(SplitViewEvent.BackToEqual)
-        }
+        backToEqualButton.setOnClickListener { viewModel.onEvent(SplitViewEvent.BackToEqual) }
     }
 
     private fun render(viewState: DivvieViewState) {

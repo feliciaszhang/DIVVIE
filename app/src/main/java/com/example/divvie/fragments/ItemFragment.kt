@@ -65,17 +65,13 @@ class ItemFragment : Fragment() {
 
         editItemText.addTextChangedListener(textWatcher)
 
-        nextButton.setOnClickListener {
-            viewModel.onEvent(ItemViewEvent.Next)
-        }
+        nextButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Next) }
 
-        doneButton.setOnClickListener {
-            viewModel.onEvent(ItemViewEvent.Done)
-        }
+        doneButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Done) }
 
-        undoButton.setOnClickListener {
-            viewModel.onEvent(ItemViewEvent.Undo)
-        }
+        undoButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Undo) }
+
+        clearAllButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.ClearAll) }
 
         backButton.setOnClickListener {
             viewModel.onEvent(ItemViewEvent.Back)
@@ -83,16 +79,12 @@ class ItemFragment : Fragment() {
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
         }
-
-        clearAllButton.setOnClickListener {
-            viewModel.onEvent(ItemViewEvent.ClearAll)
-            // TODO inactive when stack is 0
-        }
     }
 
     private fun render(viewState: DivvieViewState) {
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
         nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
+        clearAllButton.isEnabled = viewState.itemStack.size > 0
         if (viewState.itemStack.size > 0) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE

@@ -75,14 +75,6 @@ class ResultFragment : Fragment() {
             }
         })
 
-        currencyButton.setOnClickListener {
-            viewModel.onEvent(ResultViewEvent.SelectCurrency)
-        }
-
-        percentageButton.setOnClickListener {
-            viewModel.onEvent(ResultViewEvent.SelectPercentage)
-        }
-
         backButton.setOnClickListener {
             viewModel.onEvent(ResultViewEvent.Back)
             fragmentManager!!.beginTransaction().replace(
@@ -96,6 +88,10 @@ class ResultFragment : Fragment() {
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
         }
+
+        currencyButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectCurrency) }
+
+        percentageButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectPercentage) }
     }
 
     private fun render(viewState: DivvieViewState) {
