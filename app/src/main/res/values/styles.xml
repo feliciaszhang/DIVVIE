@@ -11,6 +11,7 @@
         <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="android:textColorHint">@color/colorLight</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.Detail" parent="Theme.AppCompat.NoActionBar">
