@@ -52,7 +52,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
             is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
             is BowlsViewEvent.EnterName -> onEnterName(event.i, event.input)
-            is BowlsViewEvent.ClickBowl -> onClickBowl(event.i)
+            is BowlsViewEvent.SplitBowl -> onClickBowl(event.i)
+            is BowlsViewEvent.ViewBreakdown -> onViewBreakdown(event.i)
         }
     }
 
@@ -65,6 +66,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayBowlFragment() {}
+
+    private fun onViewBreakdown(i: Int?) {
+        viewState.value = viewState.value!!.copy(
+            personalBreakDownIndex = i
+        )
+    }
 
     private fun onEnterName(i: Int, input: String) {
         if (i < getAllPersonStatic().size) {
@@ -174,7 +181,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onDisplaySplitFragment() {
         viewState.value = viewState.value!!.copy(
-            isClickableBowls = false
+            isSplittingBowls = false
         )
         // in case where ItemFragment navigate to SplitFragment when selectPerson is true
     }
@@ -212,6 +219,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayResultFragment() {
         calculatePersonResult()
         viewState.value = viewState.value!!.copy(
+            isPersonalResult = true,
             personList = getAllPersonStatic()
         )
     }
@@ -270,6 +278,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onResultBack() {
         revertPersonalResult()
         viewState.value = viewState.value!!.copy(
+            isPersonalResult = false,
             personList = getAllPersonStatic(),
             tip = null
         )
@@ -286,7 +295,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onDisplayItemFragment() {
         viewState.value = viewState.value!!.copy(
-            isClickableBowls = false
+            isSplittingBowls = false,
+            isItemEditing = false
         )
     }
 
@@ -306,7 +316,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onItemNext() {
         viewState.value = viewState.value!!.copy(
-            isClickableBowls = true
+            isSplittingBowls = true
         )
     }
 
@@ -330,7 +340,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             tempItemListOfIndex = ArrayList(),
             itemStack = vs.itemStack,
             leftover = leftover - basePrice,
-            isClickableBowls = false,
+            isSplittingBowls = false,
             isItemEditing = false,
             personList = getAllPersonStatic()
         )
@@ -351,14 +361,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onUndo() {
         val vs = viewState.value!!
-        if (vs.isClickableBowls) {
+        if (vs.isSplittingBowls) {
             removeTempItemFromPerson()
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
                 tempItemTempSplitPrice = 0.0,
                 tempItemListOfIndex = ArrayList(),
-                isClickableBowls = false,
+                isSplittingBowls = false,
                 isItemEditing = false,
                 personList = getAllPersonStatic()
 
@@ -379,14 +389,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onClearAll() {
         val vs = viewState.value!!
-        if (vs.isClickableBowls) {
+        if (vs.isSplittingBowls) {
             removeTempItemFromPerson()
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
                 tempItemTempSplitPrice = 0.0,
                 tempItemListOfIndex = ArrayList(),
-                isClickableBowls = false
+                isSplittingBowls = false
             )
         }
         while (vs.itemStack.size > 0) {

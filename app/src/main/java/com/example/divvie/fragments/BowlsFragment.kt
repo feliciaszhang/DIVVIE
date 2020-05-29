@@ -48,9 +48,19 @@ class BowlsFragment : Fragment() {
         val image: ImageView = view.findViewById(R.id.imageView)
         val currency: TextView = view.findViewById(R.id.currency)
         val priceAmount: TextView = view.findViewById(R.id.price_amount)
+        val nameText: TextView = view.findViewById(R.id.name_text)
         currency.setTextColor(color)
         priceAmount.setTextColor(color)
+        nameText.setTextColor(color)
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+    }
+
+    private fun changeOtherColor(index: Int, color: Int) {
+        for (i in 0 until MAX_GUESTS) {
+            if (i != index) {
+                changeColor(bowlsList.getChildAt(i), color)
+            }
+        }
     }
 
     private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, view: View) {
@@ -94,18 +104,35 @@ class BowlsFragment : Fragment() {
             } else {
                 view.visibility = View.GONE
             }
-            if (viewState.isClickableBowls) {
+            if (viewState.isSplittingBowls) {
+                view.isClickable = true
                 if (viewState.tempItemListOfIndex.contains(i)) {
                     changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
                 } else {
                     changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
                 view.setOnClickListener {
-                    viewModel.onEvent(BowlsViewEvent.ClickBowl(i))
+                    viewModel.onEvent(BowlsViewEvent.SplitBowl(i))
                 }
             } else {
+                view.isClickable = false
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
-                // TODO display breakdown
+            }
+            if (viewState.isPersonalResult) {
+                view.isClickable = true
+                if (i == viewState.personalBreakDownIndex) {
+                    view.setOnClickListener {
+                        viewModel.onEvent(BowlsViewEvent.ViewBreakdown(null))
+                        changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
+                        changeOtherColor(i, resources.getColor(R.color.colorWhite, context!!.theme))
+                    }
+                } else {
+                    view.setOnClickListener {
+                        viewModel.onEvent(BowlsViewEvent.ViewBreakdown(i))
+                        changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
+                        changeOtherColor(i, resources.getColor(R.color.colorSemiLight, context!!.theme))
+                    }
+                }
             }
         }
     }

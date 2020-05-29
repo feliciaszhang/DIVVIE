@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,7 +84,7 @@ class ItemFragment : Fragment() {
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
         nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
         clearAllButton.isEnabled = viewState.itemStack.size > 0
-        editItemText.isEnabled = !viewState.isClickableBowls
+        editItemText.isEnabled = !viewState.isSplittingBowls
         if (viewState.itemStack.size > 0) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
@@ -103,7 +102,7 @@ class ItemFragment : Fragment() {
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
         }
-        if (viewState.isClickableBowls) {
+        if (viewState.isSplittingBowls) {
             editItemText.background = null
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
