@@ -293,11 +293,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onEnterItemPrice(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
-                tempItemBasePrice = input.toDouble()
+                tempItemBasePrice = input.toDouble(),
+                isItemEditing = true
             )
         } else {
             viewState.value = viewState.value!!.copy(
-                tempItemBasePrice = 0.0
+                tempItemBasePrice = 0.0,
+                isItemEditing = true
             )
         }
     }
@@ -329,7 +331,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             itemStack = vs.itemStack,
             leftover = leftover - basePrice,
             isClickableBowls = false,
-            personList = getAllPersonStatic()
+            personList = getAllPersonStatic(),
+            isItemEditing = false
         )
     }
 

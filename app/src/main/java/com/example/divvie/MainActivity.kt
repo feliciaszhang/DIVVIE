@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     // TODO flash final split bowls?
     // TODO icons for navigation?
     // TODO more colors?
-    // TODO item fragment edittext not clearing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)

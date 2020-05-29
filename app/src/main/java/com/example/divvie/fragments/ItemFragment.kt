@@ -3,6 +3,7 @@ package com.example.divvie.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,6 +111,9 @@ class ItemFragment : Fragment() {
             nextButton.visibility = View.VISIBLE
             tap.visibility = View.GONE
             doneButton.visibility = View.GONE
+            if (!viewState.isItemEditing) {
+                editItemText.setText("")
+            }
         }
     }
 }
