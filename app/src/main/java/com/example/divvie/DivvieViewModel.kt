@@ -277,9 +277,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onRestart() {
         nullifyPersonalData()
+        val savedPersonData = getAllPersonStatic()
+        viewState.value = DivvieViewState()
         viewState.value = viewState.value!!.copy(
-            itemStack = Stack(),
-            personList = getAllPersonStatic()
+            personList = savedPersonData
         )
     }
 

@@ -95,8 +95,8 @@ class ResultFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        val sub = viewState.subtotal!!
-        val ta = viewState.tax!!
+        val sub = viewState.subtotal ?: 1.0
+        val ta = viewState.tax ?: 0.0
         val ti = viewState.tip ?: 0.0
         subtotal.text = sub.toString()
         tax.text = ta.toString()
