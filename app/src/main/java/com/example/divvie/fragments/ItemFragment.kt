@@ -1,5 +1,6 @@
 package com.example.divvie.fragments
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,6 +32,7 @@ class ItemFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
+    private lateinit var editTextBackground: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,7 @@ class ItemFragment : Fragment() {
         backButton = fragment.findViewById(R.id.back)
         undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
+        editTextBackground = editItemText.background
         return fragment
     }
 
@@ -101,12 +104,14 @@ class ItemFragment : Fragment() {
             ).commit()
         }
         if (viewState.isClickableBowls) {
+            editItemText.background = null
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
             tap.visibility = View.VISIBLE
             doneButton.visibility = View.VISIBLE
         } else {
             editItemText.requestFocus()
+            editItemText.background = editTextBackground
             leftoverText.visibility = View.VISIBLE
             nextButton.visibility = View.VISIBLE
             tap.visibility = View.GONE

@@ -95,12 +95,6 @@ class ResultFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        val sub = viewState.subtotal ?: 1.0
-        val ta = viewState.tax ?: 0.0
-        val ti = viewState.tip ?: 0.0
-        subtotal.text = sub.toString()
-        tax.text = ta.toString()
-        total.text = (sub + ta + ti).toString()
         if (viewState.isCurrencyTip) {
             currencyTipGroup.visibility = View.VISIBLE
             percentageTipGroup.visibility = View.GONE
@@ -112,6 +106,12 @@ class ResultFragment : Fragment() {
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
         }
+        val sub = viewState.subtotal ?: 1.0
+        val ta = viewState.tax ?: 0.0
+        val ti = viewState.tip ?: 0.0
+        subtotal.text = sub.toString()
+        tax.text = ta.toString()
+        total.text = (sub + ta + ti).toString()
         if (viewState.tip != null && !viewState.isTipEditing) {
             currencyTip.setText(viewState.tip.toString())
             percentageTip.setText((viewState.tip * 100 / sub).toString())

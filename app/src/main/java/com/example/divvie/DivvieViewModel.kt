@@ -331,8 +331,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             itemStack = vs.itemStack,
             leftover = leftover - basePrice,
             isClickableBowls = false,
-            personList = getAllPersonStatic(),
-            isItemEditing = false
+            isItemEditing = false,
+            personList = getAllPersonStatic()
         )
     }
 
@@ -344,6 +344,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             tempItemTempSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
             itemStack = Stack(),
+            isItemEditing = false,
             personList = getAllPersonStatic()
         )
     }
@@ -358,6 +359,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 tempItemTempSplitPrice = 0.0,
                 tempItemListOfIndex = ArrayList(),
                 isClickableBowls = false,
+                isItemEditing = false,
                 personList = getAllPersonStatic()
 
             )
@@ -369,6 +371,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             viewState.value = viewState.value!!.copy(
                 itemStack = vs.itemStack,
                 leftover = leftover + basePrice,
+                isItemEditing = false,
                 personList = getAllPersonStatic()
             )
         }
@@ -393,6 +396,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         viewState.value = viewState.value!!.copy(
             itemStack = Stack(),
             leftover = vs.subtotal,
+            isItemEditing = false,
             personList = getAllPersonStatic()
         )
     }
