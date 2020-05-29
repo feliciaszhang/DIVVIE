@@ -1,10 +1,8 @@
 package com.example.divvie.fragments
 
-import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
 import com.example.divvie.data.Person
-import java.io.Serializable
 import android.view.View.OnFocusChangeListener
 
 class BowlsFragment : Fragment() {
@@ -109,12 +106,6 @@ class BowlsFragment : Fragment() {
             } else {
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
                 // TODO display breakdown
-//                view.setOnClickListener {
-//                    val person: Serializable = viewModel.getPersonDetail(i)
-//                    val intent = Intent(context, DetailActivity::class.java)
-//                    intent.putExtra(PERSON, person)
-//                    startActivity(intent)
-//                }
             }
         }
     }

@@ -56,10 +56,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-//    fun getPersonDetail(i: Int): Person {
-//        return findPerson(i)
-//    }
-
     private fun onDisplayActivity() {
         deleteAllPerson()
         viewState.value = DivvieViewState()

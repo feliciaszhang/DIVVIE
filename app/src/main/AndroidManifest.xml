@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
 
-        <activity
-            android:name=".DetailActivity"
-            android:theme="@style/AppTheme.Detail" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
