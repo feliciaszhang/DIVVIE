@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.widget.LinearLayout
 import com.example.divvie.*
 
@@ -33,6 +33,8 @@ class ResultFragment : Fragment() {
     private lateinit var total: TextView
     private lateinit var backButton: Button
     private lateinit var restart: Button
+    private lateinit var editTextCurrencyBackground: Drawable
+    private lateinit var editTextPercentageBackground: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +52,8 @@ class ResultFragment : Fragment() {
         total = fragment.findViewById(R.id.total_amount)
         backButton = fragment.findViewById(R.id.back)
         restart = fragment.findViewById(R.id.restart)
+        editTextCurrencyBackground = currencyTip.background
+        editTextPercentageBackground = percentageTip.background
         return fragment
     }
 
@@ -95,6 +99,9 @@ class ResultFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
+        val breakdownIndex = viewState.personalBreakDownIndex
+        currencyTip.isEnabled = breakdownIndex == null
+        percentageTip.isEnabled = breakdownIndex == null
         if (viewState.isCurrencyTip) {
             currencyTipGroup.visibility = View.VISIBLE
             percentageTipGroup.visibility = View.GONE
@@ -106,15 +113,29 @@ class ResultFragment : Fragment() {
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
         }
-        val sub = viewState.subtotal ?: 1.0
-        val ta = viewState.tax ?: 0.0
-        val ti = viewState.tip ?: 0.0
+        val sub: Double
+        val ta: Double
+        val ti: Double
+        if (breakdownIndex != null) {
+            currencyTip.background = null
+            percentageTip.background = null
+            val person = viewState.personList[breakdownIndex]
+            sub = person.subtotal ?: 0.0
+            ta = person.tax ?: 0.0
+            ti = person.tip ?: 0.0
+        } else {
+            currencyTip.background = editTextCurrencyBackground
+            percentageTip.background = editTextPercentageBackground
+            sub = viewState.subtotal ?: 0.0
+            ta = viewState.tax ?: 0.0
+            ti = viewState.tip ?: 0.0
+        }
         subtotal.text = sub.toString()
         tax.text = ta.toString()
         total.text = (sub + ta + ti).toString()
         if (viewState.tip != null && !viewState.isTipEditing) {
             currencyTip.setText(viewState.tip.toString())
             percentageTip.setText((viewState.tip * 100 / sub).toString())
-        }
+        } // TODO issues with converting tip
     }
 }
