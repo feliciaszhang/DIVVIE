@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO format number to 2 decimal
+    // TODO click button when press next in keyboard
     // TODO fix icon and launcher image
     // TODO icons for navigation?
     // TODO more colors?

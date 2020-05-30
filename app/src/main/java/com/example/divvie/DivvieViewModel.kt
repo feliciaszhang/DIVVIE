@@ -71,10 +71,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val current = viewState.value?.personalBreakDownIndex
         if (i != current) {
             viewState.value = viewState.value!!.copy(
+                isTipEditing = false,
                 personalBreakDownIndex = i
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                isTipEditing = false,
                 personalBreakDownIndex = null
             )
         }
@@ -286,6 +288,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         revertPersonalResult()
         viewState.value = viewState.value!!.copy(
             isPersonalResult = false,
+            personalBreakDownIndex = null,
             personList = getAllPersonStatic(),
             tip = null
         )
