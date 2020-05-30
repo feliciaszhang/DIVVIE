@@ -91,6 +91,7 @@ class BowlsFragment : Fragment() {
     private fun render(viewState: DivvieViewState) {
         for (i in 0 until MAX_GUESTS) {
             val view = bowlsList.getChildAt(i)
+            view.isClickable = viewState.isSplittingBowls || viewState.isPersonalResult
             if (i < viewState.personList.size) {
                 setVisibilityAttributes(i, viewState.personList, viewState.editableName, view)
                 view.visibility = View.VISIBLE
@@ -98,7 +99,6 @@ class BowlsFragment : Fragment() {
                 view.visibility = View.GONE
             }
             if (viewState.isSplittingBowls) {
-                view.isClickable = true
                 if (viewState.tempItemListOfIndex.contains(i)) {
                     changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
                 } else {
@@ -108,19 +108,15 @@ class BowlsFragment : Fragment() {
                     viewModel.onEvent(BowlsViewEvent.SplitBowl(i))
                 }
             } else {
-                view.isClickable = false
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
             }
             if (viewState.isPersonalResult) {
-                view.isClickable = true
                 view.setOnClickListener { viewModel.onEvent(BowlsViewEvent.ViewBreakdown(i)) }
                 when (viewState.personalBreakDownIndex) {
                     null -> changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
                     i -> changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
                     else -> changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
-            } else {
-                view.isClickable = false
             }
         }
     }
