@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     // TODO format number to 2 decimal
     // TODO fix icon and launcher image
-    // TODO flash final split bowls?
     // TODO icons for navigation?
     // TODO more colors?
 

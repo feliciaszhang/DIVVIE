@@ -3,6 +3,7 @@ package com.example.divvie.fragments
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,14 +54,6 @@ class BowlsFragment : Fragment() {
         priceAmount.setTextColor(color)
         nameText.setTextColor(color)
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-    }
-
-    private fun changeOtherColor(index: Int, color: Int) {
-        for (i in 0 until MAX_GUESTS) {
-            if (i != index) {
-                changeColor(bowlsList.getChildAt(i), color)
-            }
-        }
     }
 
     private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, view: View) {
@@ -120,19 +113,14 @@ class BowlsFragment : Fragment() {
             }
             if (viewState.isPersonalResult) {
                 view.isClickable = true
-                if (i == viewState.personalBreakDownIndex) {
-                    view.setOnClickListener {
-                        viewModel.onEvent(BowlsViewEvent.ViewBreakdown(null))
-                        changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
-                        changeOtherColor(i, resources.getColor(R.color.colorWhite, context!!.theme))
-                    }
-                } else {
-                    view.setOnClickListener {
-                        viewModel.onEvent(BowlsViewEvent.ViewBreakdown(i))
-                        changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
-                        changeOtherColor(i, resources.getColor(R.color.colorSemiLight, context!!.theme))
-                    }
+                view.setOnClickListener { viewModel.onEvent(BowlsViewEvent.ViewBreakdown(i)) }
+                when (viewState.personalBreakDownIndex) {
+                    null -> changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
+                    i -> changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
+                    else -> changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
+            } else {
+                view.isClickable = false
             }
         }
     }

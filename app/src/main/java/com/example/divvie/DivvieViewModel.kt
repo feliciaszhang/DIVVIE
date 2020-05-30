@@ -68,9 +68,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayBowlFragment() {}
 
     private fun onViewBreakdown(i: Int?) {
-        viewState.value = viewState.value!!.copy(
-            personalBreakDownIndex = i
-        )
+        val current = viewState.value?.personalBreakDownIndex
+        if (i != current) {
+            viewState.value = viewState.value!!.copy(
+                personalBreakDownIndex = i
+            )
+        } else {
+            viewState.value = viewState.value!!.copy(
+                personalBreakDownIndex = null
+            )
+        }
     }
 
     private fun onEnterName(i: Int, input: String) {
