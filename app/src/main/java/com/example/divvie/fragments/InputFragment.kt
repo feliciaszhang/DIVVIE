@@ -48,6 +48,7 @@ class InputFragment : Fragment() {
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         editSubtotalText.filters = arrayOf(filter)
+        editTaxText.filters = arrayOf(filter)
 
         upButton.setOnClickListener {
             upButton.requestFocusFromTouch()

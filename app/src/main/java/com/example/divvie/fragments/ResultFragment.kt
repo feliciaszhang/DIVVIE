@@ -36,6 +36,7 @@ class ResultFragment : Fragment() {
     private lateinit var restart: Button
     private lateinit var editTextCurrencyBackground: Drawable
     private lateinit var editTextPercentageBackground: Drawable
+    private val filter = DecimalDigitsInputFilter(2)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +64,9 @@ class ResultFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(ResultViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
+
+        currencyTip.filters = arrayOf(filter)
+        percentageTip.filters = arrayOf(filter)
 
         currencyTip.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}

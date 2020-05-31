@@ -13,10 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
-import com.example.divvie.DivvieViewState
-import com.example.divvie.ItemViewEvent
+import com.example.divvie.*
 
 class ItemFragment : Fragment() {
     companion object {
@@ -32,6 +29,7 @@ class ItemFragment : Fragment() {
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
     private lateinit var editTextBackground: Drawable
+    private val filter = DecimalDigitsInputFilter(2)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +53,8 @@ class ItemFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(ItemViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
+
+        editItemText.filters = arrayOf(filter)
 
         editItemText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
