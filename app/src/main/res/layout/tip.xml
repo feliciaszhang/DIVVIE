@@ -36,6 +36,8 @@
             android:id="@+id/edit_tip_currency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:hint="0.00"
             android:inputType="numberDecimal"
             android:textSize="@dimen/large_text_size" />
@@ -57,6 +59,8 @@
             android:layout_height="wrap_content"
             android:hint="0"
             android:inputType="numberDecimal"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:textAlignment="textEnd"
             android:layout_weight="0.8"
             android:textSize="@dimen/large_text_size" />

@@ -64,6 +64,7 @@
                 android:hint="@string/enter_name"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
+                android:ems="5"
                 android:textSize="@dimen/small_text_size" />
 
             <TextView
