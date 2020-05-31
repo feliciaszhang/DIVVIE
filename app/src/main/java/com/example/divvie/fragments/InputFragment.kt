@@ -25,7 +25,7 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
-    private val filter = DecimalDigitsInputFilter(2)
+    private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,10 +91,10 @@ class InputFragment : Fragment() {
         guestsText.text = viewState.personList.size.toString()
         nextButton.isEnabled = viewState.subtotal != 0.0 && viewState.subtotal != null
         if (viewState.subtotal != null && !viewState.isSubtotalEditing) {
-            editSubtotalText.setText(viewState.subtotal.toString())
+            editSubtotalText.setText(filter.convert(viewState.subtotal.toString()))
         }
         if (viewState.tax != null && !viewState.isTaxEditing) {
-            editTaxText.setText(viewState.tax.toString())
+            editTaxText.setText(filter.convert(viewState.tax.toString()))
         }
     }
 }

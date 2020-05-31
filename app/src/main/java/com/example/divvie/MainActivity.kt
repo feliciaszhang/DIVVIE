@@ -14,7 +14,10 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO format number to 2 decimal
+    // TODO bowl amount format
+    // TODO bug when first input is "."
+    // TODO java.lang.NumberFormatException: multiple points
+    // TODO amount doesn't fit on screen
     // TODO click button when press next in keyboard
     // TODO fix icon and launcher image
     // TODO icons for navigation?

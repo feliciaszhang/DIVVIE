@@ -29,7 +29,7 @@ class ItemFragment : Fragment() {
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
     private lateinit var editTextBackground: Drawable
-    private val filter = DecimalDigitsInputFilter(2)
+    private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +48,14 @@ class ItemFragment : Fragment() {
         return fragment
     }
 
+    private val textWatcher = object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
@@ -56,13 +64,7 @@ class ItemFragment : Fragment() {
 
         editItemText.filters = arrayOf(filter)
 
-        editItemText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
-            }
-        })
+        editItemText.addTextChangedListener(textWatcher)
 
         nextButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Next) }
 
@@ -93,7 +95,7 @@ class ItemFragment : Fragment() {
             backButton.visibility = View.VISIBLE
         }
         val tempLeftover = viewState.leftover!! - viewState.tempItemBasePrice
-        leftoverText.text = String.format(resources.getString(R.string.leftover), tempLeftover.toString())
+        leftoverText.text = String.format(resources.getString(R.string.leftover), filter.convert(tempLeftover.toString()))
         if (tempLeftover < 0) {
             nextButton.isEnabled = false
         }
@@ -104,6 +106,9 @@ class ItemFragment : Fragment() {
         }
         if (viewState.isSplittingBowls) {
             editItemText.background = null
+            editItemText.removeTextChangedListener(textWatcher)
+            editItemText.setText(filter.convert(viewState.tempItemBasePrice.toString()))
+            editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
             tap.visibility = View.VISIBLE

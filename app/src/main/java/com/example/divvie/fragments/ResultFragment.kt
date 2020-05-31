@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.LinearLayout
 import com.example.divvie.*
 
@@ -36,7 +35,7 @@ class ResultFragment : Fragment() {
     private lateinit var restart: Button
     private lateinit var editTextCurrencyBackground: Drawable
     private lateinit var editTextPercentageBackground: Drawable
-    private val filter = DecimalDigitsInputFilter(2)
+    private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,11 +124,11 @@ class ResultFragment : Fragment() {
             val personalSub = person.subtotal ?: 0.0
             val personalTax = person.tax ?: 0.0
             val personalTip = person.tip ?: 0.0
-            subtotal.text = personalSub.toString()
-            tax.text = personalTax.toString()
-            total.text = (personalSub + personalTax + personalTip).toString()
+            subtotal.text = filter.convert(personalSub.toString())
+            tax.text = filter.convert(personalTax.toString())
+            total.text = filter.convert((personalSub + personalTax + personalTip).toString())
             if (!viewState.isTipEditing) {
-                currencyTip.setText(personalTip.toString())
+                currencyTip.setText(filter.convert(personalTip.toString()))
                 percentageTip.setText((personalTip * 100 / personalSub).toString())
             }
         } else {
@@ -138,11 +137,11 @@ class ResultFragment : Fragment() {
             val totalSub = viewState.subtotal ?: 0.0
             val totalTax = viewState.tax ?: 0.0
             val totalTip = viewState.tip ?: 0.0
-            subtotal.text = totalSub.toString()
-            tax.text = totalTax.toString()
-            total.text = (totalSub + totalTax + totalTip).toString()
+            subtotal.text = filter.convert(totalSub.toString())
+            tax.text = filter.convert(totalTax.toString())
+            total.text = filter.convert((totalSub + totalTax + totalTip).toString())
             if (viewState.tip != null && !viewState.isTipEditing) {
-                currencyTip.setText(totalTip.toString())
+                currencyTip.setText(filter.convert(totalTip.toString()))
                 percentageTip.setText((totalTip * 100 / totalSub).toString())
             }
         }

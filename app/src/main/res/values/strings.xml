@@ -7,7 +7,7 @@
     <string name="tax">Tax</string>
     <string name="tip">Tip</string>
     <string name="item_price">Item Price</string>
-    <string name="total">Total</string>
+    <string name="total">Grand Total</string>
     <string name="leftover">$ %1$s leftover</string>
     <string name="guests">Guests</string>
     <string name="enter_name">enter name</string>
