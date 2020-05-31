@@ -25,6 +25,7 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
+    private val filter = DecimalDigitsInputFilter(2)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +46,8 @@ class InputFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(InputViewEvent.DisplayFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
+
+        editSubtotalText.filters = arrayOf(filter)
 
         upButton.setOnClickListener {
             upButton.requestFocusFromTouch()
