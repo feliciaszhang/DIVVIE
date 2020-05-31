@@ -52,7 +52,7 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(ItemViewEvent.EnterItemPrice(editItemText.text.toString()))
+            viewModel.onEvent(ItemViewEvent.EnterItemPrice("0" + editItemText.text.toString()))
         }
     }
 

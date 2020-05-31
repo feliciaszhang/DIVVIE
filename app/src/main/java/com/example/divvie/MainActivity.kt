@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO bowl amount format
-    // TODO bug when first input is "."
+    // TODO change edittext format when lose focus
     // TODO java.lang.NumberFormatException: multiple points
     // TODO amount doesn't fit on screen
     // TODO click button when press next in keyboard

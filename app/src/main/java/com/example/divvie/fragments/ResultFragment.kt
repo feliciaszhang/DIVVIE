@@ -71,7 +71,7 @@ class ResultFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(ResultViewEvent.EnterCurrencyTip(currencyTip.text.toString()))
+                viewModel.onEvent(ResultViewEvent.EnterCurrencyTip("0" + currencyTip.text.toString()))
             }
         })
 
@@ -79,7 +79,7 @@ class ResultFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(ResultViewEvent.EnterPercentageTip(percentageTip.text.toString()))
+                viewModel.onEvent(ResultViewEvent.EnterPercentageTip("0" + percentageTip.text.toString()))
             }
         })
 

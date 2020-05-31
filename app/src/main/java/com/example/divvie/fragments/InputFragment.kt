@@ -66,7 +66,7 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(InputViewEvent.EnterSubtotal(editSubtotalText.text.toString()))
+                viewModel.onEvent(InputViewEvent.EnterSubtotal("0" + editSubtotalText.text.toString()))
             }
         })
 
@@ -74,7 +74,7 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(InputViewEvent.EnterTax(editTaxText.text.toString()))
+                viewModel.onEvent(InputViewEvent.EnterTax("0" + editTaxText.text.toString()))
             }
         })
 
