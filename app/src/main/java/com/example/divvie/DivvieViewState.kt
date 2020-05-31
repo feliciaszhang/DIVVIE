@@ -24,5 +24,6 @@ data class DivvieViewState (
     val itemStack: Stack<Item> = Stack(),
     val isItemEditing: Boolean = false,
     val isPersonalResult: Boolean = false,
-    val personalBreakDownIndex: Int? = null
+    val personalBreakDownIndex: Int? = null,
+    val grandTotal: Double? = null
 )

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e4b3f2e69fe4714f27b5b2973e7396a9",
+    "identityHash": "9dc763d4c51fc6883eece898b0a67ac6",
     "entities": [
       {
         "tableName": "person",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `subtotal` REAL, `tax` REAL, `tip` REAL, `temp price` REAL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `subtotal` REAL, `tax` REAL, `tip` REAL, `grand_total` REAL, `temp price` REAL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,6 +39,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "grandTotal",
+            "columnName": "grand_total",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
             "fieldPath": "tempPrice",
             "columnName": "temp price",
             "affinity": "REAL",
@@ -67,7 +73,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e4b3f2e69fe4714f27b5b2973e7396a9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9dc763d4c51fc6883eece898b0a67ac6')"
     ]
   }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -226,7 +227,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onDisplayResultFragment() {
-        calculatePersonResult()
+        calculateResult()
         viewState.value = viewState.value!!.copy(
             isPersonalResult = true,
             personList = getAllPersonStatic()
@@ -245,7 +246,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 isTipEditing = true
             )
         }
-        calculatePersonResult()
+        calculateResult()
         viewState.value = viewState.value!!.copy(
             personList = getAllPersonStatic()
         )
@@ -254,8 +255,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onEnterPercentageTip(input: String) {
         if (input != "") {
             val subtotal = viewState.value!!.subtotal!!
+            val tip: BigDecimal = input.toBigDecimal() * subtotal.toBigDecimal()
             viewState.value = viewState.value!!.copy(
-                tip = input.toDouble() / 100 * subtotal,
+                tip = tip.toDouble() / 100,
                 isTipEditing = true
             )
         } else {
@@ -264,7 +266,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 isTipEditing = true
             )
         }
-        calculatePersonResult()
+        calculateResult()
         viewState.value = viewState.value!!.copy(
             personList = getAllPersonStatic()
         )
@@ -471,16 +473,26 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun calculatePersonResult() {
+    private fun calculateResult() {
         val vs = viewState.value!!
+        val subtotal: BigDecimal = vs.subtotal?.toBigDecimal() ?: 0.toBigDecimal()
+        val tax: BigDecimal = vs.tax?.toBigDecimal() ?: 0.toBigDecimal()
+        val tip: BigDecimal = vs.tip?.toBigDecimal() ?: 0.toBigDecimal()
+        val total: BigDecimal = subtotal + tax + tip
         for (person in vs.personList) {
-            val tax = vs.tax!!
-            val tip = vs.tip ?: 0.0
-            val ratio = person.subtotal!! / vs.subtotal!!
-            person.tax = ratio * tax
-            person.tip = ratio * tip
+            val personalSubtotal: BigDecimal = person.subtotal?.toBigDecimal() ?: 0.toBigDecimal()
+            val ratio: BigDecimal = personalSubtotal / subtotal
+            val personalTax: BigDecimal = ratio * tax
+            val personalTip: BigDecimal = ratio * tip
+            val personalGrandTotal: BigDecimal = personalSubtotal + personalTax + personalTip
+            person.tax = personalTax.toDouble()
+            person.tip = personalTip.toDouble()
+            person.grandTotal = personalGrandTotal.toDouble()
             updatePerson(person)
         }
+        viewState.value = viewState.value!!.copy(
+            grandTotal = total.toDouble()
+        )
     }
 
     private fun revertPersonalResult() {

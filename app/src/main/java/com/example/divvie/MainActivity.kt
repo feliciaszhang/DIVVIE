@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     // TODO bowl amount format
     // TODO change edittext format when lose focus
-    // TODO java.lang.NumberFormatException: multiple points
+    // TODO !!
+    // TODO BigDecimal
     // TODO amount doesn't fit on screen
     // TODO click button when press next in keyboard
     // TODO fix icon and launcher image
