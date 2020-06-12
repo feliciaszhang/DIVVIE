@@ -32,10 +32,10 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
             }
         }
         if (dotPos >= 0) {
-            when (len - dotPos) {
-                2 -> return numString
-                1 -> return numString + "0"
-                0 -> return numString + "00"
+            return when (len - dotPos) {
+                0 -> numString + "00"
+                1 -> numString + "0"
+                else -> numString
             }
         }
         return numString + ".00"

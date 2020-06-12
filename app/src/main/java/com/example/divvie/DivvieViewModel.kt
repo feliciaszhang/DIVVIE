@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Item
 import com.example.divvie.data.Person
-import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -69,7 +68,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDisplayBowlFragment() {}
 
     private fun onViewBreakdown(i: Int?) {
-        val current = viewState.value?.personalBreakDownIndex
+        val current = viewState.value!!.personalBreakDownIndex
         if (i != current) {
             viewState.value = viewState.value!!.copy(
                 isTipEditing = false,
@@ -254,10 +253,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onEnterPercentageTip(input: String) {
         if (input != "") {
-            val subtotal = viewState.value!!.subtotal!!
-            val tip: BigDecimal = input.toBigDecimal() * subtotal.toBigDecimal()
+            val subtotal = viewState.value!!.subtotal ?: 0.0
             viewState.value = viewState.value!!.copy(
-                tip = tip.toDouble() / 100,
+                tip = input.toDouble() * subtotal / 100,
                 isTipEditing = true
             )
         } else {
@@ -475,23 +473,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun calculateResult() {
         val vs = viewState.value!!
-        val subtotal: BigDecimal = vs.subtotal?.toBigDecimal() ?: 0.toBigDecimal()
-        val tax: BigDecimal = vs.tax?.toBigDecimal() ?: 0.toBigDecimal()
-        val tip: BigDecimal = vs.tip?.toBigDecimal() ?: 0.toBigDecimal()
-        val total: BigDecimal = subtotal + tax + tip
+        val subtotal = vs.subtotal ?: 0.0
+        val tax = vs.tax ?: 0.0
+        val tip = vs.tip ?: 0.0
+        val total = subtotal + tax + tip
         for (person in vs.personList) {
-            val personalSubtotal: BigDecimal = person.subtotal?.toBigDecimal() ?: 0.toBigDecimal()
-            val ratio: BigDecimal = personalSubtotal / subtotal
-            val personalTax: BigDecimal = ratio * tax
-            val personalTip: BigDecimal = ratio * tip
-            val personalGrandTotal: BigDecimal = personalSubtotal + personalTax + personalTip
-            person.tax = personalTax.toDouble()
-            person.tip = personalTip.toDouble()
-            person.grandTotal = personalGrandTotal.toDouble()
+            val personalSubtotal = person.subtotal ?: 0.0
+            val ratio = personalSubtotal / subtotal
+            val personalTax = ratio * tax
+            val personalTip = ratio * tip
+            val personalGrandTotal = personalSubtotal + personalTax + personalTip
+            person.tax = personalTax
+            person.tip = personalTip
+            person.grandTotal = personalGrandTotal
             updatePerson(person)
         }
         viewState.value = viewState.value!!.copy(
-            grandTotal = total.toDouble()
+            grandTotal = total
         )
     }
 
