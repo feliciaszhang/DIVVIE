@@ -1,6 +1,5 @@
 package com.example.divvie
 
-import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,7 +19,7 @@ data class DivvieViewState (
     val tempItemBasePrice: Double = 0.0,
     val tempItemFinalSplitPrice: Double = 0.0,
     val tempItemListOfIndex: ArrayList<Int> = ArrayList(),
-    val itemStack: Stack<Item> = Stack(),
+    val itemList: ArrayDeque<Double> = ArrayDeque(),
     val isItemEditing: Boolean = false,
     val isPersonalResult: Boolean = false,
     val personalBreakDownIndex: Int? = null,

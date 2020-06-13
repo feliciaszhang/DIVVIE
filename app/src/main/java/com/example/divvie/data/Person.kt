@@ -2,6 +2,8 @@ package com.example.divvie.data
 
 import androidx.room.*
 import com.example.divvie.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Entity(
     tableName = PERSON,
@@ -16,5 +18,5 @@ data class Person (
     @ColumnInfo(name = TIP) var tip: Double? = null,
     @ColumnInfo(name = GRANDTOTAL) var grandTotal: Double? = null,
     @ColumnInfo(name = TEMP_PRICE) var tempPrice: Double? = null,
-    @ColumnInfo(name = LIST_OF_PRICES) var listOfPrices: List<Double> = ArrayList()
+    @ColumnInfo(name = LIST_OF_PRICES) var listOfPrices: ArrayDeque<Double> = ArrayDeque()
 )

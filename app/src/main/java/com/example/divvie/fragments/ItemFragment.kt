@@ -85,9 +85,9 @@ class ItemFragment : Fragment() {
     private fun render(viewState: DivvieViewState) {
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
         nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
-        clearAllButton.isEnabled = viewState.itemStack.size > 0
+        clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
-        if (viewState.itemStack.size > 0) {
+        if (viewState.itemList.size > 0) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
         } else {

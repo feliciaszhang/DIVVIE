@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.divvie.data.DivvieDatabase
-import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
 import kotlin.collections.ArrayList
@@ -228,7 +227,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         viewState.value = viewState.value!!.copy(
             personList = getAllPersonStatic(),
             leftover = vs.subtotal,
-            itemStack = Stack()
+            itemList = ArrayDeque()
         )
     }
 
@@ -340,15 +339,12 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDone() {
         val vs = viewState.value!!
         val basePrice = vs.tempItemBasePrice
-        val listOfIndex = vs.tempItemListOfIndex
-        vs.itemStack.push(Item(basePrice, listOfIndex))
+        vs.itemList.add(basePrice)
         val leftover = vs.leftover!!
         for (person in vs.personList) {
             val personalTemp = person.tempPrice ?: 0.0
             person.subtotal = ((person.subtotal!!).toBigDecimal() + personalTemp.toBigDecimal()).toDouble()
-            val list = person.listOfPrices.toMutableList()
-            list.add(personalTemp)
-            person.listOfPrices = list
+            person.listOfPrices.add(personalTemp)
             person.tempPrice = 0.0
             updatePerson(person)
         }
@@ -356,7 +352,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             tempItemBasePrice = 0.0,
             tempItemFinalSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
-            itemStack = vs.itemStack,
+            itemList = vs.itemList,
             leftover = (leftover.toBigDecimal() - basePrice.toBigDecimal()).toDouble(),
             isSplittingBowls = false,
             isItemEditing = false,
@@ -365,12 +361,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun onItemBack() {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            person.tempPrice = 0.0
+            updatePerson(person)
+        }
         splitPretaxEqually()
         viewState.value = viewState.value!!.copy(
             tempItemBasePrice = 0.0,
             tempItemFinalSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
-            itemStack = Stack(),
+            itemList = ArrayDeque(),
             isItemEditing = false,
             personList = getAllPersonStatic()
         )
@@ -379,7 +380,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onUndo() {
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
-            removeTempItemFromPerson()
+            for (person in vs.personList) {
+                person.tempPrice = 0.0
+                updatePerson(person)
+            }
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
@@ -390,13 +394,16 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
             )
         } else {
-            val removedItem = vs.itemStack.pop()
-            val basePrice = removedItem.basePrice
+            val removedItem = vs.itemList.removeLast()
             val leftover = vs.leftover!!
-            removeFinalItemFromPerson()
+            for (person in vs.personList) {
+                val lastPrice = person.listOfPrices.removeLast()
+                person.subtotal = (person.subtotal!!.toBigDecimal() - lastPrice.toBigDecimal()).toDouble()
+                updatePerson(person)
+            }
             viewState.value = viewState.value!!.copy(
-                itemStack = vs.itemStack,
-                leftover = (leftover.toBigDecimal() + basePrice.toBigDecimal()).toDouble(),
+                itemList = vs.itemList,
+                leftover = (leftover.toBigDecimal() + removedItem.toBigDecimal()).toDouble(),
                 isItemEditing = false,
                 personList = getAllPersonStatic()
             )
@@ -406,7 +413,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onClearAll() {
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
-            removeTempItemFromPerson()
+            for (person in vs.personList) {
+                person.tempPrice = 0.0
+                updatePerson(person)
+            }
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
@@ -414,34 +424,18 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 isSplittingBowls = false
             )
         }
-        while (vs.itemStack.size > 0) {
-            vs.itemStack.pop()
-            removeFinalItemFromPerson()
+        vs.itemList.clear()
+        for (person in vs.personList) {
+            person.subtotal = 0.0
+            person.listOfPrices.clear()
+            updatePerson(person)
         }
         viewState.value = viewState.value!!.copy(
-            itemStack = Stack(),
+            itemList = ArrayDeque(),
             leftover = vs.subtotal,
             isItemEditing = false,
             personList = getAllPersonStatic()
         )
-    }
-
-    private fun removeTempItemFromPerson() {
-        val vs = viewState.value!!
-        for (person in vs.personList) {
-            person.tempPrice = 0.0
-            updatePerson(person)
-        }
-    }
-
-    private fun removeFinalItemFromPerson() {
-        val vs = viewState.value!!
-        for (person in vs.personList) {
-            val lastPrice = person.listOfPrices.last()
-            person.listOfPrices.dropLast(1)
-            person.subtotal = ((person.subtotal!!).toBigDecimal() - lastPrice.toBigDecimal()).toDouble()
-            updatePerson(person)
-        }
     }
 
     private fun splitPretaxEqually() {
@@ -458,7 +452,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             }
             person.tax = 0.0
             person.tip = 0.0
-            person.listOfPrices = ArrayList()
+            person.listOfPrices = ArrayDeque()
             updatePerson(person)
         }
     }
@@ -479,7 +473,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.subtotal = 0.0
             person.tax = 0.0
             person.tip = 0.0
-            person.listOfPrices = ArrayList()
+            person.listOfPrices = ArrayDeque()
             updatePerson(person)
         }
     }
@@ -490,7 +484,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.subtotal = null
             person.tax = null
             person.tip = null
-            person.listOfPrices = ArrayList()
+            person.listOfPrices = ArrayDeque()
             updatePerson(person)
         }
     }
@@ -522,7 +516,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         for (person in vs.personList) {
             person.tax = 0.0
             person.tip = 0.0
-            person.listOfPrices = ArrayList()
+            person.listOfPrices = ArrayDeque()
             updatePerson(person)
         }
     }
