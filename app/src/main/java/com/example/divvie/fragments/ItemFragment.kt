@@ -94,9 +94,9 @@ class ItemFragment : Fragment() {
             undoButton.visibility = View.GONE
             backButton.visibility = View.VISIBLE
         }
-        val tempLeftover = viewState.leftover!! - viewState.tempItemBasePrice
+        val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemBasePrice).toBigDecimal()
         leftoverText.text = String.format(resources.getString(R.string.leftover), filter.convert(tempLeftover.toString()))
-        if (tempLeftover < 0) {
+        if (tempLeftover.toDouble() < 0.0) {
             nextButton.isEnabled = false
         }
         if (viewState.leftover == 0.0) {

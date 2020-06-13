@@ -9,6 +9,7 @@ import com.example.divvie.data.Item
 import com.example.divvie.data.Person
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -102,17 +103,23 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             listOfIndex.add(i)
         }
         val basePrice = vs.tempItemBasePrice
-        val tempSplitPrice = basePrice / listOfIndex.size
+        val dividedMoney = moneyDivider(basePrice, listOfIndex.size)
+        val quotient = dividedMoney.first
+        var remainder = dividedMoney.second
         for (person in vs.personList) {
             if (person.id in listOfIndex) {
-                person.tempPrice = tempSplitPrice
+                if (remainder > 0) {
+                    person.tempPrice = (quotient + 1).toDouble() / 100
+                    remainder -= 1
+                } else {
+                    person.tempPrice = quotient.toDouble() / 100
+                }
             } else {
                 person.tempPrice = 0.0
             }
             updatePerson(person)
         }
         viewState.value = viewState.value!!.copy(
-            tempItemTempSplitPrice = tempSplitPrice,
             tempItemListOfIndex = listOfIndex,
             personList = getAllPersonStatic()
         )
@@ -333,23 +340,24 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDone() {
         val vs = viewState.value!!
         val basePrice = vs.tempItemBasePrice
-        val finalSplitPrice = vs.tempItemTempSplitPrice
         val listOfIndex = vs.tempItemListOfIndex
-        vs.itemStack.push(Item(basePrice, finalSplitPrice, listOfIndex))
+        vs.itemStack.push(Item(basePrice, listOfIndex))
         val leftover = vs.leftover!!
         for (person in vs.personList) {
             val personalTemp = person.tempPrice ?: 0.0
-            person.subtotal = person.subtotal!! + personalTemp
+            person.subtotal = ((person.subtotal!!).toBigDecimal() + personalTemp.toBigDecimal()).toDouble()
+            val list = person.listOfPrices.toMutableList()
+            list.add(personalTemp)
+            person.listOfPrices = list
             person.tempPrice = 0.0
             updatePerson(person)
         }
         viewState.value = viewState.value!!.copy(
             tempItemBasePrice = 0.0,
             tempItemFinalSplitPrice = 0.0,
-            tempItemTempSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
             itemStack = vs.itemStack,
-            leftover = leftover - basePrice,
+            leftover = (leftover.toBigDecimal() - basePrice.toBigDecimal()).toDouble(),
             isSplittingBowls = false,
             isItemEditing = false,
             personList = getAllPersonStatic()
@@ -361,7 +369,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         viewState.value = viewState.value!!.copy(
             tempItemBasePrice = 0.0,
             tempItemFinalSplitPrice = 0.0,
-            tempItemTempSplitPrice = 0.0,
             tempItemListOfIndex = ArrayList(),
             itemStack = Stack(),
             isItemEditing = false,
@@ -376,7 +383,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
-                tempItemTempSplitPrice = 0.0,
                 tempItemListOfIndex = ArrayList(),
                 isSplittingBowls = false,
                 isItemEditing = false,
@@ -387,10 +393,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             val removedItem = vs.itemStack.pop()
             val basePrice = removedItem.basePrice
             val leftover = vs.leftover!!
-            removeFinalItemFromPerson(removedItem)
+            removeFinalItemFromPerson()
             viewState.value = viewState.value!!.copy(
                 itemStack = vs.itemStack,
-                leftover = leftover + basePrice,
+                leftover = (leftover.toBigDecimal() + basePrice.toBigDecimal()).toDouble(),
                 isItemEditing = false,
                 personList = getAllPersonStatic()
             )
@@ -404,14 +410,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = 0.0,
                 tempItemFinalSplitPrice = 0.0,
-                tempItemTempSplitPrice = 0.0,
                 tempItemListOfIndex = ArrayList(),
                 isSplittingBowls = false
             )
         }
         while (vs.itemStack.size > 0) {
-            val removedItem = vs.itemStack.pop()
-            removeFinalItemFromPerson(removedItem)
+            vs.itemStack.pop()
+            removeFinalItemFromPerson()
         }
         viewState.value = viewState.value!!.copy(
             itemStack = Stack(),
@@ -423,30 +428,49 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun removeTempItemFromPerson() {
         val vs = viewState.value!!
-        for (index in vs.tempItemListOfIndex) {
-            val person = findPerson(index)
+        for (person in vs.personList) {
             person.tempPrice = 0.0
             updatePerson(person)
         }
     }
 
-    private fun removeFinalItemFromPerson(removedItem: Item) {
-        for (index in removedItem.listOfIndex) {
-            val person = findPerson(index)
-            person.subtotal = person.subtotal!! - removedItem.finalSplitPrice
+    private fun removeFinalItemFromPerson() {
+        val vs = viewState.value!!
+        for (person in vs.personList) {
+            val lastPrice = person.listOfPrices.last()
+            person.listOfPrices.dropLast(1)
+            person.subtotal = ((person.subtotal!!).toBigDecimal() - lastPrice.toBigDecimal()).toDouble()
             updatePerson(person)
         }
     }
 
     private fun splitPretaxEqually() {
         val vs = viewState.value!!
+        val dividedMoney = moneyDivider(vs.subtotal!!, vs.personList.size)
+        val quotient = dividedMoney.first
+        var remainder = dividedMoney.second
         for (person in vs.personList) {
-            person.subtotal = vs.subtotal!! / vs.personList.size
+            if (remainder > 0) {
+                person.subtotal = (quotient + 1).toDouble() / 100
+                remainder -= 1
+            } else {
+                person.subtotal = quotient.toDouble() / 100
+            }
             person.tax = 0.0
             person.tip = 0.0
-            person.tempPrice = 0.0
+            person.listOfPrices = ArrayList()
             updatePerson(person)
         }
+    }
+
+    private fun moneyDivider(dividend: Double, divisor: Int): Pair<Int, Int> {
+        if (divisor == 0) {
+            return Pair(0, 0)
+        }
+        val dividendInt = round(dividend * 100).toInt()
+        val quotient = Math.floorDiv(dividendInt, divisor)
+        val remainder = dividendInt % divisor
+        return Pair(quotient, remainder)
     }
 
     private fun clearPersonalData() {
@@ -455,7 +479,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.subtotal = 0.0
             person.tax = 0.0
             person.tip = 0.0
-            person.tempPrice = 0.0
+            person.listOfPrices = ArrayList()
             updatePerson(person)
         }
     }
@@ -466,7 +490,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             person.subtotal = null
             person.tax = null
             person.tip = null
-            person.tempPrice = null
+            person.listOfPrices = ArrayList()
             updatePerson(person)
         }
     }
@@ -498,7 +522,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         for (person in vs.personList) {
             person.tax = 0.0
             person.tip = 0.0
-            person.tempPrice = 0.0
+            person.listOfPrices = ArrayList()
             updatePerson(person)
         }
     }

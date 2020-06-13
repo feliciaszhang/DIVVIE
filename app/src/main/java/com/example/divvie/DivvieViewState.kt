@@ -19,7 +19,6 @@ data class DivvieViewState (
     val isCurrencyTip: Boolean = true,
     val tempItemBasePrice: Double = 0.0,
     val tempItemFinalSplitPrice: Double = 0.0,
-    val tempItemTempSplitPrice: Double = 0.0,
     val tempItemListOfIndex: ArrayList<Int> = ArrayList(),
     val itemStack: Stack<Item> = Stack(),
     val isItemEditing: Boolean = false,

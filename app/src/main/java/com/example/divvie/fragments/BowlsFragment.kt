@@ -3,7 +3,6 @@ package com.example.divvie.fragments
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
 import com.example.divvie.data.Person
 import android.view.View.OnFocusChangeListener
+import java.math.BigDecimal
 
 class BowlsFragment : Fragment() {
     companion object {
@@ -65,11 +65,11 @@ class BowlsFragment : Fragment() {
         val personalSub = person.subtotal
         if (personalSub != null) {
             price.visibility = View.VISIBLE
-            val personalTax = person.tax ?: 0.0
-            val personalTip = person.tip ?: 0.0
-            val personalTempPrice = person.tempPrice ?: 0.0
-            val total = personalSub + personalTax + personalTip + personalTempPrice
-            priceAmount.text = total.toString()
+            val personalTax: BigDecimal = person.tax?.toBigDecimal() ?: BigDecimal.ZERO
+            val personalTip: BigDecimal = person.tip?.toBigDecimal() ?: BigDecimal.ZERO
+            val personalTempPrice: BigDecimal = person.tempPrice?.toBigDecimal() ?: BigDecimal.ZERO
+            val total: BigDecimal = personalSub.toBigDecimal() + personalTax + personalTip + personalTempPrice
+            priceAmount.text = total.toDouble().toString()
         } else {
             price.visibility = View.GONE
         }

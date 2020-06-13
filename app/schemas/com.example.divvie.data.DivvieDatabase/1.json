@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9dc763d4c51fc6883eece898b0a67ac6",
+    "identityHash": "1d68af9860fede068bef0b6b5f084217",
     "entities": [
       {
         "tableName": "person",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `subtotal` REAL, `tax` REAL, `tip` REAL, `grand_total` REAL, `temp price` REAL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `subtotal` REAL, `tax` REAL, `tip` REAL, `grand_total` REAL, `temp price` REAL, `list_of_prices` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,6 +49,12 @@
             "columnName": "temp price",
             "affinity": "REAL",
             "notNull": false
+          },
+          {
+            "fieldPath": "listOfPrices",
+            "columnName": "list_of_prices",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -73,7 +79,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9dc763d4c51fc6883eece898b0a67ac6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1d68af9860fede068bef0b6b5f084217')"
     ]
   }
 }
