@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO person.acc
     // TODO personal breakdown calculation discrepency
     // TODO change edittext format when lose focus
     // TODO amount doesn't fit on screen

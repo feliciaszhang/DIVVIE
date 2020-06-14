@@ -2,6 +2,7 @@ package com.example.divvie.data
 
 import androidx.room.*
 import com.example.divvie.*
+import java.math.BigDecimal
 import java.util.*
 
 @Entity(
@@ -16,15 +17,23 @@ data class Person (
     @ColumnInfo(name = TAX) var tax: Double? = null,
     @ColumnInfo(name = TIP) var tip: Double? = null,
     @ColumnInfo(name = TEMP_PRICE) var tempPrice: Price? = null,
-    @ColumnInfo(name = LIST_OF_PRICES) var listOfPrices: ArrayDeque<Price> = ArrayDeque(),
-    @ColumnInfo(name = ACC) var acc: Int = 0
+    @ColumnInfo(name = LIST_OF_PRICES) var listOfPrices: ArrayDeque<Price> = ArrayDeque()
 ): Comparable<Person> {
 
     override fun compareTo(other: Person): Int {
         return when {
-            this.acc == other.acc -> 0
-            this.acc < other.acc -> -1
+            this.getAcc() == other.getAcc() -> 0
+            this.getAcc() < other.getAcc() -> -1
             else -> 1
         }
+    }
+
+    private fun getAcc(): Double {
+        var acc = BigDecimal.ZERO
+        for (p in listOfPrices) {
+            acc += p.acc.toBigDecimal()
+        }
+        acc += tempPrice?.acc?.toBigDecimal() ?: BigDecimal.ZERO
+        return acc.toDouble()
     }
 }
