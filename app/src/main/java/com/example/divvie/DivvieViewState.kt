@@ -17,11 +17,9 @@ data class DivvieViewState (
     val leftover: Double? = null,
     val isCurrencyTip: Boolean = true,
     val tempItemBasePrice: Double = 0.0,
-    val tempItemFinalSplitPrice: Double = 0.0,
     val tempItemListOfIndex: ArrayList<Int> = ArrayList(),
     val itemList: ArrayDeque<Double> = ArrayDeque(),
     val isItemEditing: Boolean = false,
     val isPersonalResult: Boolean = false,
-    val personalBreakDownIndex: Int? = null,
-    val grandTotal: Double? = null
+    val personalBreakDownIndex: Int? = null
 )

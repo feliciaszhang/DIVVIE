@@ -25,6 +25,7 @@ class BowlsFragment : Fragment() {
     }
     private lateinit var viewModel: DivvieViewModel
     private lateinit var bowlsList: ConstraintLayout
+    private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +70,7 @@ class BowlsFragment : Fragment() {
             val personalTip: BigDecimal = person.tip?.toBigDecimal() ?: BigDecimal.ZERO
             val personalTempPrice: BigDecimal = person.tempPrice?.toBigDecimal() ?: BigDecimal.ZERO
             val total: BigDecimal = personalSub.toBigDecimal() + personalTax + personalTip + personalTempPrice
-            priceAmount.text = total.toDouble().toString()
+            priceAmount.text = filter.clean(total.toDouble().toString())
         } else {
             price.visibility = View.GONE
         }

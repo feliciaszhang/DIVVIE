@@ -23,7 +23,7 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
         return null
     }
 
-    fun convert(numString: String): String {
+    fun clean(numString: String): String {
         var dotPos = -1
         val len = numString.length - 1
         for (i in numString.indices) {
@@ -35,7 +35,8 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
             return when (len - dotPos) {
                 0 -> numString + "00"
                 1 -> numString + "0"
-                else -> numString
+                2 -> numString
+                else -> throw Exception("---------------- more than 2 decimals -------------------")
             }
         }
         return numString + ".00"

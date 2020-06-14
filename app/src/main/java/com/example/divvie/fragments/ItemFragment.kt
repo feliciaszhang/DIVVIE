@@ -95,7 +95,7 @@ class ItemFragment : Fragment() {
             backButton.visibility = View.VISIBLE
         }
         val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemBasePrice).toBigDecimal()
-        leftoverText.text = String.format(resources.getString(R.string.leftover), filter.convert(tempLeftover.toString()))
+        leftoverText.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toString()))
         if (tempLeftover.toDouble() < 0.0) {
             nextButton.isEnabled = false
         }
@@ -107,7 +107,7 @@ class ItemFragment : Fragment() {
         if (viewState.isSplittingBowls) {
             editItemText.background = null
             editItemText.removeTextChangedListener(textWatcher)
-            editItemText.setText(filter.convert(viewState.tempItemBasePrice.toString()))
+            editItemText.setText(filter.clean(viewState.tempItemBasePrice.toString()))
             editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE

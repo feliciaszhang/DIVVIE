@@ -91,10 +91,10 @@ class InputFragment : Fragment() {
         guestsText.text = viewState.personList.size.toString()
         nextButton.isEnabled = viewState.subtotal != 0.0 && viewState.subtotal != null
         if (viewState.subtotal != null && !viewState.isSubtotalEditing) {
-            editSubtotalText.setText(filter.convert(viewState.subtotal.toString()))
+            editSubtotalText.setText(filter.clean(viewState.subtotal.toString()))
         }
         if (viewState.tax != null && !viewState.isTaxEditing) {
-            editTaxText.setText(filter.convert(viewState.tax.toString()))
+            editTaxText.setText(filter.clean(viewState.tax.toString()))
         }
     }
 }

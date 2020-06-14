@@ -124,12 +124,12 @@ class ResultFragment : Fragment() {
             val personalSub = person.subtotal ?: 0.0
             val personalTax = person.tax ?: 0.0
             val personalTip = person.tip ?: 0.0
-            val personalGrandTotal = person.grandTotal ?: 0.0
-            subtotal.text = filter.convert(personalSub.toString())
-            tax.text = filter.convert(personalTax.toString())
-            total.text = filter.convert(personalGrandTotal.toString())
+            val personalGrandTotal = personalSub.toBigDecimal() + personalTax.toBigDecimal() + personalTip.toBigDecimal()
+            subtotal.text = filter.clean(personalSub.toString())
+            tax.text = filter.clean(personalTax.toString())
+            total.text = filter.clean(personalGrandTotal.toString())
             if (!viewState.isTipEditing) {
-                currencyTip.setText(filter.convert(personalTip.toString()))
+                currencyTip.setText(filter.clean(personalTip.toString()))
                 percentageTip.setText((personalTip * 100 / personalSub).toString())
             }
         } else {
@@ -138,12 +138,12 @@ class ResultFragment : Fragment() {
             val totalSub = viewState.subtotal ?: 0.0
             val totalTax = viewState.tax ?: 0.0
             val totalTip = viewState.tip ?: 0.0
-            val grandTotal = viewState.grandTotal ?: 0.0
-            subtotal.text = filter.convert(totalSub.toString())
-            tax.text = filter.convert(totalTax.toString())
-            total.text = filter.convert(grandTotal.toString())
+            val grandTotal = totalSub.toBigDecimal() + totalTax.toBigDecimal() + totalTip.toBigDecimal()
+            subtotal.text = filter.clean(totalSub.toString())
+            tax.text = filter.clean(totalTax.toString())
+            total.text = filter.clean(grandTotal.toString())
             if (viewState.tip != null && !viewState.isTipEditing) {
-                currencyTip.setText(filter.convert(totalTip.toString()))
+                currencyTip.setText(filter.clean(totalTip.toString()))
                 percentageTip.setText((totalTip * 100 / totalSub).toString())
             }
         }

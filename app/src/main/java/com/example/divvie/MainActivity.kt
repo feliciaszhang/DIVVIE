@@ -14,7 +14,8 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO bowl amount format
+    // TODO person.acc
+    // TODO investigate any currency <-> percentage tip abnormality
     // TODO change edittext format when lose focus
     // TODO amount doesn't fit on screen
     // TODO click button when press next in keyboard
