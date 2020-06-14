@@ -13,7 +13,10 @@ import com.example.divvie.DIVVIEDATABASE
     entities = [Person::class],
     version = 1
 )
-@TypeConverters(ListConverter::class)
+@TypeConverters(
+    ListConverter::class,
+    PriceConverter::class
+)
 abstract class DivvieDatabase : RoomDatabase() {
 
     abstract fun dao(): DivvieDao

@@ -1,14 +1,15 @@
 package com.example.divvie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Person
+import com.example.divvie.data.Price
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.round
 
 class DivvieViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -102,19 +103,19 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             listOfIndex.add(i)
         }
         val basePrice = vs.tempItemBasePrice
-        val dividedMoney = moneyDivider(basePrice, listOfIndex.size.toDouble())
-        val quotient = dividedMoney.first
-        var remainder = dividedMoney.second
+        val dividedMoney = Price.moneyDivider(basePrice, listOfIndex.size)
+        val base = dividedMoney.base
+        var acc = dividedMoney.acc
         for (person in vs.personList.sorted()) {
             if (person.id in listOfIndex) {
-                if (remainder > 0) {
-                    person.tempPrice = (quotient.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
-                    remainder -= 1
+                if (acc > 0) {
+                    person.tempPrice = Price(base, 0.01)
+                    acc -= 1
                 } else {
-                    person.tempPrice = quotient
+                    person.tempPrice = Price(base, 0.0)
                 }
             } else {
-                person.tempPrice = 0.0
+                person.tempPrice = Price(0.0, 0.0)
             }
             updatePerson(person)
         }
@@ -267,9 +268,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onEnterPercentageTip(input: String) {
         if (input != "") {
             val subtotal = viewState.value!!.subtotal ?: 0.0
-            val dividedMoney = moneyDivider(input.toDouble() * subtotal, 100.0)
+            val dividedMoney = Price.moneyDivider(input.toDouble() * subtotal, 100)
             viewState.value = viewState.value!!.copy(
-                tip = dividedMoney.first,
+                tip = dividedMoney.base,
                 isTipEditing = true
             )
         } else {
@@ -356,10 +357,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         vs.itemList.add(basePrice)
         val leftover = vs.leftover!!
         for (person in vs.personList) {
-            val personalTemp = person.tempPrice ?: 0.0
-            person.subtotal = ((person.subtotal!!).toBigDecimal() + personalTemp.toBigDecimal()).toDouble()
+            val personalTemp = person.tempPrice ?: Price(0.0, 0.0)
+            person.subtotal = ((person.subtotal!!).toBigDecimal() + personalTemp.base.toBigDecimal() + personalTemp.acc.toBigDecimal()).toDouble()
             person.listOfPrices.add(personalTemp)
-            person.tempPrice = 0.0
+            person.tempPrice = Price(0.0, 0.0)
             updatePerson(person)
         }
         viewState.value = viewState.value!!.copy(
@@ -376,7 +377,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onItemBack() {
         val vs = viewState.value!!
         for (person in vs.personList) {
-            person.tempPrice = 0.0
+            person.tempPrice = Price(0.0, 0.0)
             updatePerson(person)
         }
         splitPretaxEqually()
@@ -393,7 +394,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
             for (person in vs.personList) {
-                person.tempPrice = 0.0
+                person.tempPrice = Price(0.0, 0.0)
                 updatePerson(person)
             }
             viewState.value = viewState.value!!.copy(
@@ -409,7 +410,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             val leftover = vs.leftover!!
             for (person in vs.personList) {
                 val lastPrice = person.listOfPrices.removeLast()
-                person.subtotal = (person.subtotal!!.toBigDecimal() - lastPrice.toBigDecimal()).toDouble()
+                person.subtotal = (person.subtotal!!.toBigDecimal() - lastPrice.base.toBigDecimal() - lastPrice.acc.toBigDecimal()).toDouble()
                 updatePerson(person)
             }
             viewState.value = viewState.value!!.copy(
@@ -425,7 +426,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
             for (person in vs.personList) {
-                person.tempPrice = 0.0
+                person.tempPrice = Price(0.0, 0.0)
                 updatePerson(person)
             }
             viewState.value = viewState.value!!.copy(
@@ -450,15 +451,15 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun splitPretaxEqually() {
         val vs = viewState.value!!
-        val dividedMoney = moneyDivider(vs.subtotal!!, vs.personList.size.toDouble())
-        val quotient = dividedMoney.first
-        var remainder = dividedMoney.second
+        val dividedMoney = Price.moneyDivider(vs.subtotal!!, vs.personList.size)
+        val base = dividedMoney.base
+        var acc = dividedMoney.acc
         for (person in vs.personList) {
-            if (remainder > 0) {
-                person.subtotal = (quotient.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
-                remainder -= 1
+            if (acc > 0) {
+                person.subtotal = (base.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
+                acc -= 1
             } else {
-                person.subtotal = quotient
+                person.subtotal = base
             }
             person.tax = 0.0
             person.tip = 0.0
@@ -483,18 +484,19 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val subtotal = vs.subtotal ?: 0.0
         val tax = vs.tax ?: 0.0
         val tip = vs.tip ?: 0.0
+        val grandTotal = (subtotal.toBigDecimal() + tax.toBigDecimal() + tip.toBigDecimal()).toDouble()
+        var grandTotalRemainder = 0.0
         var taxRemainder = 0.0
-        var tipRemainder = 0.0
         for (person in vs.personList) {
             val personalSubtotal = person.subtotal ?: 0.0
-            val dividedTax = moneyDivider(personalSubtotal * tax * 100, subtotal * 100)
-            val taxQuotient = dividedTax.first
-            taxRemainder += dividedTax.second
-            val dividedTip = moneyDivider(personalSubtotal * tip * 100, subtotal * 100)
-            val tipQuotient = dividedTip.first
-            tipRemainder += dividedTip.second
+            val dividedGrandTotal = Price.moneyDivider(personalSubtotal * grandTotal * 100, (subtotal * 100).toInt())
+            val grandTotalQuotient = dividedGrandTotal.base
+            grandTotalRemainder += dividedGrandTotal.acc
+            val dividedTax = Price.moneyDivider(personalSubtotal * tax * 100, (subtotal * 100).toInt())
+            val taxQuotient = dividedTax.base
+            taxRemainder += dividedTax.acc
             person.tax = taxQuotient
-            person.tip = tipQuotient
+            person.tip = (grandTotalQuotient.toBigDecimal() - taxQuotient.toBigDecimal() - personalSubtotal.toBigDecimal()).toDouble()
             updatePerson(person)
         }
         for (person in vs.personList.sorted()) {
@@ -503,10 +505,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
                 person.tax = (personalTax.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
                 taxRemainder -= 1
             }
-            if (tipRemainder > 0) {
+            if (grandTotalRemainder > 0) {
                 val personalTip = person.tip ?: 0.0
                 person.tip = (personalTip.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
-                tipRemainder -= 1
+                grandTotalRemainder -= 1
             }
             updatePerson(person)
         }
@@ -527,17 +529,5 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun updatePerson(person: Person) {dao.updatePerson(person)}
 
     private fun deleteAllPerson() {dao.deleteAllPerson()}
-
-    companion object {
-        private fun moneyDivider(dividend: Double, divisor: Double): Pair<Double, Double> {
-            if (dividend == 0.0 || divisor == 0.0) {
-                return Pair(0.0, 0.0)
-            }
-            val roundedDividend = round(dividend * 100)
-            val quotient = Math.floorDiv(roundedDividend.toLong(), divisor.toLong())
-            val remainder = roundedDividend % divisor
-            return Pair(quotient.toDouble() / 100, remainder)
-        }
-    }
 }
 
