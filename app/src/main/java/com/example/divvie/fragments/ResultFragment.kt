@@ -58,6 +58,22 @@ class ResultFragment : Fragment() {
         return fragment
     }
 
+    private val currencyTextWatcher = object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.onEvent(ResultViewEvent.EnterCurrencyTip("0" + currencyTip.text.toString()))
+        }
+    }
+
+    private val percentageTextWatcher = object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.onEvent(ResultViewEvent.EnterPercentageTip("0" + percentageTip.text.toString()))
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
@@ -67,21 +83,13 @@ class ResultFragment : Fragment() {
         currencyTip.filters = arrayOf(filter)
         percentageTip.filters = arrayOf(filter)
 
-        currencyTip.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(ResultViewEvent.EnterCurrencyTip("0" + currencyTip.text.toString()))
-            }
-        })
+        currencyTip.addTextChangedListener(currencyTextWatcher)
 
-        percentageTip.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(ResultViewEvent.EnterPercentageTip("0" + percentageTip.text.toString()))
-            }
-        })
+        percentageTip.addTextChangedListener(percentageTextWatcher)
+
+        currencyButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectCurrency) }
+
+        percentageButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectPercentage) }
 
         backButton.setOnClickListener {
             viewModel.onEvent(ResultViewEvent.Back)
@@ -96,10 +104,6 @@ class ResultFragment : Fragment() {
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
         }
-
-        currencyButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectCurrency) }
-
-        percentageButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectPercentage) }
     }
 
     private fun render(viewState: DivvieViewState) {
@@ -129,8 +133,12 @@ class ResultFragment : Fragment() {
             tax.text = filter.clean(personalTax.toString())
             total.text = filter.clean(personalGrandTotal.toString())
             if (!viewState.isTipEditing) {
+                currencyTip.removeTextChangedListener(currencyTextWatcher)
+                percentageTip.removeTextChangedListener(percentageTextWatcher)
                 currencyTip.setText(filter.clean(personalTip.toString()))
-                percentageTip.setText((personalTip * 100 / personalSub).toString())
+                percentageTip.setText(filter.roundAndClean(personalTip * 100 / personalSub))
+                currencyTip.addTextChangedListener(currencyTextWatcher)
+                percentageTip.addTextChangedListener(percentageTextWatcher)
             }
         } else {
             currencyTip.background = editTextCurrencyBackground
@@ -143,8 +151,12 @@ class ResultFragment : Fragment() {
             tax.text = filter.clean(totalTax.toString())
             total.text = filter.clean(grandTotal.toString())
             if (viewState.tip != null && !viewState.isTipEditing) {
+                currencyTip.removeTextChangedListener(currencyTextWatcher)
+                percentageTip.removeTextChangedListener(percentageTextWatcher)
                 currencyTip.setText(filter.clean(totalTip.toString()))
-                percentageTip.setText((totalTip * 100 / totalSub).toString())
+                percentageTip.setText(filter.roundAndClean(totalTip * 100 / totalSub))
+                currencyTip.addTextChangedListener(currencyTextWatcher)
+                percentageTip.addTextChangedListener(percentageTextWatcher)
             }
         }
     }

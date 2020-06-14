@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO person.acc
-    // TODO investigate any currency <-> percentage tip abnormality
+    // TODO personal breakdown calculation discrepency
     // TODO change edittext format when lose focus
     // TODO amount doesn't fit on screen
     // TODO click button when press next in keyboard
