@@ -8,20 +8,31 @@ import kotlin.math.round
 class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
 
     override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
-        var dotPos = -1
-        val len = dest.length
-        for (i in 0 until len) {
-            if (dest[i] == '.') {
-                dotPos = i
-                break
+        try {
+            var dotPos = -1
+            val len: Int
+            if (dstart == 0) {
+                len = 0
+            } else {
+                len = dest.length
+                for (i in 0 until len) {
+                    if (dest[i] == '.') {
+                        dotPos = i
+                        break
+                    }
+                }
             }
+            if (dotPos >= 0) {
+                if (source == ".") { return "" }
+                if (dend <= dotPos) { return null }
+                if (len - dotPos > decimalDigits) { return "" }
+            } else if (source == "." && ((len - dend) > decimalDigits || (dest.length - dend) > decimalDigits)) {
+                return ""
+            }
+            return null
+        } catch (e: NumberFormatException) {
+            return ""
         }
-        if (dotPos >= 0) {
-            if (source == ".") { return "" }
-            if (dend <= dotPos) { return null }
-            if (len - dotPos > decimalDigits) { return "" }
-        } else if (source == "." && (len - dend) > decimalDigits) { return "" }
-        return null
     }
 
     fun clean(numString: String): String {

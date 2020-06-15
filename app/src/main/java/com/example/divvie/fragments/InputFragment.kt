@@ -83,7 +83,12 @@ class InputFragment : Fragment() {
         editSubtotalText.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val text = editSubtotalText.text.toString()
-                editSubtotalText.setText(filter.clean(text))
+                val cleanedText = try {
+                    filter.clean(text)
+                } catch (e: Exception) {
+                    "12345"
+                }
+                editSubtotalText.setText(cleanedText)
             }
         })
 

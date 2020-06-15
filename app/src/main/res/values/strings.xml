@@ -3,7 +3,7 @@
     <string name="currency">$</string>
     <string name="percentage">%</string>
     <string name="subtotal">Subtotal</string>
-    <string name="subtotal_helper">Don\'t include tax nor tip!</string>
+    <string name="subtotal_helper">* before tax and tip!</string>
     <string name="tax">Tax</string>
     <string name="tip">Tip</string>
     <string name="item_price">Item Price</string>
