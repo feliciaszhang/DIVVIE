@@ -1,5 +1,7 @@
 package com.example.divvie.fragments
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,6 +36,7 @@ class ResultFragment : Fragment() {
     private lateinit var restart: Button
     private lateinit var editTextCurrencyBackground: Drawable
     private lateinit var editTextPercentageBackground: Drawable
+    private lateinit var tipHelper: TextView
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -54,6 +57,7 @@ class ResultFragment : Fragment() {
         restart = fragment.findViewById(R.id.restart)
         editTextCurrencyBackground = currencyTip.background
         editTextPercentageBackground = percentageTip.background
+        tipHelper = fragment.findViewById(R.id.tip_helper)
         return fragment
     }
 
@@ -61,7 +65,12 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + currencyTip.text.toString()))
+            try {
+                filter.clean(currencyTip.text.toString())
+                viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + currencyTip.text.toString()))
+            } catch (e: java.lang.Exception) {
+                viewModel.onEvent(DivvieViewEvent.InvalidCurrencyTip)
+            }
         }
     }
 
@@ -93,7 +102,12 @@ class ResultFragment : Fragment() {
         currencyTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val text = currencyTip.text.toString()
-                currencyTip.setText(filter.clean(text))
+                val cleanedText = try {
+                    filter.clean(text)
+                } catch (e: Exception) {
+                    text
+                }
+                currencyTip.setText(cleanedText)
             }
         })
 
@@ -173,6 +187,23 @@ class ResultFragment : Fragment() {
                 percentageTip.setText(filter.roundAndClean(totalTip * 100 / totalSub))
                 currencyTip.addTextChangedListener(currencyTextWatcher)
                 percentageTip.addTextChangedListener(percentageTextWatcher)
+            }
+        }
+        if (viewState.invalidCurrencyTip) {
+            percentageButton.isEnabled = false
+            tipHelper.visibility = View.VISIBLE
+            tipHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
+            currencyTip.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
+        if (!viewState.invalidCurrencyTip) {
+            percentageButton.isEnabled = true
+            tipHelper.visibility = View.INVISIBLE
+            if (viewState.personalBreakDownIndex == null) {
+                currencyTip.background.colorFilter = PorterDuffColorFilter(
+                    resources.getColor(R.color.colorLight, context!!.theme),
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
         }
     }

@@ -30,6 +30,7 @@ class ItemFragment : Fragment() {
     private lateinit var undoButton: Button
     private lateinit var clearAllButton: Button
     private lateinit var editTextBackground: Drawable
+    private lateinit var itemHelper: TextView
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -46,6 +47,7 @@ class ItemFragment : Fragment() {
         undoButton = fragment.findViewById(R.id.undo)
         clearAllButton = fragment.findViewById(R.id.clear_all)
         editTextBackground = editItemText.background
+        itemHelper = fragment.findViewById(R.id.item_helper)
         return fragment
     }
 
@@ -53,7 +55,12 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(DivvieViewEvent.ItemEnterPrice("0" + editItemText.text.toString()))
+            try {
+                filter.clean(editItemText.text.toString())
+                viewModel.onEvent(DivvieViewEvent.ItemEnterPrice("0" + editItemText.text.toString()))
+            } catch (e: java.lang.Exception) {
+                viewModel.onEvent(DivvieViewEvent.InvalidItem)
+            }
         }
     }
 

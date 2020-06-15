@@ -83,6 +83,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onInvalidCurrencyTip() {
         viewState.value = viewState.value!!.copy(
+            isPersonalResult = false,
             invalidCurrencyTip = true
         )
     }
@@ -159,7 +160,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             editableName = true, personList = getAllPersonStatic(), tip = null,
             isTipEditing = false, leftover = null, isCurrencyTip = true, tempItemPrice = 0.0,
             tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(), isItemEditing = false,
-            isPersonalResult = false, personalBreakDownIndex = null
+            isPersonalResult = false, personalBreakDownIndex = null, invalidSubtotal = false,
+            invalidTax = false, invalidItem = false, invalidCurrencyTip = false
         ) // subtotal, tax, leftover, personList
     }
 
@@ -250,7 +252,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             editableName = false, personList = getAllPersonStatic(), tip = null,
             isTipEditing = false, leftover = null, isCurrencyTip = true, tempItemPrice = 0.0,
             tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(), isItemEditing = false,
-            isPersonalResult = false, personalBreakDownIndex = null
+            isPersonalResult = false, personalBreakDownIndex = null, invalidSubtotal = false,
+            invalidTax = false, invalidItem = false, invalidCurrencyTip = false
         ) // subtotal, tax, editableName, personList
     }
 
@@ -261,19 +264,22 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             editableName = false, personList = getAllPersonStatic(), tip = null,
             isTipEditing = false, leftover = 0.0, isCurrencyTip = true, tempItemPrice = 0.0,
             tempItemListOfIndex = ArrayList(), isItemEditing = false, isPersonalResult = true,
-            personalBreakDownIndex = null
+            personalBreakDownIndex = null, invalidSubtotal = false, invalidTax = false,
+            invalidItem = false, invalidCurrencyTip = false
         ) // subtotal, tax, editableName, isPersonalResult, leftover, personList, itemList
     }
 
     private fun onResultEnterCurrencyTip(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
+                isPersonalResult = true,
                 invalidCurrencyTip = false,
                 tip = input.toDouble(),
                 isTipEditing = true
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                isPersonalResult = true,
                 invalidCurrencyTip = false,
                 tip = 0.0,
                 isTipEditing = true
@@ -342,7 +348,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             editableName = false, personList = getAllPersonStatic(), tip = null,
             isTipEditing = false, leftover = vs.subtotal, isCurrencyTip = true,
             tempItemPrice = 0.0, tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(),
-            isItemEditing = false, isPersonalResult = false, personalBreakDownIndex = null
+            isItemEditing = false, isPersonalResult = false, personalBreakDownIndex = null,
+            invalidSubtotal = false, invalidTax = false, invalidItem = false, invalidCurrencyTip = false
         ) // subtotal, tax, editableName, personList, leftover
     }
 
