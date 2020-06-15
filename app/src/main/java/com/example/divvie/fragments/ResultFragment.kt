@@ -91,6 +91,20 @@ class ResultFragment : Fragment() {
 
         percentageButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectPercentage) }
 
+        currencyTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = currencyTip.text.toString()
+                currencyTip.setText(filter.clean(text))
+            }
+        })
+
+        percentageTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = percentageTip.text.toString()
+                percentageTip.setText(filter.clean(text))
+            }
+        })
+
         backButton.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, SplitFragment.newInstance()

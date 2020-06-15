@@ -78,6 +78,20 @@ class InputFragment : Fragment() {
             }
         })
 
+        editSubtotalText.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = editSubtotalText.text.toString()
+                editSubtotalText.setText(filter.clean(text))
+            }
+        })
+
+        editTaxText.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = editTaxText.text.toString()
+                editTaxText.setText(filter.clean(text))
+            }
+        })
+
         nextButton.setOnClickListener {
             viewModel.onEvent(DivvieViewEvent.InputToSplit)
             fragmentManager!!.beginTransaction().replace(

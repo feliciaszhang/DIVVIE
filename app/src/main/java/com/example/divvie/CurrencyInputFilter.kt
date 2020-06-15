@@ -25,22 +25,32 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
     }
 
     fun clean(numString: String): String {
+        var string = numString
         var dotPos = -1
-        val len = numString.length - 1
-        for (i in numString.indices) {
-            if (numString[i] == '.') {
+        val len = string.length - 1
+        for (i in string.indices) {
+            if (string[i] == '.') {
                 dotPos = i
             }
         }
+        if (string.length > 1 && string[0] == '0' && string[1] != '.') {
+            string = string.removeRange(0, 1)
+        }
+        if (string.length == 0) {
+            string = "0"
+        }
+        if (string[0] == '.') {
+            string = "0" + string
+        }
         if (dotPos >= 0) {
             return when (len - dotPos) {
-                0 -> numString + "00"
-                1 -> numString + "0"
-                2 -> numString
+                0 -> string + "00"
+                1 -> string + "0"
+                2 -> string
                 else -> throw Exception("---------------- more than 2 decimals -------------------")
             }
         }
-        return numString + ".00"
+        return string + ".00"
     }
 
     fun roundAndClean(num: Double): String {
