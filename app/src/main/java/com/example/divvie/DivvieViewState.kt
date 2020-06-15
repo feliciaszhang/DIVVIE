@@ -21,7 +21,11 @@ data class DivvieViewState (
     val itemList: ArrayDeque<Double>,
     val isItemEditing: Boolean,
     val isPersonalResult: Boolean,
-    val personalBreakDownIndex: Int?
+    val personalBreakDownIndex: Int?,
+    val invalidSubtotal: Boolean,
+    val invalidTax: Boolean,
+    val invalidItem: Boolean,
+    val invalidCurrencyTip: Boolean
 ) {
     companion object {
         private fun defaultPersonList(): Array<Person> {
@@ -34,7 +38,8 @@ data class DivvieViewState (
                 isSplittingBowls = false, editableName = true, personList = defaultPersonList(),
                 tip = null, isTipEditing = false, leftover = null, isCurrencyTip = true,
                 tempItemPrice = 0.0, tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(),
-                isItemEditing = false, isPersonalResult = false, personalBreakDownIndex = null
+                isItemEditing = false, isPersonalResult = false, personalBreakDownIndex = null,
+                invalidSubtotal = false, invalidTax = false, invalidItem = false, invalidCurrencyTip = false
             )
         }
     }

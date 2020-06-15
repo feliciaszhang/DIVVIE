@@ -21,6 +21,10 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     fun onEvent(event: DivvieViewEvent) {
         return when (event) {
             is DivvieViewEvent.DisplayActivity -> onDisplayActivity()
+            is DivvieViewEvent.InvalidSubtotal -> onInvalidSubtotal()
+            is DivvieViewEvent.InvalidTax -> onInvalidTax()
+            is DivvieViewEvent.InvalidItem -> onInvalidItem()
+            is DivvieViewEvent.InvalidCurrencyTip -> onInvalidCurrencyTip()
 
             is DivvieViewEvent.DisplayInputFragment -> onDisplayInputFragment()
             is DivvieViewEvent.InputInsertPerson -> onInputInsertPerson()
@@ -57,6 +61,30 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         for (person in viewState.value!!.personList) {
             insertPerson(person)
         }
+    }
+
+    private fun onInvalidSubtotal() {
+        viewState.value = viewState.value!!.copy(
+            invalidSubtotal = true
+        )
+    }
+
+    private fun onInvalidTax() {
+        viewState.value = viewState.value!!.copy(
+            invalidTax = true
+        )
+    }
+
+    private fun onInvalidItem() {
+        viewState.value = viewState.value!!.copy(
+            invalidItem = true
+        )
+    }
+
+    private fun onInvalidCurrencyTip() {
+        viewState.value = viewState.value!!.copy(
+            invalidCurrencyTip = true
+        )
     }
 
     private fun onBowlsViewBreakdown(i: Int?) {
@@ -158,12 +186,14 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onInputEnterSubtotal(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
+                invalidSubtotal = false,
                 subtotal = input.toDouble(),
                 isSubtotalEditing = true,
                 leftover = input.toDouble()
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                invalidSubtotal = false,
                 subtotal = 0.0,
                 isSubtotalEditing = true,
                 leftover = 0.0
@@ -174,11 +204,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onInputEnterTax(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
+                invalidTax = false,
                 tax = input.toDouble(),
                 isTaxEditing = true
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                invalidTax = false,
                 tax = 0.0,
                 isTaxEditing = true
             )
@@ -236,11 +268,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onResultEnterCurrencyTip(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
+                invalidCurrencyTip = false,
                 tip = input.toDouble(),
                 isTipEditing = true
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                invalidCurrencyTip = false,
                 tip = 0.0,
                 isTipEditing = true
             )
@@ -315,11 +349,13 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
     private fun onItemEnterPrice(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
+                invalidItem = false,
                 tempItemPrice = input.toDouble(),
                 isItemEditing = true
             )
         } else {
             viewState.value = viewState.value!!.copy(
+                invalidItem = false,
                 tempItemPrice = 0.0,
                 isItemEditing = true
             )

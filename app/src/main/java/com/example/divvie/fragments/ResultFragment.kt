@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
-import android.widget.LinearLayout
 import com.example.divvie.*
 
 
@@ -24,8 +23,8 @@ class ResultFragment : Fragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var subtotal: TextView
     private lateinit var tax: TextView
-    private lateinit var currencyTipGroup: LinearLayout
-    private lateinit var percentageTipGroup: LinearLayout
+    private lateinit var currency: TextView
+    private lateinit var percentage: TextView
     private lateinit var currencyTip: EditText
     private lateinit var percentageTip: EditText
     private lateinit var currencyButton: Button
@@ -44,9 +43,9 @@ class ResultFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.result_fragment, container, false)
         subtotal = fragment.findViewById(R.id.subtotal_amount)
         tax = fragment.findViewById(R.id.tax_amount)
-        currencyTipGroup = fragment.findViewById(R.id.currency_tip_group)
+        currency = fragment.findViewById(R.id.currency4)
         currencyTip = fragment.findViewById(R.id.edit_tip_currency)
-        percentageTipGroup = fragment.findViewById(R.id.percentage_tip_group)
+        percentage = fragment.findViewById(R.id.percentage)
         percentageTip = fragment.findViewById(R.id.edit_tip_percentage)
         currencyButton = fragment.findViewById(R.id.currencyButton)
         percentageButton = fragment.findViewById(R.id.percentageButton)
@@ -124,13 +123,17 @@ class ResultFragment : Fragment() {
         currencyTip.isEnabled = breakdownIndex == null
         percentageTip.isEnabled = breakdownIndex == null
         if (viewState.isCurrencyTip) {
-            currencyTipGroup.visibility = View.VISIBLE
-            percentageTipGroup.visibility = View.GONE
+            currency.visibility = View.VISIBLE
+            currencyTip.visibility = View.VISIBLE
+            percentage.visibility = View.GONE
+            percentageTip.visibility = View.GONE
             currencyButton.isEnabled = false
             percentageButton.isEnabled = true
         } else {
-            currencyTipGroup.visibility = View.GONE
-            percentageTipGroup.visibility = View.VISIBLE
+            currency.visibility = View.GONE
+            currencyTip.visibility = View.GONE
+            percentage.visibility = View.VISIBLE
+            percentageTip.visibility = View.VISIBLE
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
         }

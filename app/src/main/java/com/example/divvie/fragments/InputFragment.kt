@@ -1,6 +1,8 @@
 package com.example.divvie.fragments
 
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
@@ -29,6 +31,8 @@ class InputFragment : Fragment() {
     private lateinit var editSubtotalText: EditText
     private lateinit var editTaxText: EditText
     private lateinit var nextButton: Button
+    private lateinit var subtotalHelper: TextView
+    private lateinit var taxHelper: TextView
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -42,6 +46,8 @@ class InputFragment : Fragment() {
         editSubtotalText = fragment.findViewById(R.id.edit_subtotal)
         editTaxText = fragment.findViewById(R.id.edit_tax)
         nextButton = fragment.findViewById(R.id.next)
+        subtotalHelper = fragment.findViewById(R.id.subtotal_helper)
+        taxHelper = fragment.findViewById(R.id.tax_helper)
         return fragment
     }
 
@@ -68,7 +74,12 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(DivvieViewEvent.InputEnterSubtotal("0" + editSubtotalText.text.toString()))
+                try {
+                    filter.clean(editSubtotalText.text.toString())
+                    viewModel.onEvent(DivvieViewEvent.InputEnterSubtotal("0" + editSubtotalText.text.toString()))
+                } catch (e: java.lang.Exception) {
+                    viewModel.onEvent(DivvieViewEvent.InvalidSubtotal)
+                }
             }
         })
 
@@ -76,7 +87,12 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(DivvieViewEvent.InputEnterTax("0" + editTaxText.text.toString()))
+                try {
+                    filter.clean(editTaxText.text.toString())
+                    viewModel.onEvent(DivvieViewEvent.InputEnterTax("0" + editTaxText.text.toString()))
+                } catch (e: java.lang.Exception) {
+                    viewModel.onEvent(DivvieViewEvent.InvalidTax)
+                }
             }
         })
 
@@ -86,7 +102,7 @@ class InputFragment : Fragment() {
                 val cleanedText = try {
                     filter.clean(text)
                 } catch (e: Exception) {
-                    "12345"
+                    text
                 }
                 editSubtotalText.setText(cleanedText)
             }
@@ -95,7 +111,12 @@ class InputFragment : Fragment() {
         editTaxText.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val text = editTaxText.text.toString()
-                editTaxText.setText(filter.clean(text))
+                val cleanedText = try {
+                    filter.clean(text)
+                } catch (e: java.lang.Exception) {
+                    text
+                }
+                editTaxText.setText(cleanedText)
             }
         })
 
@@ -123,12 +144,38 @@ class InputFragment : Fragment() {
 
     private fun render(viewState: DivvieViewState) {
         guestsText.text = viewState.personList.size.toString()
-        nextButton.isEnabled = viewState.subtotal != 0.0 && viewState.subtotal != null
+        nextButton.isEnabled = viewState.subtotal != 0.0
+                && viewState.subtotal != null
+                && !viewState.invalidSubtotal
+                && !viewState.invalidTax
         if (viewState.subtotal != null && !viewState.isSubtotalEditing) {
             editSubtotalText.setText(filter.clean(viewState.subtotal.toString()))
         }
         if (viewState.tax != null && !viewState.isTaxEditing) {
             editTaxText.setText(filter.clean(viewState.tax.toString()))
+        }
+        if (viewState.invalidSubtotal) {
+            subtotalHelper.text = resources.getString(R.string.warning)
+            subtotalHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
+            editSubtotalText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
+        if (viewState.invalidTax) {
+            taxHelper.visibility = View.VISIBLE
+            taxHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
+            editTaxText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
+        if (!viewState.invalidSubtotal){
+            subtotalHelper.text = resources.getString(R.string.subtotal_helper)
+            subtotalHelper.setTextColor(resources.getColor(R.color.colorWhite, context!!.theme))
+            editSubtotalText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorLight, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
+        if (!viewState.invalidTax) {
+            taxHelper.visibility = View.GONE
+            editTaxText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorLight, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
     }
 }

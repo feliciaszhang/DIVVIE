@@ -2,6 +2,10 @@ package com.example.divvie
 
 sealed class DivvieViewEvent {
     object DisplayActivity: DivvieViewEvent()
+    object InvalidSubtotal: DivvieViewEvent()
+    object InvalidTax: DivvieViewEvent()
+    object InvalidItem: DivvieViewEvent()
+    object InvalidCurrencyTip: DivvieViewEvent()
 
     object DisplayInputFragment: DivvieViewEvent()
     object InputInsertPerson: DivvieViewEvent()

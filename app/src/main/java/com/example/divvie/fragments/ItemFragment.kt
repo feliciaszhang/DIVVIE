@@ -38,7 +38,7 @@ class ItemFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.item_fragment, container, false)
         editItemText = fragment.findViewById(R.id.edit_item)
-        leftoverText = fragment.findViewById(R.id.leftover)
+        leftoverText = fragment.findViewById(R.id.item_helper)
         tap = fragment.findViewById(R.id.tap)
         nextButton = fragment.findViewById(R.id.next)
         doneButton = fragment.findViewById(R.id.done)

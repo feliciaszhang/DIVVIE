@@ -4,6 +4,7 @@
     <string name="percentage">%</string>
     <string name="subtotal">Subtotal</string>
     <string name="subtotal_helper">* before tax and tip!</string>
+    <string name="warning">* correct currency format?</string>
     <string name="tax">Tax</string>
     <string name="tip">Tip</string>
     <string name="item_price">Item Price</string>
