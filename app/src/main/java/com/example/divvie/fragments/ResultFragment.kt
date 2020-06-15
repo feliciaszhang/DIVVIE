@@ -135,7 +135,7 @@ class ResultFragment : Fragment() {
     private fun render(viewState: DivvieViewState) {
         val breakdownIndex = viewState.personalBreakDownIndex
         currencyTip.isEnabled = breakdownIndex == null
-        percentageTip.isEnabled = breakdownIndex == null
+        percentageTip.isEnabled = breakdownIndex == null && !viewState.invalidCurrencyTip
         if (viewState.isCurrencyTip) {
             currency.visibility = View.VISIBLE
             currencyTip.visibility = View.VISIBLE
@@ -190,14 +190,12 @@ class ResultFragment : Fragment() {
             }
         }
         if (viewState.invalidCurrencyTip) {
-            percentageButton.isEnabled = false
             tipHelper.visibility = View.VISIBLE
             tipHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
             currencyTip.background.colorFilter = PorterDuffColorFilter(
                 resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
         if (!viewState.invalidCurrencyTip) {
-            percentageButton.isEnabled = true
             tipHelper.visibility = View.INVISIBLE
             if (viewState.personalBreakDownIndex == null) {
                 currencyTip.background.colorFilter = PorterDuffColorFilter(
