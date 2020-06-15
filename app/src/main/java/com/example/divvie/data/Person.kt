@@ -28,6 +28,10 @@ data class Person (
         }
     }
 
+    fun getBaseSubtotal(): Double {
+        return ((subtotal?.toBigDecimal() ?: BigDecimal.ZERO) - getAcc().toBigDecimal()).toDouble()
+    }
+
     private fun getAcc(): Double {
         var acc = BigDecimal.ZERO
         for (p in listOfPrices) {

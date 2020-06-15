@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.divvie.data.DivvieDatabase
 import com.example.divvie.data.Person
 import com.example.divvie.data.Price
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -317,6 +318,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onRestart() {
         nullifyPersonalData()
+        // TODO nullify
         val savedPersonData = getAllPersonStatic()
         viewState.value = DivvieViewState()
         viewState.value = viewState.value!!.copy(
@@ -455,15 +457,17 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val base = dividedMoney.base
         var acc = dividedMoney.acc
         for (person in vs.personList) {
+            person.listOfPrices = ArrayDeque()
             if (acc > 0) {
                 person.subtotal = (base.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
+                person.listOfPrices.add(Price(base, 0.01))
                 acc -= 1
             } else {
                 person.subtotal = base
+                person.listOfPrices.add(Price(base, 0.0))
             }
             person.tax = 0.0
             person.tip = 0.0
-            person.listOfPrices = ArrayDeque()
             updatePerson(person)
         }
     }
@@ -485,32 +489,38 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val tax = vs.tax ?: 0.0
         val tip = vs.tip ?: 0.0
         val grandTotal = (subtotal.toBigDecimal() + tax.toBigDecimal() + tip.toBigDecimal()).toDouble()
-        var grandTotalRemainder = 0.0
-        var taxRemainder = 0.0
+        var grandTotalRemainder = grandTotal.toBigDecimal()
+        var taxRemainder = tax.toBigDecimal()
         for (person in vs.personList) {
-            val personalSubtotal = person.subtotal ?: 0.0
-            val dividedGrandTotal = Price.moneyDivider(personalSubtotal * grandTotal * 100, (subtotal * 100).toInt())
+            val personalBaseSubtotal = person.getBaseSubtotal()
+            val dividedGrandTotal = Price.moneyDivider(personalBaseSubtotal * grandTotal * 100, (subtotal * 100).toInt())
             val grandTotalQuotient = dividedGrandTotal.base
-            grandTotalRemainder += dividedGrandTotal.acc
-            val dividedTax = Price.moneyDivider(personalSubtotal * tax * 100, (subtotal * 100).toInt())
+            grandTotalRemainder -= grandTotalQuotient.toBigDecimal()
+            val dividedTax = Price.moneyDivider(personalBaseSubtotal * tax * 100, (subtotal * 100).toInt())
             val taxQuotient = dividedTax.base
-            taxRemainder += dividedTax.acc
+            taxRemainder -= taxQuotient.toBigDecimal()
             person.tax = taxQuotient
-            person.tip = (grandTotalQuotient.toBigDecimal() - taxQuotient.toBigDecimal() - personalSubtotal.toBigDecimal()).toDouble()
+            person.tip = (grandTotalQuotient.toBigDecimal() - taxQuotient.toBigDecimal() - person.subtotal!!.toBigDecimal()).toDouble()
             updatePerson(person)
         }
         for (person in vs.personList.sorted()) {
-            if (taxRemainder > 0) {
+            if (taxRemainder > BigDecimal.ZERO) {
                 val personalTax = person.tax ?: 0.0
                 person.tax = (personalTax.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
-                taxRemainder -= 1
-            }
-            if (grandTotalRemainder > 0) {
-                val personalTip = person.tip ?: 0.0
-                person.tip = (personalTip.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
-                grandTotalRemainder -= 1
+                taxRemainder -= 0.01.toBigDecimal()
             }
             updatePerson(person)
+        }
+        for (person in vs.personList.sorted()) {
+            if (grandTotalRemainder > BigDecimal.ZERO) {
+                val personalTip = person.tip ?: 0.0
+                person.tip = (personalTip.toBigDecimal() + 0.01.toBigDecimal()).toDouble()
+                grandTotalRemainder -= 0.01.toBigDecimal()
+            }
+            updatePerson(person)
+        }
+        for (person in vs.personList) {
+            Log.d("********", person.toString())
         }
         // personalTax = personalSubtotal / subtotal * tax = personalSubtotal * tax / subtotal
         // personalTip = personalSubtotal / subtotal * tip = personalSubtotal * tip / subtotal
