@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         viewModel = ViewModelProviders.of(this).get(DivvieViewModel::class.java)
-        viewModel.onEvent(MainEvent.DisplayActivity)
+        viewModel.onEvent(DivvieViewEvent.DisplayActivity)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(

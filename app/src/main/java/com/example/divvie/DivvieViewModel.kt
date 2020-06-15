@@ -19,43 +19,45 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         get() = viewState
 
     fun onEvent(event: DivvieViewEvent) {
-        when (event) {
-            is MainEvent.DisplayActivity -> onDisplayActivity()
+        return when (event) {
+            is DivvieViewEvent.DisplayActivity -> onDisplayActivity()
 
-            is InputViewEvent.DisplayFragment -> onDisplayInputFragment()
-            is InputViewEvent.InsertPerson -> onInsertPerson()
-            is InputViewEvent.RemovePerson -> onRemovePerson()
-            is InputViewEvent.EnterSubtotal -> onEnterSubtotal(event.input)
-            is InputViewEvent.EnterTax -> onEnterTax(event.input)
-            is InputViewEvent.Next -> onInputNext()
+            is DivvieViewEvent.DisplayInputFragment -> onDisplayInputFragment()
+            is DivvieViewEvent.InputInsertPerson -> onInputInsertPerson()
+            is DivvieViewEvent.InputRemovePerson -> onInputRemovePerson()
+            is DivvieViewEvent.InputEnterSubtotal -> onInputEnterSubtotal(event.input)
+            is DivvieViewEvent.InputEnterTax -> onInputEnterTax(event.input)
+            is DivvieViewEvent.InputToSplit -> onInputToSplit()
 
-            is SplitViewEvent.DisplayFragment -> onDisplaySplitFragment()
-            is SplitViewEvent.SplitEqually -> onSplitEqually()
-            is SplitViewEvent.EnterIndividually -> onEnterIndividually()
-            is SplitViewEvent.Calculate -> onCalculate()
-            is SplitViewEvent.BackToInput -> onSplitBackToInput()
-            is SplitViewEvent.BackToEqual -> onSplitBackToEqual()
+            is DivvieViewEvent.DisplaySplitFragment -> onDisplaySplitFragment()
+            is DivvieViewEvent.SplitToResult -> onSplitToResult()
+            is DivvieViewEvent.SplitToItem -> onSplitToItem()
+            is DivvieViewEvent.SplitToInput -> onSplitToInput()
 
-            is ResultViewEvent.DisplayFragment -> onDisplayResultFragment()
-            is ResultViewEvent.EnterCurrencyTip -> onEnterCurrencyTip(event.input)
-            is ResultViewEvent.EnterPercentageTip -> onEnterPercentageTip(event.input)
-            is ResultViewEvent.SelectCurrency -> onSelectCurrency()
-            is ResultViewEvent.SelectPercentage -> onSelectPercentage()
-            is ResultViewEvent.Back -> onResultBack()
-            is ResultViewEvent.Restart -> onRestart()
+            is DivvieViewEvent.DisplayItemFragment -> onDisplayItemFragment()
+            is DivvieViewEvent.ItemEnterPrice -> onItemEnterPrice(event.input)
+            is DivvieViewEvent.ItemDone -> onItemDone()
+            is DivvieViewEvent.ItemNext -> onItemNext()
+            is DivvieViewEvent.ItemUndo -> onItemUndo()
+            is DivvieViewEvent.ItemClear -> onItemClear()
+            is DivvieViewEvent.ItemToSplit -> onItemToSplit()
 
-            is ItemViewEvent.DisplayFragment -> onDisplayItemFragment()
-            is ItemViewEvent.EnterItemPrice -> onEnterItemPrice(event.input)
-            is ItemViewEvent.Back -> onItemBack()
-            is ItemViewEvent.Undo -> onUndo()
-            is ItemViewEvent.Next -> onItemNext()
-            is ItemViewEvent.ClearAll -> onClearAll()
-            is ItemViewEvent.Done -> onDone()
+            is DivvieViewEvent.DisplayCalculateFragment -> onDisplayCalculateFragment()
+            is DivvieViewEvent.CalculateToResult -> onCalculateToResult()
+            is DivvieViewEvent.CalculateToItem -> onCalculateToItem()
 
-            is BowlsViewEvent.DisplayFragment -> onDisplayBowlFragment()
-            is BowlsViewEvent.EnterName -> onEnterName(event.i, event.input)
-            is BowlsViewEvent.SplitBowl -> onClickBowl(event.i)
-            is BowlsViewEvent.ViewBreakdown -> onViewBreakdown(event.i)
+            is DivvieViewEvent.DisplayResultFragment -> onDisplayResultFragment()
+            is DivvieViewEvent.ResultEnterCurrencyTip -> onResultEnterCurrencyTip(event.input)
+            is DivvieViewEvent.ResultEnterPercentageTip -> onResultEnterPercentageTip(event.input)
+            is DivvieViewEvent.ResultSelectCurrency -> onResultSelectCurrency()
+            is DivvieViewEvent.ResultSelectPercentage -> onResultSelectPercentage()
+            is DivvieViewEvent.ResultToSplit -> onResultToSplit()
+            is DivvieViewEvent.ResultToInput -> onResultToInput()
+
+            is DivvieViewEvent.DisplayBowlsFragment -> onDisplayBowlFragment()
+            is DivvieViewEvent.BowlsEnterName -> onBowlsEnterName(event.i, event.input)
+            is DivvieViewEvent.BowlsSplitPrice -> onBowlsSplitPrice(event.i)
+            is DivvieViewEvent.BowlsViewBreakdown -> onBowlsViewBreakdown(event.i)
         }
     }
 
@@ -69,7 +71,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun onDisplayBowlFragment() {}
 
-    private fun onViewBreakdown(i: Int?) {
+    private fun onBowlsViewBreakdown(i: Int?) {
         val current = viewState.value!!.personalBreakDownIndex
         if (i != current) {
             viewState.value = viewState.value!!.copy(
@@ -84,7 +86,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onEnterName(i: Int, input: String) {
+    private fun onBowlsEnterName(i: Int, input: String) {
         if (i < getAllPersonStatic().size) {
             val person = findPerson(i)
             person.name = input
@@ -95,7 +97,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onClickBowl(i: Int) {
+    private fun onBowlsSplitPrice(i: Int) {
         val vs = viewState.value!!
         val listOfIndex = vs.tempItemListOfIndex
         if (listOfIndex.contains(i)) {
@@ -132,7 +134,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onInsertPerson() {
+    private fun onInputInsertPerson() {
         val num = viewState.value!!.personList.size
         if (num < MAX_GUESTS) {
             insertPerson(Person(id = num))
@@ -142,7 +144,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onRemovePerson() {
+    private fun onInputRemovePerson() {
         val num = viewState.value!!.personList.size
         if (num > MIN_GUESTS) {
             deletePerson(Person(id = num - 1))
@@ -152,7 +154,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onEnterSubtotal(input: String) {
+    private fun onInputEnterSubtotal(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
                 subtotal = input.toDouble(),
@@ -168,7 +170,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onEnterTax(input: String) {
+    private fun onInputEnterTax(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
                 tax = input.toDouble(),
@@ -182,7 +184,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onInputNext() {
+    private fun onInputToSplit() {
         if (viewState.value!!.tax == null) {
             viewState.value = viewState.value!!.copy(
                 tax = 0.0
@@ -203,9 +205,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         // in case where ItemFragment navigate to SplitFragment when selectPerson is true
     }
 
-    private fun onSplitEqually() {}
+    private fun onSplitToResult() {}
 
-    private fun onEnterIndividually() {
+    private fun onSplitToItem() {
         val vs = viewState.value!!
         for (person in vs.personList) {
             person.subtotal = 0.0
@@ -219,9 +221,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onCalculate() {}
-
-    private fun onSplitBackToInput() {
+    private fun onSplitToInput() {
         nullifyPersonalData()
         viewState.value = viewState.value!!.copy(
             isSubtotalEditing = false,
@@ -230,7 +230,9 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onSplitBackToEqual() {
+    private fun onDisplayCalculateFragment() {}
+
+    private fun onCalculateToItem() {
         splitPretaxEqually()
         val vs = viewState.value!!
         viewState.value = viewState.value!!.copy(
@@ -240,6 +242,8 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
+    private fun onCalculateToResult() {}
+
     private fun onDisplayResultFragment() {
         calculateResult()
         viewState.value = viewState.value!!.copy(
@@ -248,7 +252,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onEnterCurrencyTip(input: String) {
+    private fun onResultEnterCurrencyTip(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
                 tip = input.toDouble(),
@@ -266,7 +270,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onEnterPercentageTip(input: String) {
+    private fun onResultEnterPercentageTip(input: String) {
         if (input != "") {
             val subtotal = viewState.value!!.subtotal ?: 0.0
             val dividedMoney = Price.moneyDivider(input.toDouble() * subtotal, 100)
@@ -286,21 +290,21 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onSelectCurrency() {
+    private fun onResultSelectCurrency() {
         viewState.value = viewState.value!!.copy(
             isCurrencyTip = true,
             isTipEditing = false
         )
     }
 
-    private fun onSelectPercentage() {
+    private fun onResultSelectPercentage() {
         viewState.value = viewState.value!!.copy(
             isCurrencyTip = false,
             isTipEditing = false
         )
     }
 
-    private fun onResultBack() {
+    private fun onResultToSplit() {
         val vs = viewState.value!!
         for (person in vs.personList) {
             person.tax = 0.0
@@ -316,7 +320,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onRestart() {
+    private fun onResultToInput() {
         nullifyPersonalData()
         // TODO nullify
         val savedPersonData = getAllPersonStatic()
@@ -333,7 +337,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onEnterItemPrice(input: String) {
+    private fun onItemEnterPrice(input: String) {
         if (input != "") {
             viewState.value = viewState.value!!.copy(
                 tempItemBasePrice = input.toDouble(),
@@ -353,7 +357,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onDone() {
+    private fun onItemDone() {
         val vs = viewState.value!!
         val basePrice = vs.tempItemBasePrice
         vs.itemList.add(basePrice)
@@ -376,7 +380,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onItemBack() {
+    private fun onItemToSplit() {
         val vs = viewState.value!!
         for (person in vs.personList) {
             person.tempPrice = Price(0.0, 0.0)
@@ -392,7 +396,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun onUndo() {
+    private fun onItemUndo() {
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
             for (person in vs.personList) {
@@ -424,7 +428,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onClearAll() {
+    private fun onItemClear() {
         val vs = viewState.value!!
         if (vs.isSplittingBowls) {
             for (person in vs.personList) {

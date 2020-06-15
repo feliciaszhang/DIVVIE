@@ -44,7 +44,7 @@ class InputFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.onEvent(InputViewEvent.DisplayFragment)
+        viewModel.onEvent(DivvieViewEvent.DisplayInputFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         editSubtotalText.filters = arrayOf(filter)
@@ -52,13 +52,13 @@ class InputFragment : Fragment() {
 
         upButton.setOnClickListener {
             upButton.requestFocusFromTouch()
-            viewModel.onEvent(InputViewEvent.InsertPerson)
+            viewModel.onEvent(DivvieViewEvent.InputInsertPerson)
             upButton.clearFocus()
         }
 
         downButton.setOnClickListener {
             downButton.requestFocusFromTouch()
-            viewModel.onEvent(InputViewEvent.RemovePerson)
+            viewModel.onEvent(DivvieViewEvent.InputRemovePerson)
             downButton.clearFocus()
         }
 
@@ -66,7 +66,7 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(InputViewEvent.EnterSubtotal("0" + editSubtotalText.text.toString()))
+                viewModel.onEvent(DivvieViewEvent.InputEnterSubtotal("0" + editSubtotalText.text.toString()))
             }
         })
 
@@ -74,12 +74,12 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onEvent(InputViewEvent.EnterTax("0" + editTaxText.text.toString()))
+                viewModel.onEvent(DivvieViewEvent.InputEnterTax("0" + editTaxText.text.toString()))
             }
         })
 
         nextButton.setOnClickListener {
-            viewModel.onEvent(InputViewEvent.Next)
+            viewModel.onEvent(DivvieViewEvent.InputToSplit)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 SplitFragment.newInstance()

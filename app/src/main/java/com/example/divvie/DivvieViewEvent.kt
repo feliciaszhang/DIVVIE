@@ -1,52 +1,42 @@
 package com.example.divvie
 
-open class DivvieViewEvent
+sealed class DivvieViewEvent {
+    object DisplayActivity: DivvieViewEvent()
 
-sealed class MainEvent: DivvieViewEvent() {
-    object DisplayActivity: MainEvent()
-}
+    object DisplayInputFragment: DivvieViewEvent()
+    object InputInsertPerson: DivvieViewEvent()
+    object InputRemovePerson: DivvieViewEvent()
+    data class InputEnterSubtotal(val input: String): DivvieViewEvent()
+    data class InputEnterTax(val input: String): DivvieViewEvent()
+    object InputToSplit: DivvieViewEvent()
 
-sealed class InputViewEvent: DivvieViewEvent() {
-    object DisplayFragment: InputViewEvent()
-    object InsertPerson: InputViewEvent()
-    object RemovePerson: InputViewEvent()
-    data class EnterSubtotal(val input: String): InputViewEvent()
-    data class EnterTax(val input: String): InputViewEvent()
-    object Next: InputViewEvent()
-}
+    object DisplaySplitFragment: DivvieViewEvent()
+    object SplitToResult: DivvieViewEvent()
+    object SplitToItem: DivvieViewEvent()
+    object SplitToInput: DivvieViewEvent()
 
-sealed class SplitViewEvent: DivvieViewEvent() {
-    object DisplayFragment: SplitViewEvent()
-    object SplitEqually: SplitViewEvent()
-    object EnterIndividually: SplitViewEvent()
-    object Calculate: SplitViewEvent()
-    object BackToInput: SplitViewEvent()
-    object BackToEqual: SplitViewEvent()
-}
+    object DisplayItemFragment: DivvieViewEvent()
+    data class ItemEnterPrice(val input: String): DivvieViewEvent()
+    object ItemNext: DivvieViewEvent()
+    object ItemDone: DivvieViewEvent()
+    object ItemUndo: DivvieViewEvent()
+    object ItemClear: DivvieViewEvent()
+    object ItemToSplit: DivvieViewEvent()
 
-sealed class ItemViewEvent: DivvieViewEvent() {
-    object DisplayFragment: ItemViewEvent()
-    data class EnterItemPrice(val input: String): ItemViewEvent()
-    object Next: ItemViewEvent()
-    object Done: ItemViewEvent()
-    object Back: ItemViewEvent()
-    object Undo: ItemViewEvent()
-    object ClearAll: ItemViewEvent()
-}
+    object DisplayCalculateFragment: DivvieViewEvent()
+    object CalculateToItem: DivvieViewEvent()
+    object CalculateToResult: DivvieViewEvent()
 
-sealed class ResultViewEvent: DivvieViewEvent() {
-    object DisplayFragment: ResultViewEvent()
-    data class EnterCurrencyTip(val input: String): ResultViewEvent()
-    data class EnterPercentageTip(val input: String): ResultViewEvent()
-    object SelectCurrency: ResultViewEvent()
-    object SelectPercentage: ResultViewEvent()
-    object Back: ResultViewEvent()
-    object Restart: ResultViewEvent()
-}
+    object DisplayResultFragment: DivvieViewEvent()
+    data class ResultEnterCurrencyTip(val input: String): DivvieViewEvent()
+    data class ResultEnterPercentageTip(val input: String): DivvieViewEvent()
+    object ResultSelectCurrency: DivvieViewEvent()
+    object ResultSelectPercentage: DivvieViewEvent()
+    object ResultToSplit: DivvieViewEvent()
+    object ResultToInput: DivvieViewEvent()
 
-sealed class BowlsViewEvent: DivvieViewEvent() {
-    object DisplayFragment: BowlsViewEvent()
-    data class EnterName(val i: Int, val input: String): BowlsViewEvent()
-    data class SplitBowl(val i: Int): BowlsViewEvent()
-    data class ViewBreakdown(val i: Int?): BowlsViewEvent()
+    object DisplayBowlsFragment: DivvieViewEvent()
+    data class BowlsEnterName(val i: Int, val input: String): DivvieViewEvent()
+    data class BowlsSplitPrice(val i: Int): DivvieViewEvent()
+    data class BowlsViewBreakdown(val i: Int?): DivvieViewEvent()
 }

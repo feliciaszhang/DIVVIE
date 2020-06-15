@@ -62,7 +62,7 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(ResultViewEvent.EnterCurrencyTip("0" + currencyTip.text.toString()))
+            viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + currencyTip.text.toString()))
         }
     }
 
@@ -70,14 +70,14 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(ResultViewEvent.EnterPercentageTip("0" + percentageTip.text.toString()))
+            viewModel.onEvent(DivvieViewEvent.ResultEnterPercentageTip("0" + percentageTip.text.toString()))
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.onEvent(ResultViewEvent.DisplayFragment)
+        viewModel.onEvent(DivvieViewEvent.DisplayResultFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         currencyTip.filters = arrayOf(filter)
@@ -87,19 +87,19 @@ class ResultFragment : Fragment() {
 
         percentageTip.addTextChangedListener(percentageTextWatcher)
 
-        currencyButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectCurrency) }
+        currencyButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectCurrency) }
 
-        percentageButton.setOnClickListener { viewModel.onEvent(ResultViewEvent.SelectPercentage) }
+        percentageButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectPercentage) }
 
         backButton.setOnClickListener {
-            viewModel.onEvent(ResultViewEvent.Back)
+            viewModel.onEvent(DivvieViewEvent.ResultToSplit)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
         }
 
         restart.setOnClickListener {
-            viewModel.onEvent(ResultViewEvent.Restart)
+            viewModel.onEvent(DivvieViewEvent.ResultToInput)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()

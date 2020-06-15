@@ -52,30 +52,30 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(ItemViewEvent.EnterItemPrice("0" + editItemText.text.toString()))
+            viewModel.onEvent(DivvieViewEvent.ItemEnterPrice("0" + editItemText.text.toString()))
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.onEvent(ItemViewEvent.DisplayFragment)
+        viewModel.onEvent(DivvieViewEvent.DisplayItemFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
         editItemText.filters = arrayOf(filter)
 
         editItemText.addTextChangedListener(textWatcher)
 
-        nextButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Next) }
+        nextButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemNext) }
 
-        doneButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Done) }
+        doneButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemDone) }
 
-        undoButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.Undo) }
+        undoButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemUndo) }
 
-        clearAllButton.setOnClickListener { viewModel.onEvent(ItemViewEvent.ClearAll) }
+        clearAllButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemClear) }
 
         backButton.setOnClickListener {
-            viewModel.onEvent(ItemViewEvent.Back)
+            viewModel.onEvent(DivvieViewEvent.ItemToSplit)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
@@ -101,7 +101,7 @@ class ItemFragment : Fragment() {
         }
         if (viewState.leftover == 0.0) {
             fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, SplitFragment.newInstance()
+                R.id.info_fragment_layout, CalculateFragment.newInstance()
             ).commit()
         }
         if (viewState.isSplittingBowls) {

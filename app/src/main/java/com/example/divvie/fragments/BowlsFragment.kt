@@ -42,7 +42,7 @@ class BowlsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.onEvent(BowlsViewEvent.DisplayFragment)
+        viewModel.onEvent(DivvieViewEvent.DisplayBowlsFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
@@ -80,7 +80,7 @@ class BowlsFragment : Fragment() {
             nameText.visibility = View.GONE
             nameEdit.setText(personList[i].name)
             nameEdit.onFocusChangeListener = (OnFocusChangeListener { _, hasFocus -> if (!hasFocus) {
-                viewModel.onEvent(BowlsViewEvent.EnterName(i, nameEdit.text.toString())) }
+                viewModel.onEvent(DivvieViewEvent.BowlsEnterName(i, nameEdit.text.toString())) }
             })
         } else {
             nameEdit.visibility = View.GONE
@@ -106,13 +106,13 @@ class BowlsFragment : Fragment() {
                     changeColor(view, resources.getColor(R.color.colorSemiLight, context!!.theme))
                 }
                 view.setOnClickListener {
-                    viewModel.onEvent(BowlsViewEvent.SplitBowl(i))
+                    viewModel.onEvent(DivvieViewEvent.BowlsSplitPrice(i))
                 }
             } else {
                 changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
             }
             if (viewState.isPersonalResult) {
-                view.setOnClickListener { viewModel.onEvent(BowlsViewEvent.ViewBreakdown(i)) }
+                view.setOnClickListener { viewModel.onEvent(DivvieViewEvent.BowlsViewBreakdown(i)) }
                 when (viewState.personalBreakDownIndex) {
                     null -> changeColor(view, resources.getColor(R.color.colorWhite, context!!.theme))
                     i -> changeColor(view, resources.getColor(R.color.colorAccent, context!!.theme))
