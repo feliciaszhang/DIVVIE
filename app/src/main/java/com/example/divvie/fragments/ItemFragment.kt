@@ -96,7 +96,7 @@ class ItemFragment : Fragment() {
         nextButton.isEnabled = viewState.tempItemPrice != 0.0
         clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
-        if (viewState.itemList.size > 0) {
+        if (viewState.itemList.size > 0 || (viewState.tempItemPrice != 0.0 && viewState.isSplittingBowls)) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
         } else {

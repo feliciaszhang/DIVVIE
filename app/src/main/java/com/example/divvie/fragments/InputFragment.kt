@@ -57,13 +57,11 @@ class InputFragment : Fragment() {
         upButton.setOnClickListener {
             upButton.requestFocusFromTouch()
             viewModel.onEvent(DivvieViewEvent.InputInsertPerson)
-            upButton.clearFocus()
         }
 
         downButton.setOnClickListener {
             downButton.requestFocusFromTouch()
             viewModel.onEvent(DivvieViewEvent.InputRemovePerson)
-            downButton.clearFocus()
         }
 
         editSubtotalText.addTextChangedListener(object: TextWatcher {
