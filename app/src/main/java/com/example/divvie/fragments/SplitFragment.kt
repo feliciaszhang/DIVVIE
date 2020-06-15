@@ -37,21 +37,18 @@ class SplitFragment : Fragment() {
         viewModel.onEvent(DivvieViewEvent.DisplaySplitFragment)
 
         equalButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.SplitToResult)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, ResultFragment.newInstance()
             ).commit()
         }
 
         individualButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.SplitToItem)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, ItemFragment.newInstance()
             ).commit()
         }
 
         backButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.SplitToInput)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()

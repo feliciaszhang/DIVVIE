@@ -92,7 +92,6 @@ class ResultFragment : Fragment() {
         percentageButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectPercentage) }
 
         backButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.ResultToSplit)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()

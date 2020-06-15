@@ -42,7 +42,6 @@ class BowlsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
-        viewModel.onEvent(DivvieViewEvent.DisplayBowlsFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
     }
 

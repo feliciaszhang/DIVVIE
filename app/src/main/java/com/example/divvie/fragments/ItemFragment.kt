@@ -75,7 +75,6 @@ class ItemFragment : Fragment() {
         clearAllButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemClear) }
 
         backButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.ItemToSplit)
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, SplitFragment.newInstance()
             ).commit()
@@ -84,7 +83,7 @@ class ItemFragment : Fragment() {
 
     private fun render(viewState: DivvieViewState) {
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
-        nextButton.isEnabled = viewState.tempItemBasePrice != 0.0
+        nextButton.isEnabled = viewState.tempItemPrice != 0.0
         clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
         if (viewState.itemList.size > 0) {
@@ -94,7 +93,7 @@ class ItemFragment : Fragment() {
             undoButton.visibility = View.GONE
             backButton.visibility = View.VISIBLE
         }
-        val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemBasePrice).toBigDecimal()
+        val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemPrice).toBigDecimal()
         leftoverText.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toString()))
         if (tempLeftover.toDouble() < 0.0) {
             nextButton.isEnabled = false
@@ -107,7 +106,7 @@ class ItemFragment : Fragment() {
         if (viewState.isSplittingBowls) {
             editItemText.background = null
             editItemText.removeTextChangedListener(textWatcher)
-            editItemText.setText(filter.clean(viewState.tempItemBasePrice.toString()))
+            editItemText.setText(filter.clean(viewState.tempItemPrice.toString()))
             editItemText.addTextChangedListener(textWatcher)
             leftoverText.visibility = View.GONE
             nextButton.visibility = View.GONE
