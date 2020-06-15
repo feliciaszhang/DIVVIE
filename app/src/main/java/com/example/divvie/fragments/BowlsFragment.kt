@@ -1,8 +1,10 @@
 package com.example.divvie.fragments
 
+import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
 import com.example.divvie.data.Person
 import android.view.View.OnFocusChangeListener
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import java.math.BigDecimal
 
 class BowlsFragment : Fragment() {
@@ -81,6 +85,15 @@ class BowlsFragment : Fragment() {
             nameEdit.onFocusChangeListener = (OnFocusChangeListener { _, hasFocus -> if (!hasFocus) {
                 viewModel.onEvent(DivvieViewEvent.BowlsEnterName(i, nameEdit.text.toString())) }
             })
+            nameEdit.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(nameEdit.windowToken, 0)
+                    true
+                } else {
+                    false
+                }
+            }
         } else {
             nameEdit.visibility = View.GONE
             nameText.visibility = View.VISIBLE

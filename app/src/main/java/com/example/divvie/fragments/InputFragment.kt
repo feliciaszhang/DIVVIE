@@ -1,12 +1,16 @@
 package com.example.divvie.fragments
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -92,13 +96,26 @@ class InputFragment : Fragment() {
             }
         })
 
-        nextButton.setOnClickListener {
-            viewModel.onEvent(DivvieViewEvent.InputToSplit)
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout,
-                SplitFragment.newInstance()
-            ).commit()
+        editTaxText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == IME_ACTION_DONE && nextButton.isEnabled) {
+                next()
+                true
+            } else {
+                false
+            }
         }
+
+        nextButton.setOnClickListener { next() }
+    }
+
+    private fun next() {
+        viewModel.onEvent(DivvieViewEvent.InputToSplit)
+        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(editTaxText.windowToken, 0)
+        fragmentManager!!.beginTransaction().replace(
+            R.id.info_fragment_layout,
+            SplitFragment.newInstance()
+        ).commit()
     }
 
     private fun render(viewState: DivvieViewState) {

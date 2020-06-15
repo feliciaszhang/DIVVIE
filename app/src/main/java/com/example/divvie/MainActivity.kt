@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     // TODO personal breakdown calculation discrepency
     // TODO amount doesn't fit on screen
-    // TODO click button when press next in keyboard
+    // TODO selectAllOnFocus, clear focus when add / remove person
 
     // TODO fix icon and launcher image
     // TODO icons for navigation?

@@ -12,6 +12,9 @@
     <include
         android:id="@+id/bowl1"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl2"
+        android:nextFocusForward="@+id/bowl2"
+        android:nextFocusRight="@+id/bowl2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -21,6 +24,9 @@
     <include
         android:id="@+id/bowl2"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl3"
+        android:nextFocusForward="@+id/bowl3"
+        android:nextFocusRight="@+id/bowl3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -30,6 +36,9 @@
     <include
         android:id="@+id/bowl3"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl4"
+        android:nextFocusForward="@+id/bowl4"
+        android:nextFocusRight="@+id/bowl4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -39,6 +48,9 @@
     <include
         android:id="@+id/bowl4"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl5"
+        android:nextFocusForward="@+id/bowl5"
+        android:nextFocusRight="@+id/bowl5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -48,6 +60,9 @@
     <include
         android:id="@+id/bowl5"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl6"
+        android:nextFocusForward="@+id/bowl6"
+        android:nextFocusRight="@+id/bowl6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -57,6 +72,9 @@
     <include
         android:id="@+id/bowl6"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl7"
+        android:nextFocusForward="@+id/bowl7"
+        android:nextFocusRight="@+id/bowl7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -66,6 +84,9 @@
     <include
         android:id="@+id/bowl7"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl8"
+        android:nextFocusForward="@+id/bowl8"
+        android:nextFocusRight="@+id/bowl8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -75,6 +96,9 @@
     <include
         android:id="@+id/bowl8"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl9"
+        android:nextFocusForward="@+id/bowl9"
+        android:nextFocusRight="@+id/bowl9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -84,6 +108,9 @@
     <include
         android:id="@+id/bowl9"
         layout="@layout/bowl"
+        android:nextFocusDown="@+id/bowl10"
+        android:nextFocusForward="@+id/bowl10"
+        android:nextFocusRight="@+id/bowl10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

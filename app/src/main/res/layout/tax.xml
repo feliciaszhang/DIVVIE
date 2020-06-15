@@ -36,10 +36,11 @@
             android:id="@+id/edit_tax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:hint="0.00"
-            android:inputType="numberDecimal"
             android:textSize="@dimen/large_text_size" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

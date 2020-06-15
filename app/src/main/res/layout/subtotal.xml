@@ -40,6 +40,9 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
+            android:nextFocusDown="@+id/edit_tax"
+            android:nextFocusForward="@+id/edit_tax"
+            android:nextFocusRight="@+id/edit_tax"
             android:textSize="@dimen/large_text_size" />
     </LinearLayout>
 

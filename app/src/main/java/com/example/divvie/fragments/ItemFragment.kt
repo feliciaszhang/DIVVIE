@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -65,6 +66,15 @@ class ItemFragment : Fragment() {
         editItemText.filters = arrayOf(filter)
 
         editItemText.addTextChangedListener(textWatcher)
+
+        editItemText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE && nextButton.isEnabled) {
+                viewModel.onEvent(DivvieViewEvent.ItemNext)
+                true
+            } else {
+                false
+            }
+        }
 
         nextButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemNext) }
 
