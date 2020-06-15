@@ -52,15 +52,6 @@
         android:textSize="@dimen/small_text_size"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
 
-    <TextView
-        android:id="@+id/tap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tap"
-        android:textSize="@dimen/small_text_size"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
-
     <Button
         android:id="@+id/next"
         android:layout_width="match_parent"
@@ -74,6 +65,6 @@
         android:layout_height="wrap_content"
         android:text="@string/done"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tap"/>
+        app:layout_constraintTop_toBottomOf="@id/item_helper"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
