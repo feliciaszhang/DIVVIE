@@ -15,7 +15,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO personal breakdown calculation discrepency
-    // TODO amount doesn't fit on screen
+    // TODO amount less than 10 million warning (1.0E7)
+    // TODO still need smaller font size/padding for main amount and individual bowl amount
     // TODO percentage tip rounding
 
     // TODO fix icon and launcher image

@@ -75,8 +75,10 @@ class InputFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 try {
-                    filter.clean(editSubtotalText.text.toString())
-                    viewModel.onEvent(DivvieViewEvent.InputEnterSubtotal("0" + editSubtotalText.text.toString()))
+                    val text = editSubtotalText.text.toString()
+                    filter.clean(text)
+                    editSubtotalText.textSize = SizeCalculator(42f).resize(text)
+                    viewModel.onEvent(DivvieViewEvent.InputEnterSubtotal("0" + text))
                 } catch (e: java.lang.Exception) {
                     viewModel.onEvent(DivvieViewEvent.InvalidSubtotal)
                 }
