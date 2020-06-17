@@ -27,7 +27,7 @@
         <TextView
             android:id="@+id/currency"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingRight="@dimen/small_margin"
             android:gravity="center_vertical"
             android:layout_marginRight="@dimen/small_margin"
@@ -38,7 +38,7 @@
             android:id="@+id/edit_item"
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="0dp"
             android:selectAllOnFocus="true"
