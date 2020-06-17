@@ -1,7 +1,5 @@
 package com.example.divvie.data
 
-import kotlin.math.round
-
 data class Price(val base: Double, val acc: Double) {
 
     companion object {
@@ -9,9 +7,9 @@ data class Price(val base: Double, val acc: Double) {
             if (dividend == 0.0 || divisor == 0) {
                 return Price(0.0, 0.0)
             }
-            val roundedDividend = round(dividend * 100).toInt()
-            val quotient = Math.floorDiv(roundedDividend, divisor)
-            val remainder = roundedDividend % divisor
+            val roundedDividend = (dividend.toBigDecimal() * 100.toBigDecimal()).toBigInteger()
+            val quotient = roundedDividend.divide(divisor.toBigInteger())
+            val remainder = roundedDividend.remainder(divisor.toBigInteger())
             return Price(quotient.toDouble() / 100, remainder.toDouble())
         }
     }
