@@ -89,9 +89,11 @@ class InputFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val text = editTaxText.text.toString()
+                editTaxText.textSize = SizeCalculator(42f).resize(text)
                 try {
-                    filter.clean(editTaxText.text.toString())
-                    viewModel.onEvent(DivvieViewEvent.InputEnterTax("0" + editTaxText.text.toString()))
+                    filter.clean(text)
+                    viewModel.onEvent(DivvieViewEvent.InputEnterTax("0" + text))
                 } catch (e: java.lang.Exception) {
                     viewModel.onEvent(DivvieViewEvent.InvalidTax)
                 }
@@ -154,7 +156,7 @@ class InputFragment : Fragment() {
             editSubtotalText.setText(filter.clean(viewState.subtotal.toBigDecimal().toPlainString()))
         }
         if (viewState.tax != null && !viewState.isTaxEditing) {
-            editTaxText.setText(filter.clean(viewState.tax.toString()))
+            editTaxText.setText(filter.clean(viewState.tax.toBigDecimal().toPlainString()))
         }
         if (viewState.invalidSubtotal) {
             subtotalHelper.text = resources.getString(R.string.warning)

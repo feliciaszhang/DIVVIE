@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO personal breakdown calculation discrepency
-    // TODO amount less than 10 million warning (1.0E7)
+    // TODO amount too long change to ...
     // TODO cannot be 0 warning
     // TODO percentage tip rounding
 

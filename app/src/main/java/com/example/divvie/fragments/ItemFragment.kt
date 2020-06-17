@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.divvie.*
+import java.math.BigDecimal
 
 class ItemFragment : Fragment() {
     companion object {
@@ -53,9 +55,11 @@ class ItemFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val text = editItemText.text.toString()
+            editItemText.textSize = SizeCalculator(42f).resize(text)
             try {
-                filter.clean(editItemText.text.toString())
-                viewModel.onEvent(DivvieViewEvent.ItemEnterPrice("0" + editItemText.text.toString()))
+                filter.clean(text)
+                viewModel.onEvent(DivvieViewEvent.ItemEnterPrice("0" + text))
             } catch (e: java.lang.Exception) {
                 viewModel.onEvent(DivvieViewEvent.InvalidItem)
             }
@@ -104,10 +108,10 @@ class ItemFragment : Fragment() {
         }
         val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemPrice).toBigDecimal()
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
-        nextButton.isEnabled = viewState.tempItemPrice != 0.0 && !viewState.invalidItem && tempLeftover.toDouble() >= 0.0
+        nextButton.isEnabled = viewState.tempItemPrice.toBigDecimal() != BigDecimal.ZERO && !viewState.invalidItem && tempLeftover.toDouble() >= 0.0
         clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
-        if (viewState.itemList.size > 0 || (viewState.tempItemPrice != 0.0 && viewState.isSplittingBowls)) {
+        if (viewState.itemList.size > 0 || (viewState.tempItemPrice.toBigDecimal() != BigDecimal.ZERO && viewState.isSplittingBowls)) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
         } else {
@@ -117,7 +121,7 @@ class ItemFragment : Fragment() {
         if (viewState.isSplittingBowls) {
             editItemText.background = null
             editItemText.removeTextChangedListener(textWatcher)
-            editItemText.setText(filter.clean(viewState.tempItemPrice.toString()))
+            editItemText.setText(filter.clean(viewState.tempItemPrice.toBigDecimal().toPlainString()))
             editItemText.addTextChangedListener(textWatcher)
             itemHelper.text = resources.getString(R.string.tap)
             nextButton.visibility = View.GONE
@@ -125,7 +129,7 @@ class ItemFragment : Fragment() {
         } else {
             editItemText.requestFocus()
             editItemText.background = editTextBackground
-            itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toString()))
+            itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toPlainString()))
             nextButton.visibility = View.VISIBLE
             doneButton.visibility = View.GONE
             if (!viewState.isItemEditing) {

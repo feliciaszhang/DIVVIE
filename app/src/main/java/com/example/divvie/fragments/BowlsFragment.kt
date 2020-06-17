@@ -73,7 +73,7 @@ class BowlsFragment : Fragment() {
             val personalTip: BigDecimal = person.tip?.toBigDecimal() ?: BigDecimal.ZERO
             val personalTempPrice: BigDecimal = (person.tempPrice?.base?.toBigDecimal() ?: BigDecimal.ZERO) + (person.tempPrice?.acc?.toBigDecimal() ?: BigDecimal.ZERO)
             val total: BigDecimal = personalSub.toBigDecimal() + personalTax + personalTip + personalTempPrice
-            priceAmount.text = filter.clean(total.toDouble().toString())
+            priceAmount.text = filter.clean(total.toPlainString())
         } else {
             price.visibility = View.GONE
         }
