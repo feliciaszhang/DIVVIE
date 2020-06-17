@@ -189,7 +189,7 @@
                 android:textSize="@dimen/large_text_size" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>>
+    </LinearLayout>
 
     <LinearLayout
         app:layout_constraintBottom_toBottomOf="parent"
@@ -203,12 +203,14 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/back" />
 
         <Button
             android:id="@+id/restart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/restart" />
     </LinearLayout>
 
