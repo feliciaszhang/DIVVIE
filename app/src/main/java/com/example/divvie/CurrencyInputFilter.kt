@@ -44,7 +44,7 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
                 dotPos = i
             }
         }
-        if (string.length > 1 && string[0] == '0' && string[1] != '.') {
+        while (string.length > 1 && string[0] == '0' && string[1] != '.') {
             string = string.removeRange(0, 1)
         }
         if (string.length == 0) {

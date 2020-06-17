@@ -35,7 +35,11 @@ class SizeCalculator(private val size: Float) {
             (count(text) <= 39) -> { size - 7 }
             (count(text) <= 42) -> { size - 9 }
             (count(text) <= 45) -> { size - 11 }
-            else -> { size - 13 }
+            (count(text) <= 48) -> { size - 13 }
+            (count(text) <= 51) -> { size - 15 }
+            (count(text) <= 54) -> { size - 17 }
+            (count(text) <= 57) -> { size - 19 }
+            else -> { size - 20 }
         }
     }
 }

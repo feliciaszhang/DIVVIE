@@ -28,21 +28,25 @@
         <TextView
             android:id="@+id/currency"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_height="match_parent"
+            android:paddingRight="@dimen/small_margin"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/small_margin"
             android:text="@string/currency"
             android:textSize="@dimen/large_text_size" />
 
         <EditText
             android:id="@+id/edit_subtotal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:inputType="numberDecimal"
+            android:nextFocusRight="@+id/edit_tax"
             android:nextFocusDown="@+id/edit_tax"
             android:nextFocusForward="@+id/edit_tax"
-            android:nextFocusRight="@+id/edit_tax"
+            android:padding="0dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:textSize="@dimen/large_text_size" />
     </LinearLayout>
 

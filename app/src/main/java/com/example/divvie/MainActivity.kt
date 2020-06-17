@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     // TODO personal breakdown calculation discrepency
     // TODO amount less than 10 million warning (1.0E7)
-    // TODO still need smaller font size/padding for main amount and individual bowl amount
+    // TODO cannot be 0 warning
     // TODO percentage tip rounding
 
     // TODO fix icon and launcher image
