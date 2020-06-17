@@ -2,6 +2,7 @@ package com.example.divvie
 
 import android.text.Spanned
 import android.text.InputFilter
+import java.math.BigDecimal
 import kotlin.math.round
 
 
@@ -64,7 +65,7 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
         return string + ".00"
     }
 
-    fun roundAndClean(num: Double): String {
-        return clean((round(num * 100) / 100).toString())
+    fun roundAndClean(num: BigDecimal): String {
+        return clean((num * 100.toBigDecimal() / 100.toBigDecimal()).toBigInteger().toString())
     }
 }

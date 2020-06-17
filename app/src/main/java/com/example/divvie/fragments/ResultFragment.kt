@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
 import com.example.divvie.*
+import java.math.BigDecimal
 
 
 class ResultFragment : Fragment() {
@@ -155,36 +156,36 @@ class ResultFragment : Fragment() {
             currencyTip.background = null
             percentageTip.background = null
             val person = viewState.personList[breakdownIndex]
-            val personalSub = person.subtotal ?: 0.0
-            val personalTax = person.tax ?: 0.0
-            val personalTip = person.tip ?: 0.0
-            val personalGrandTotal = personalSub.toBigDecimal() + personalTax.toBigDecimal() + personalTip.toBigDecimal()
-            subtotal.text = filter.clean(personalSub.toString())
-            tax.text = filter.clean(personalTax.toString())
-            total.text = filter.clean(personalGrandTotal.toString())
+            val personalSub = person.subtotal ?: BigDecimal.ZERO
+            val personalTax = person.tax ?: BigDecimal.ZERO
+            val personalTip = person.tip ?: BigDecimal.ZERO
+            val personalGrandTotal = personalSub + personalTax + personalTip
+            subtotal.text = filter.clean(personalSub.toPlainString())
+            tax.text = filter.clean(personalTax.toPlainString())
+            total.text = filter.clean(personalGrandTotal.toPlainString())
             if (!viewState.isTipEditing) {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)
-                currencyTip.setText(filter.clean(personalTip.toString()))
-                percentageTip.setText(filter.roundAndClean(personalTip * 100 / personalSub))
+                currencyTip.setText(filter.clean(personalTip.toPlainString()))
+                percentageTip.setText(filter.roundAndClean(personalTip * 100.toBigDecimal() / personalSub))
                 currencyTip.addTextChangedListener(currencyTextWatcher)
                 percentageTip.addTextChangedListener(percentageTextWatcher)
             }
         } else {
             currencyTip.background = editTextCurrencyBackground
             percentageTip.background = editTextPercentageBackground
-            val totalSub = viewState.subtotal ?: 0.0
-            val totalTax = viewState.tax ?: 0.0
-            val totalTip = viewState.tip ?: 0.0
-            val grandTotal = totalSub.toBigDecimal() + totalTax.toBigDecimal() + totalTip.toBigDecimal()
-            subtotal.text = filter.clean(totalSub.toString())
-            tax.text = filter.clean(totalTax.toString())
-            total.text = filter.clean(grandTotal.toString())
+            val totalSub = viewState.subtotal ?: BigDecimal.ZERO
+            val totalTax = viewState.tax ?: BigDecimal.ZERO
+            val totalTip = viewState.tip ?: BigDecimal.ZERO
+            val grandTotal = totalSub + totalTax + totalTip
+            subtotal.text = filter.clean(totalSub.toPlainString())
+            tax.text = filter.clean(totalTax.toPlainString())
+            total.text = filter.clean(grandTotal.toPlainString())
             if (viewState.tip != null && !viewState.isTipEditing) {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)
-                currencyTip.setText(filter.clean(totalTip.toString()))
-                percentageTip.setText(filter.roundAndClean(totalTip * 100 / totalSub))
+                currencyTip.setText(filter.clean(totalTip.toPlainString()))
+                percentageTip.setText(filter.roundAndClean(totalTip * 100.toBigDecimal() / totalSub))
                 currencyTip.addTextChangedListener(currencyTextWatcher)
                 percentageTip.addTextChangedListener(percentageTextWatcher)
             }

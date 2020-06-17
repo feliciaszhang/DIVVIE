@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.divvie.*
+import java.math.BigDecimal
 
 class InputFragment : Fragment() {
     companion object {
@@ -148,15 +149,15 @@ class InputFragment : Fragment() {
 
     private fun render(viewState: DivvieViewState) {
         guestsText.text = viewState.personList.size.toString()
-        nextButton.isEnabled = viewState.subtotal != 0.0
+        nextButton.isEnabled = viewState.subtotal != BigDecimal.ZERO
                 && viewState.subtotal != null
                 && !viewState.invalidSubtotal
                 && !viewState.invalidTax
         if (viewState.subtotal != null && !viewState.isSubtotalEditing) {
-            editSubtotalText.setText(filter.clean(viewState.subtotal.toBigDecimal().toPlainString()))
+            editSubtotalText.setText(filter.clean(viewState.subtotal.toPlainString()))
         }
         if (viewState.tax != null && !viewState.isTaxEditing) {
-            editTaxText.setText(filter.clean(viewState.tax.toBigDecimal().toPlainString()))
+            editTaxText.setText(filter.clean(viewState.tax.toPlainString()))
         }
         if (viewState.invalidSubtotal) {
             subtotalHelper.text = resources.getString(R.string.warning)

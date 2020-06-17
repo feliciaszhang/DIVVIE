@@ -2,6 +2,7 @@ package com.example.divvie.data
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import java.math.BigDecimal
 import java.util.*
 
 class ListConverter {
@@ -20,4 +21,22 @@ class PriceConverter {
 
     @TypeConverter
     fun jsonToPrice(value: String) = Gson().fromJson(value, Price::class.java)
+}
+
+class BigDecimalConverter {
+
+    @TypeConverter
+    fun bigDecimalToString(input: BigDecimal?): String {
+        return input?.toPlainString() ?: "null"
+    }
+
+    @TypeConverter
+    fun stringToBigDecimal(input: String?): BigDecimal? {
+        return if (input == "null" || input == null) {
+            null
+        } else {
+            return input.toBigDecimal()
+        }
+    }
+
 }

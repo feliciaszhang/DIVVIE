@@ -13,9 +13,9 @@ data class Person (
     @PrimaryKey
     @ColumnInfo(name = ID) var id: Int,
     @ColumnInfo(name = NAME) var name: String = "",
-    @ColumnInfo(name = SUBTOTAL) var subtotal: Double? = null,
-    @ColumnInfo(name = TAX) var tax: Double? = null,
-    @ColumnInfo(name = TIP) var tip: Double? = null,
+    @ColumnInfo(name = SUBTOTAL) var subtotal: BigDecimal? = null,
+    @ColumnInfo(name = TAX) var tax: BigDecimal? = null,
+    @ColumnInfo(name = TIP) var tip: BigDecimal? = null,
     @ColumnInfo(name = TEMP_PRICE) var tempPrice: Price? = null,
     @ColumnInfo(name = LIST_OF_PRICES) var listOfPrices: ArrayDeque<Price> = ArrayDeque()
 ): Comparable<Person> {
@@ -28,16 +28,16 @@ data class Person (
         }
     }
 
-    fun getBaseSubtotal(): Double {
-        return ((subtotal?.toBigDecimal() ?: BigDecimal.ZERO) - getAcc().toBigDecimal()).toDouble()
+    fun getBaseSubtotal(): BigDecimal {
+        return (subtotal ?: BigDecimal.ZERO) - getAcc()
     }
 
-    private fun getAcc(): Double {
+    private fun getAcc(): BigDecimal {
         var acc = BigDecimal.ZERO
         for (p in listOfPrices) {
-            acc += p.acc.toBigDecimal()
+            acc += p.acc
         }
-        acc += tempPrice?.acc?.toBigDecimal() ?: BigDecimal.ZERO
-        return acc.toDouble()
+        acc += tempPrice?.acc ?: BigDecimal.ZERO
+        return acc
     }
 }

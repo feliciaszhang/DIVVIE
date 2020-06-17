@@ -101,17 +101,17 @@ class ItemFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        if (viewState.leftover == 0.0) {
+        if (viewState.leftover == BigDecimal.ZERO) {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, CalculateFragment.newInstance()
             ).commit()
         }
-        val tempLeftover = (viewState.leftover!!).toBigDecimal() - (viewState.tempItemPrice).toBigDecimal()
+        val tempLeftover = (viewState.leftover ?: BigDecimal.ZERO) - (viewState.tempItemPrice ?: BigDecimal.ZERO)
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
-        nextButton.isEnabled = viewState.tempItemPrice.toBigDecimal() != BigDecimal.ZERO && !viewState.invalidItem && tempLeftover.toDouble() >= 0.0
+        nextButton.isEnabled = viewState.tempItemPrice != BigDecimal.ZERO && !viewState.invalidItem && tempLeftover >= BigDecimal.ZERO
         clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
-        if (viewState.itemList.size > 0 || (viewState.tempItemPrice.toBigDecimal() != BigDecimal.ZERO && viewState.isSplittingBowls)) {
+        if (viewState.itemList.size > 0 || (viewState.tempItemPrice != BigDecimal.ZERO && viewState.isSplittingBowls)) {
             undoButton.visibility = View.VISIBLE
             backButton.visibility = View.GONE
         } else {
@@ -121,7 +121,7 @@ class ItemFragment : Fragment() {
         if (viewState.isSplittingBowls) {
             editItemText.background = null
             editItemText.removeTextChangedListener(textWatcher)
-            editItemText.setText(filter.clean(viewState.tempItemPrice.toBigDecimal().toPlainString()))
+            editItemText.setText(filter.clean(viewState.tempItemPrice?.toPlainString() ?: ""))
             editItemText.addTextChangedListener(textWatcher)
             itemHelper.text = resources.getString(R.string.tap)
             nextButton.visibility = View.GONE
@@ -143,7 +143,7 @@ class ItemFragment : Fragment() {
                 resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
         if (!viewState.invalidItem && !viewState.isSplittingBowls) {
-            itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toString()))
+            itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toPlainString()))
             itemHelper.setTextColor(resources.getColor(R.color.colorWhite, context!!.theme))
             if (!viewState.isSplittingBowls) {
                 editItemText.background.colorFilter = PorterDuffColorFilter(

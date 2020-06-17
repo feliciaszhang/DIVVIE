@@ -1,16 +1,18 @@
 package com.example.divvie.data
 
-data class Price(val base: Double, val acc: Double) {
+import java.math.BigDecimal
+
+data class Price(val base: BigDecimal, val acc: BigDecimal) {
 
     companion object {
-        fun moneyDivider(dividend: Double, divisor: Int): Price {
-            if (dividend == 0.0 || divisor == 0) {
-                return Price(0.0, 0.0)
+        fun moneyDivider(dividend: BigDecimal, divisor: Int): Price {
+            if (dividend == BigDecimal.ZERO || divisor == 0) {
+                return Price(BigDecimal.ZERO, BigDecimal.ZERO)
             }
-            val roundedDividend = (dividend.toBigDecimal() * 100.toBigDecimal()).toBigInteger()
+            val roundedDividend = (dividend * 100.toBigDecimal()).toBigInteger()
             val quotient = roundedDividend.divide(divisor.toBigInteger())
             val remainder = roundedDividend.remainder(divisor.toBigInteger())
-            return Price(quotient.toDouble() / 100, remainder.toDouble())
+            return Price(quotient.toBigDecimal() / 100.toBigDecimal(), remainder.toBigDecimal())
         }
     }
 }

@@ -15,7 +15,8 @@ import com.example.divvie.DIVVIEDATABASE
 )
 @TypeConverters(
     ListConverter::class,
-    PriceConverter::class
+    PriceConverter::class,
+    BigDecimalConverter::class
 )
 abstract class DivvieDatabase : RoomDatabase() {
 

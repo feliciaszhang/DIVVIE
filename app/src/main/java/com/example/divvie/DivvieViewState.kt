@@ -1,24 +1,25 @@
 package com.example.divvie
 
 import com.example.divvie.data.Person
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
 data class DivvieViewState (
-    val subtotal: Double?,
+    val subtotal: BigDecimal?,
     val isSubtotalEditing: Boolean,
-    val tax: Double?,
+    val tax: BigDecimal?,
     val isTaxEditing: Boolean,
     val isSplittingBowls: Boolean,
     val editableName: Boolean,
     val personList: Array<Person>,
-    val tip: Double?,
+    val tip: BigDecimal?,
     val isTipEditing: Boolean,
-    val leftover: Double?,
+    val leftover: BigDecimal?,
     val isCurrencyTip: Boolean,
-    val tempItemPrice: Double,
+    val tempItemPrice: BigDecimal?,
     val tempItemListOfIndex: ArrayList<Int>,
-    val itemList: ArrayDeque<Double>,
+    val itemList: ArrayDeque<BigDecimal>,
     val isItemEditing: Boolean,
     val isPersonalResult: Boolean,
     val personalBreakDownIndex: Int?,
@@ -37,7 +38,7 @@ data class DivvieViewState (
                 subtotal = null, isSubtotalEditing = false, tax = null, isTaxEditing = false,
                 isSplittingBowls = false, editableName = true, personList = defaultPersonList(),
                 tip = null, isTipEditing = false, leftover = null, isCurrencyTip = true,
-                tempItemPrice = 0.0, tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(),
+                tempItemPrice = null, tempItemListOfIndex = ArrayList(), itemList = ArrayDeque(),
                 isItemEditing = false, isPersonalResult = false, personalBreakDownIndex = null,
                 invalidSubtotal = false, invalidTax = false, invalidItem = false, invalidCurrencyTip = false
             )
