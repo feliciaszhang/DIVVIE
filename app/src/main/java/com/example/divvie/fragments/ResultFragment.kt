@@ -66,9 +66,11 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val text = currencyTip.text.toString()
+            currencyTip.textSize = SizeCalculator(42f).resize(text)
             try {
-                filter.clean(currencyTip.text.toString())
-                viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + currencyTip.text.toString()))
+                filter.clean(text)
+                viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + text))
             } catch (e: java.lang.Exception) {
                 viewModel.onEvent(DivvieViewEvent.InvalidCurrencyTip)
             }
@@ -79,7 +81,9 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.onEvent(DivvieViewEvent.ResultEnterPercentageTip("0" + percentageTip.text.toString()))
+            val text = percentageTip.text.toString()
+            percentageTip.textSize = SizeCalculator(42f).resize(text)
+            viewModel.onEvent(DivvieViewEvent.ResultEnterPercentageTip("0" + text))
         }
     }
 
@@ -163,6 +167,9 @@ class ResultFragment : Fragment() {
             subtotal.text = filter.clean(personalSub.toPlainString())
             tax.text = filter.clean(personalTax.toPlainString())
             total.text = filter.clean(personalGrandTotal.toPlainString())
+            subtotal.textSize = SizeCalculator(42f).resize(personalSub.toPlainString())
+            tax.textSize = SizeCalculator(42f).resize(personalTax.toPlainString())
+            total.textSize = SizeCalculator(42f).resize(personalGrandTotal.toPlainString())
             if (!viewState.isTipEditing) {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)
@@ -181,6 +188,9 @@ class ResultFragment : Fragment() {
             subtotal.text = filter.clean(totalSub.toPlainString())
             tax.text = filter.clean(totalTax.toPlainString())
             total.text = filter.clean(grandTotal.toPlainString())
+            subtotal.textSize = SizeCalculator(42f).resize(totalSub.toPlainString())
+            tax.textSize = SizeCalculator(42f).resize(totalTax.toPlainString())
+            total.textSize = SizeCalculator(42f).resize(grandTotal.toPlainString())
             if (viewState.tip != null && !viewState.isTipEditing) {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)

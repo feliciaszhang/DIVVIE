@@ -85,6 +85,18 @@ class ItemFragment : Fragment() {
             }
         }
 
+        editItemText.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = editItemText.text.toString()
+                val cleanedText = try {
+                    filter.clean(text)
+                } catch (e: Exception) {
+                    text
+                }
+                editItemText.setText(cleanedText)
+            }
+        })
+
         nextButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemNext) }
 
         doneButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemDone) }
