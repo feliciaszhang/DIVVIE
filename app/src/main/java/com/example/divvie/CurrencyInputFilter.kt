@@ -12,7 +12,7 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
         try {
             var dotPos = -1
             val len: Int
-            if (dstart == 0) {
+            if (dstart == 0) { // if it's pasted in
                 len = 0
             } else {
                 len = dest.length
