@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -29,8 +28,8 @@ class InputFragment : Fragment() {
     private lateinit var guestsText: TextView
     private lateinit var upButton: Button
     private lateinit var downButton: Button
-    private lateinit var editSubtotalText: EditText
-    private lateinit var editTaxText: EditText
+    private lateinit var editSubtotalText: DivvieEditText
+    private lateinit var editTaxText: DivvieEditText
     private lateinit var nextButton: Button
     private lateinit var subtotalHelper: TextView
     private lateinit var taxHelper: TextView

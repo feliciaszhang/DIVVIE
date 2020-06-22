@@ -51,6 +51,7 @@
         android:id="@+id/item_helper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:text="@string/leftover"
         android:textSize="@dimen/small_text_size"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"/>

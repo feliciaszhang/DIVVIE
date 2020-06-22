@@ -45,6 +45,7 @@
                 android:id="@+id/price_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:textSize="@dimen/small_text_size" />
         </LinearLayout>
 
@@ -71,6 +72,7 @@
                 android:id="@+id/name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textSize="@dimen/small_text_size" />
 
