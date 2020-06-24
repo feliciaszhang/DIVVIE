@@ -1,4 +1,4 @@
-package com.example.divvie.fragments
+package com.felinix.divvie.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.divvie.DivvieViewEvent
-import com.example.divvie.R
-import com.example.divvie.DivvieViewModel
+import com.felinix.divvie.DivvieViewEvent
+import com.felinix.divvie.R
+import com.felinix.divvie.DivvieViewModel
 
 class SplitFragment : Fragment() {
     companion object {

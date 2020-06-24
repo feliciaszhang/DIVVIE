@@ -1,6 +1,6 @@
-package com.example.divvie
+package com.felinix.divvie
 
-import com.example.divvie.data.Person
+import com.felinix.divvie.data.Person
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList

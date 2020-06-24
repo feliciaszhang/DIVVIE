@@ -1,9 +1,8 @@
-package com.example.divvie
+package com.felinix.divvie
 
 import android.text.Spanned
 import android.text.InputFilter
 import java.math.BigDecimal
-import kotlin.math.round
 
 
 class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {

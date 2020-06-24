@@ -1,4 +1,4 @@
-package com.example.divvie
+package com.felinix.divvie
 
 const val GUESTS_DEFAULT = 4
 const val MAX_GUESTS = 10

@@ -1,11 +1,11 @@
-package com.example.divvie.data
+package com.felinix.divvie.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.divvie.DIVVIEDATABASE
+import com.felinix.divvie.DIVVIEDATABASE
 
 
 

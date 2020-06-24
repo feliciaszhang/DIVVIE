@@ -1,4 +1,4 @@
-package com.example.divvie
+package com.felinix.divvie
 
 import org.junit.Test
 

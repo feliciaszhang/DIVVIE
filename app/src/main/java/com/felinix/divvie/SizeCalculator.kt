@@ -1,6 +1,4 @@
-package com.example.divvie
-
-import android.util.Log
+package com.felinix.divvie
 
 class SizeCalculator(private val size: Float) {
 //    (0, 5)

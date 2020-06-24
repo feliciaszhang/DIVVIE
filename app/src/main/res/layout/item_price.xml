@@ -34,7 +34,7 @@
             android:text="@string/currency"
             android:textSize="@dimen/large_text_size" />
 
-        <com.example.divvie.DivvieEditText
+        <com.felinix.divvie.DivvieEditText
             android:id="@+id/edit_item"
             android:imeOptions="actionDone"
             android:layout_width="match_parent"

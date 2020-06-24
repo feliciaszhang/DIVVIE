@@ -57,7 +57,7 @@
             app:layout_constraintStart_toStartOf="@id/info"
             app:layout_constraintTop_toBottomOf="@id/price">
 
-            <com.example.divvie.DivvieEditText
+            <com.felinix.divvie.DivvieEditText
                 android:id="@+id/name_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package com.example.divvie.data
+package com.felinix.divvie.data
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
