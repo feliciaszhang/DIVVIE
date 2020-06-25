@@ -3,6 +3,7 @@ package com.felinix.divvie.fragments
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,7 @@ class BowlsFragment : Fragment() {
     }
     private lateinit var viewModel: DivvieViewModel
     private lateinit var bowlsList: ConstraintLayout
+    private lateinit var etBackground: Drawable
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -39,6 +41,7 @@ class BowlsFragment : Fragment() {
         for (i in 0 until MAX_GUESTS) {
             changeColor(bowlsList.getChildAt(i), resources.getColor(R.color.colorWhite, context!!.theme))
         }
+        etBackground = fragment.findViewById<DivvieEditText>(R.id.name_edit).background
         return fragment
     }
 
@@ -52,10 +55,8 @@ class BowlsFragment : Fragment() {
         val image: ImageView = view.findViewById(R.id.imageView)
         val currency: TextView = view.findViewById(R.id.currency)
         val priceAmount: TextView = view.findViewById(R.id.price_amount)
-        val nameText: TextView = view.findViewById(R.id.name_text)
         currency.setTextColor(color)
         priceAmount.setTextColor(color)
-        nameText.setTextColor(color)
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
@@ -64,7 +65,6 @@ class BowlsFragment : Fragment() {
         val priceAmount: TextView = view.findViewById(R.id.price_amount)
         val price: LinearLayout = view.findViewById(R.id.price)
         val nameEdit: EditText = view.findViewById(R.id.name_edit)
-        val nameText: TextView = view.findViewById(R.id.name_text)
         val personalSub = person.subtotal
         if (personalSub != null) {
             price.visibility = View.VISIBLE
@@ -74,12 +74,13 @@ class BowlsFragment : Fragment() {
             val total: BigDecimal = personalSub + personalTax + personalTip + personalTempPrice
             priceAmount.text = filter.clean(total.toPlainString())
         } else {
-            price.visibility = View.GONE
+            price.visibility = View.INVISIBLE
         }
 
         if (editable) {
-            nameEdit.visibility = View.VISIBLE
-            nameText.visibility = View.GONE
+            nameEdit.isEnabled = true
+            nameEdit.background = etBackground
+            nameEdit.hint = resources.getString(R.string.enter_name)
             nameEdit.setText(personList[i].name)
             nameEdit.onFocusChangeListener = (OnFocusChangeListener { _, hasFocus -> if (!hasFocus) {
                 viewModel.onEvent(DivvieViewEvent.BowlsEnterName(i, nameEdit.text.toString())) }
@@ -94,9 +95,9 @@ class BowlsFragment : Fragment() {
                 }
             }
         } else {
-            nameEdit.visibility = View.GONE
-            nameText.visibility = View.VISIBLE
-            nameText.text = personList[i].name
+            nameEdit.isEnabled = false
+            nameEdit.background = null
+            nameEdit.hint = ""
         }
     }
 
