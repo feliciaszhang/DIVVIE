@@ -113,7 +113,7 @@ class ItemFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        if (viewState.leftover == BigDecimal.ZERO) {
+        if (viewState.leftover == BigDecimal.ZERO || viewState.leftover.toString() == "0.00") {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, CalculateFragment.newInstance()
             ).commit()
