@@ -24,15 +24,15 @@ class ResultFragment : Fragment() {
         fun newInstance() = ResultFragment()
     }
     private lateinit var viewModel: DivvieViewModel
-    private lateinit var subtotal: TextView
-    private lateinit var tax: TextView
+    private lateinit var subtotal: DivvieEditText
+    private lateinit var tax: DivvieEditText
     private lateinit var currency: TextView
     private lateinit var percentage: TextView
-    private lateinit var currencyTip: EditText
+    private lateinit var currencyTip: DivvieEditText
     private lateinit var percentageTip: EditText
     private lateinit var currencyButton: Button
     private lateinit var percentageButton: Button
-    private lateinit var total: TextView
+    private lateinit var total: DivvieEditText
     private lateinit var backButton: Button
     private lateinit var restart: Button
     private lateinit var editTextCurrencyBackground: Drawable
@@ -164,9 +164,9 @@ class ResultFragment : Fragment() {
             val personalTax = person.tax ?: BigDecimal.ZERO
             val personalTip = person.tip ?: BigDecimal.ZERO
             val personalGrandTotal = personalSub + personalTax + personalTip
-            subtotal.text = filter.clean(personalSub.toPlainString())
-            tax.text = filter.clean(personalTax.toPlainString())
-            total.text = filter.clean(personalGrandTotal.toPlainString())
+            subtotal.setText(filter.clean(personalSub.toPlainString()))
+            tax.setText(filter.clean(personalTax.toPlainString()))
+            total.setText(filter.clean(personalGrandTotal.toPlainString()))
             subtotal.textSize = SizeCalculator(42f).resize(personalSub.toPlainString())
             tax.textSize = SizeCalculator(42f).resize(personalTax.toPlainString())
             total.textSize = SizeCalculator(42f).resize(personalGrandTotal.toPlainString())
@@ -185,9 +185,9 @@ class ResultFragment : Fragment() {
             val totalTax = viewState.tax ?: BigDecimal.ZERO
             val totalTip = viewState.tip ?: BigDecimal.ZERO
             val grandTotal = totalSub + totalTax + totalTip
-            subtotal.text = filter.clean(totalSub.toPlainString())
-            tax.text = filter.clean(totalTax.toPlainString())
-            total.text = filter.clean(grandTotal.toPlainString())
+            subtotal.setText(filter.clean(totalSub.toPlainString()))
+            tax.setText(filter.clean(totalTax.toPlainString()))
+            total.setText(filter.clean(grandTotal.toPlainString()))
             subtotal.textSize = SizeCalculator(42f).resize(totalSub.toPlainString())
             tax.textSize = SizeCalculator(42f).resize(totalTax.toPlainString())
             total.textSize = SizeCalculator(42f).resize(grandTotal.toPlainString())

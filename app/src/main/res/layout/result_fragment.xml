@@ -53,8 +53,10 @@
                 android:text="@string/currency"
                 android:textSize="@dimen/large_text_size" />
 
-            <TextView
+            <com.felinix.divvie.DivvieEditText
                 android:id="@+id/subtotal_amount"
+                android:enabled="false"
+                android:background="@null"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -100,8 +102,10 @@
                 android:text="@string/currency"
                 android:textSize="@dimen/large_text_size" />
 
-            <TextView
+            <com.felinix.divvie.DivvieEditText
                 android:id="@+id/tax_amount"
+                android:enabled="false"
+                android:background="@null"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -182,8 +186,10 @@
                 android:text="@string/currency"
                 android:textSize="@dimen/large_text_size" />
 
-            <TextView
+            <com.felinix.divvie.DivvieEditText
                 android:id="@+id/total_amount"
+                android:enabled="false"
+                android:background="@null"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"

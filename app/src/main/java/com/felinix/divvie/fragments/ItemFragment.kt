@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,7 +120,11 @@ class ItemFragment : Fragment() {
         }
         val tempLeftover = (viewState.leftover ?: BigDecimal.ZERO) - (viewState.tempItemPrice ?: BigDecimal.ZERO)
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
-        nextButton.isEnabled = viewState.tempItemPrice != BigDecimal.ZERO && !viewState.invalidItem && tempLeftover >= BigDecimal.ZERO
+        nextButton.isEnabled = viewState.tempItemPrice != BigDecimal.ZERO
+                && viewState.tempItemPrice.toString() != "0.00"
+                && viewState.tempItemPrice != null
+                && !viewState.invalidItem
+                && tempLeftover >= BigDecimal.ZERO
         clearAllButton.isEnabled = viewState.itemList.size > 0
         editItemText.isEnabled = !viewState.isSplittingBowls
         if (viewState.itemList.size > 0 || (viewState.tempItemPrice != BigDecimal.ZERO && viewState.isSplittingBowls)) {

@@ -148,6 +148,7 @@ class InputFragment : Fragment() {
     private fun render(viewState: DivvieViewState) {
         guestsText.text = viewState.personList.size.toString()
         nextButton.isEnabled = viewState.subtotal != BigDecimal.ZERO
+                && viewState.subtotal.toString() != "0.00"
                 && viewState.subtotal != null
                 && !viewState.invalidSubtotal
                 && !viewState.invalidTax
