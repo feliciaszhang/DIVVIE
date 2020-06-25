@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +55,7 @@ class BowlsFragment : Fragment() {
     private fun changeColor(view: View, color: Int) {
         val image: ImageView = view.findViewById(R.id.imageView)
         val currency: TextView = view.findViewById(R.id.currency)
-        val priceAmount: TextView = view.findViewById(R.id.price_amount)
+        val priceAmount: DivvieEditText = view.findViewById(R.id.price_amount)
         currency.setTextColor(color)
         priceAmount.setTextColor(color)
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
@@ -62,7 +63,7 @@ class BowlsFragment : Fragment() {
 
     private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, view: View) {
         val person = personList[i]
-        val priceAmount: TextView = view.findViewById(R.id.price_amount)
+        val priceAmount: DivvieEditText = view.findViewById(R.id.price_amount)
         val price: LinearLayout = view.findViewById(R.id.price)
         val nameEdit: EditText = view.findViewById(R.id.name_edit)
         val personalSub = person.subtotal
@@ -72,7 +73,7 @@ class BowlsFragment : Fragment() {
             val personalTip: BigDecimal = person.tip ?: BigDecimal.ZERO
             val personalTempPrice: BigDecimal = (person.tempPrice?.base ?: BigDecimal.ZERO) + (person.tempPrice?.acc ?: BigDecimal.ZERO)
             val total: BigDecimal = personalSub + personalTax + personalTip + personalTempPrice
-            priceAmount.text = filter.clean(total.toPlainString())
+            priceAmount.setText(filter.clean(total.toPlainString()))
         } else {
             price.visibility = View.INVISIBLE
         }
