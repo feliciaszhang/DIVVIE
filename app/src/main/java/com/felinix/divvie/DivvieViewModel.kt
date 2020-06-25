@@ -382,7 +382,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val leftover = vs.leftover ?: BigDecimal.ZERO
         for (person in vs.personList) {
             val personalTemp = person.tempPrice ?: Price(BigDecimal.ZERO, BigDecimal.ZERO)
-            person.subtotal = (person.subtotal ?: BigDecimal.ZERO + personalTemp.base + personalTemp.acc)
+            person.subtotal = ((person.subtotal ?: BigDecimal.ZERO) + personalTemp.base + personalTemp.acc)
             person.listOfPrices.add(personalTemp)
             person.tempPrice = Price(BigDecimal.ZERO, BigDecimal.ZERO)
             updatePerson(person)
@@ -418,7 +418,7 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             val leftover = vs.leftover ?: BigDecimal.ZERO
             for (person in vs.personList) {
                 val lastPrice = person.listOfPrices.removeLast()
-                person.subtotal = person.subtotal ?: BigDecimal.ZERO - lastPrice.base - lastPrice.acc
+                person.subtotal = (person.subtotal ?: BigDecimal.ZERO) - lastPrice.base - lastPrice.acc
                 updatePerson(person)
             }
             viewState.value = viewState.value!!.copy(

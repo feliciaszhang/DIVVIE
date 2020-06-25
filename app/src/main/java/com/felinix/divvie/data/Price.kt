@@ -10,9 +10,9 @@ data class Price(val base: BigDecimal, val acc: BigDecimal) {
                 return Price(BigDecimal.ZERO, BigDecimal.ZERO)
             }
             val roundedDividend = (dividend * 100.toBigDecimal()).toBigInteger()
-            val quotient = roundedDividend.divide(divisor.toBigInteger())
+            val quotient = roundedDividend.divide(divisor.toBigInteger()).toBigDecimal()
             val remainder = roundedDividend.remainder(divisor.toBigInteger())
-            return Price(quotient.toBigDecimal() / 100.toBigDecimal(), remainder.toBigDecimal())
+            return Price((quotient.divide(100.toBigDecimal())), remainder.toBigDecimal())
         }
     }
 }
