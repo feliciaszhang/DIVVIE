@@ -2,6 +2,7 @@ package com.felinix.divvie
 
 import android.text.Spanned
 import android.text.InputFilter
+import android.util.Log
 import java.math.BigDecimal
 
 
@@ -64,7 +65,19 @@ class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {
         return string + ".00"
     }
 
-    fun roundAndClean(num: BigDecimal): String {
-        return clean((num * 100.toBigDecimal() / 100.toBigDecimal()).toBigInteger().toString())
+    fun roundAndClean(numString: String): String {
+        val roundedDividend = (numString.toBigDecimal() * 100.toBigDecimal()).toBigInteger()
+        val quotient = (roundedDividend.toBigDecimal().divide(100.toBigDecimal())).toBigInteger()
+        var string = quotient.toString()
+        while (string.length > 1 && string[0] == '0' && string[1] != '.') {
+            string = string.removeRange(0, 1)
+        }
+        if (string.length == 0) {
+            string = "0"
+        }
+        if ('.' in string) {
+            throw Exception("---------------- has decimals -------------------")
+        }
+        return string
     }
 }

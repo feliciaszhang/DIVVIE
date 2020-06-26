@@ -488,9 +488,6 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
             }
             updatePerson(person)
         }
-        for (person in vs.personList) {
-            Log.d("********", person.toString())
-        }
         // personalTax = personalSubtotal / subtotal * tax = personalSubtotal * tax / subtotal
         // personalTip = personalSubtotal / subtotal * tip = personalSubtotal * tip / subtotal
     }

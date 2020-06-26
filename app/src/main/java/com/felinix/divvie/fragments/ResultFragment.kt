@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
+import android.util.Log
 import com.felinix.divvie.*
 import java.math.BigDecimal
 
@@ -119,7 +120,7 @@ class ResultFragment : Fragment() {
         percentageTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val text = percentageTip.text.toString()
-                percentageTip.setText(filter.clean(text))
+                percentageTip.setText(filter.roundAndClean(text))
             }
         })
 
@@ -174,7 +175,7 @@ class ResultFragment : Fragment() {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)
                 currencyTip.setText(filter.clean(personalTip.toPlainString()))
-                percentageTip.setText(filter.roundAndClean(personalTip * 100.toBigDecimal() / personalSub))
+                percentageTip.setText(filter.roundAndClean((personalTip * 100.toBigDecimal() / personalSub).toPlainString()))
                 currencyTip.addTextChangedListener(currencyTextWatcher)
                 percentageTip.addTextChangedListener(percentageTextWatcher)
             }
@@ -195,12 +196,16 @@ class ResultFragment : Fragment() {
                 currencyTip.removeTextChangedListener(currencyTextWatcher)
                 percentageTip.removeTextChangedListener(percentageTextWatcher)
                 currencyTip.setText(filter.clean(totalTip.toPlainString()))
-                percentageTip.setText(filter.roundAndClean(totalTip * 100.toBigDecimal() / totalSub))
+                percentageTip.setText(filter.roundAndClean((totalTip * 100.toBigDecimal() / totalSub).toPlainString()))
                 currencyTip.addTextChangedListener(currencyTextWatcher)
                 percentageTip.addTextChangedListener(percentageTextWatcher)
             }
         }
-        if (viewState.invalidCurrencyTip) {
+        if ((viewState.tip ?: BigDecimal.ZERO > viewState.subtotal ?: BigDecimal.ZERO) && breakdownIndex == null) {
+            currencyTip.setText(filter.clean(viewState.subtotal?.toPlainString() ?: "0.00"))
+            percentageTip.setText("100")
+        }
+        if (viewState.invalidCurrencyTip && viewState.isCurrencyTip) {
             percentageButton.isEnabled = false
             tipHelper.visibility = View.VISIBLE
             tipHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
