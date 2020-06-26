@@ -61,7 +61,7 @@ class BowlsFragment : Fragment() {
         image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
-    private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, view: View) {
+    private fun setVisibilityAttributes(i: Int, personList: Array<Person>, editable: Boolean, invalid: Boolean, view: View) {
         val person = personList[i]
         val priceAmount: DivvieEditText = view.findViewById(R.id.price_amount)
         val price: LinearLayout = view.findViewById(R.id.price)
@@ -77,7 +77,9 @@ class BowlsFragment : Fragment() {
         } else {
             price.visibility = View.INVISIBLE
         }
-
+        if (invalid) {
+            priceAmount.setText("")
+        }
         if (editable) {
             nameEdit.isEnabled = true
             nameEdit.background = etBackground
@@ -107,7 +109,7 @@ class BowlsFragment : Fragment() {
             val view = bowlsList.getChildAt(i)
             view.isClickable = viewState.isSplittingBowls || viewState.isPersonalResult
             if (i < viewState.personList.size) {
-                setVisibilityAttributes(i, viewState.personList, viewState.editableName, view)
+                setVisibilityAttributes(i, viewState.personList, viewState.editableName, viewState.invalidCurrencyTip, view)
                 view.visibility = View.VISIBLE
             } else {
                 view.visibility = View.GONE

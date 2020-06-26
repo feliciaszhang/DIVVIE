@@ -206,6 +206,7 @@ class ResultFragment : Fragment() {
             percentageTip.setText("100")
         }
         if (viewState.invalidCurrencyTip && viewState.isCurrencyTip) {
+            total.setText("")
             percentageButton.isEnabled = false
             tipHelper.visibility = View.VISIBLE
             tipHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
