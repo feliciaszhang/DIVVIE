@@ -158,6 +158,12 @@ class InputFragment : Fragment() {
         if (viewState.tax != null && !viewState.isTaxEditing) {
             editTaxText.setText(filter.clean(viewState.tax.toPlainString()))
         }
+        if (viewState.subtotal.toString() == "0.00") {
+            subtotalHelper.text = resources.getString(R.string.zero)
+            subtotalHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
+            editSubtotalText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
         if (viewState.invalidSubtotal) {
             subtotalHelper.text = resources.getString(R.string.warning)
             subtotalHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
@@ -170,7 +176,7 @@ class InputFragment : Fragment() {
             editTaxText.background.colorFilter = PorterDuffColorFilter(
                 resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
-        if (!viewState.invalidSubtotal){
+        if (!viewState.invalidSubtotal && viewState.subtotal.toString() != "0.00"){
             subtotalHelper.text = resources.getString(R.string.subtotal_helper)
             subtotalHelper.setTextColor(resources.getColor(R.color.colorWhite, context!!.theme))
             editSubtotalText.background.colorFilter = PorterDuffColorFilter(

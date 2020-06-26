@@ -152,13 +152,19 @@ class ItemFragment : Fragment() {
                 editItemText.setText("")
             }
         }
+        if (viewState.tempItemPrice.toString() == "0.00") {
+            itemHelper.text = resources.getString(R.string.zero)
+            itemHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
+            editItemText.background.colorFilter = PorterDuffColorFilter(
+                resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        }
         if (viewState.invalidItem) {
             itemHelper.text = resources.getString(R.string.warning)
             itemHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
             editItemText.background.colorFilter = PorterDuffColorFilter(
                 resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
-        if (!viewState.invalidItem && !viewState.isSplittingBowls) {
+        if (!viewState.invalidItem && !viewState.isSplittingBowls && viewState.tempItemPrice.toString() != "0.00") {
             itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toPlainString()))
             itemHelper.setTextColor(resources.getColor(R.color.colorWhite, context!!.theme))
             if (!viewState.isSplittingBowls) {

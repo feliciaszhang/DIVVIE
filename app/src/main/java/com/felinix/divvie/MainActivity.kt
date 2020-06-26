@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO personal breakdown calculation discrepency
-    // TODO cannot be 0 warning
-    // TODO tip cannot be over 100%
     // TODO percentage tip rounding
 
     // TODO fix icon and launcher image
