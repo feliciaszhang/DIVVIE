@@ -1,4 +1,4 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 sealed class DivvieViewEvent {
     object DisplayActivity: DivvieViewEvent()

@@ -1,9 +1,7 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 import android.text.Spanned
 import android.text.InputFilter
-import android.util.Log
-import java.math.BigDecimal
 
 
 class CurrencyInputFilter(private val decimalDigits: Int = 2) : InputFilter {

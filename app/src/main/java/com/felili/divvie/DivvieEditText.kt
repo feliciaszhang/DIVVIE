@@ -1,4 +1,4 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 import android.content.Context
 import android.graphics.Canvas

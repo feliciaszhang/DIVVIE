@@ -1,7 +1,7 @@
-package com.felinix.divvie.data
+package com.felili.divvie.data
 
 import androidx.room.*
-import com.felinix.divvie.*
+import com.felili.divvie.*
 import java.math.BigDecimal
 import java.util.*
 

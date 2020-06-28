@@ -1,4 +1,4 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 class SizeCalculator(private val size: Float) {
 //    (0, 5)

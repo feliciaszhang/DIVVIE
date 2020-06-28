@@ -1,11 +1,11 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
-import com.felinix.divvie.fragments.BowlsFragment
-import com.felinix.divvie.fragments.InputFragment
+import com.felili.divvie.fragments.BowlsFragment
+import com.felili.divvie.fragments.InputFragment
 import android.graphics.Rect
 import android.widget.EditText
 import android.view.MotionEvent

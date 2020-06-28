@@ -1,13 +1,12 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.felinix.divvie.data.DivvieDatabase
-import com.felinix.divvie.data.Person
-import com.felinix.divvie.data.Price
+import com.felili.divvie.data.DivvieDatabase
+import com.felili.divvie.data.Person
+import com.felili.divvie.data.Price
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList

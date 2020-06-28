@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.felinix.divvie">
+    package="com.felili.divvie">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
 
-        <activity android:name="com.felinix.divvie.MainActivity">
+        <activity android:name="com.felili.divvie.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.felinix.divvie.fragments
+package com.felili.divvie.fragments
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -15,8 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
-import android.util.Log
-import com.felinix.divvie.*
+import com.felili.divvie.*
 import java.math.BigDecimal
 
 

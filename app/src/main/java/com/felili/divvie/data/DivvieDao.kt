@@ -1,4 +1,4 @@
-package com.felinix.divvie.data
+package com.felili.divvie.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

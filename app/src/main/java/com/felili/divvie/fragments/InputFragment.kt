@@ -1,4 +1,4 @@
-package com.felinix.divvie.fragments
+package com.felili.divvie.fragments
 
 import android.content.Context
 import android.graphics.PorterDuff
@@ -16,7 +16,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.felinix.divvie.*
+import com.felili.divvie.*
 import java.math.BigDecimal
 
 class InputFragment : Fragment() {

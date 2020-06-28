@@ -1,4 +1,4 @@
-package com.felinix.divvie
+package com.felili.divvie
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
