@@ -457,39 +457,40 @@ class DivvieViewModel(application: Application) : AndroidViewModel(application) 
         val subtotal = vs.subtotal ?: BigDecimal.ZERO
         val tax = vs.tax ?: BigDecimal.ZERO
         val tip = vs.tip ?: BigDecimal.ZERO
-        val grandTotal = subtotal + tax + tip
-        var grandTotalRemainder = grandTotal
-        var taxRemainder = tax
+        var baseTax = BigDecimal.ZERO
+        var baseTip = BigDecimal.ZERO
         for (person in vs.personList) {
             val personalBaseSubtotal = person.getBaseSubtotal()
-            val dividedGrandTotal = Price.moneyDivider(personalBaseSubtotal * grandTotal * 100.toBigDecimal(), (subtotal * 100.toBigDecimal()).toInt())
-            val grandTotalQuotient = dividedGrandTotal.base
-            grandTotalRemainder -= grandTotalQuotient
-            val dividedTax = Price.moneyDivider(personalBaseSubtotal * tax * 100.toBigDecimal(), (subtotal * 100.toBigDecimal()).toInt())
-            val taxQuotient = dividedTax.base
-            taxRemainder -= taxQuotient
-            person.tax = taxQuotient
-            person.tip = grandTotalQuotient - taxQuotient - (person.subtotal ?: BigDecimal.ZERO)
+            val ratio = personalBaseSubtotal * 100.toBigDecimal() / subtotal
+            val roundedTax = ratio.multiply(tax).toBigInteger()
+            val roundedTip = ratio.multiply(tip).toBigInteger()
+            val personalTax = roundedTax.toBigDecimal().divide(100.toBigDecimal())
+            val personalTip = roundedTip.toBigDecimal().divide(100.toBigDecimal())
+            person.tax = personalTax
+            person.tip = personalTip
+            baseTax += personalTax
+            baseTip += personalTip
             updatePerson(person)
         }
+        var taxAcc = tax - baseTax
         for (person in vs.personList.sorted()) {
-            if (taxRemainder > BigDecimal.ZERO) {
+            if (taxAcc > BigDecimal.ZERO) {
                 val personalTax = person.tax ?: BigDecimal.ZERO
                 person.tax = personalTax + 0.01.toBigDecimal()
-                taxRemainder -= 0.01.toBigDecimal()
+                person.listOfPrices.add(Price(BigDecimal.ZERO, 0.01.toBigDecimal()))
+                taxAcc -= 0.01.toBigDecimal()
+                updatePerson(person)
             }
-            updatePerson(person)
         }
+        var tipAcc = tip - baseTip
         for (person in vs.personList.sorted()) {
-            if (grandTotalRemainder > BigDecimal.ZERO) {
+            if (tipAcc > BigDecimal.ZERO) {
                 val personalTip = person.tip ?: BigDecimal.ZERO
                 person.tip = personalTip + 0.01.toBigDecimal()
-                grandTotalRemainder -= 0.01.toBigDecimal()
+                tipAcc -= 0.01.toBigDecimal()
+                updatePerson(person)
             }
-            updatePerson(person)
         }
-        // personalTax = personalSubtotal / subtotal * tax = personalSubtotal * tax / subtotal
-        // personalTip = personalSubtotal / subtotal * tip = personalSubtotal * tip / subtotal
     }
 
     private val dao = DivvieDatabase.getInstance(application).dao()

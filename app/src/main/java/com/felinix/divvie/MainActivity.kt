@@ -14,8 +14,6 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO personal breakdown calculation discrepency
-
     // TODO fix icon and launcher image
     // TODO icons for navigation?
     // TODO more colors?
