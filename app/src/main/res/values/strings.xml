@@ -23,6 +23,6 @@
     <string name="restart">Restart</string>
     <string name="calculate">Calculate</string>
     <string name="undo">Undo</string>
-    <string name="clear_all">Clear All</string>
+    <string name="clear_all">Clear</string>
     <string name="back">Back</string>
 </resources>

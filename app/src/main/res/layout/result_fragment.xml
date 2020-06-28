@@ -210,17 +210,20 @@
 
         <Button
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/back" />
 
         <Button
             android:id="@+id/restart"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
             android:layout_weight="1"
-            android:text="@string/restart" />
+            android:text="@string/restart"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"/>
     </LinearLayout>
 
 
