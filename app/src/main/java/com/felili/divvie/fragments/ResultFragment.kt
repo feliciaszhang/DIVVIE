@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
 import com.felili.divvie.*
+import com.google.android.material.button.MaterialButtonToggleGroup
 import java.math.BigDecimal
 
 
@@ -32,6 +33,7 @@ class ResultFragment : Fragment() {
     private lateinit var percentageTip: EditText
     private lateinit var currencyButton: Button
     private lateinit var percentageButton: Button
+    private lateinit var toggleGroup: MaterialButtonToggleGroup
     private lateinit var total: DivvieEditText
     private lateinit var backButton: Button
     private lateinit var restart: Button
@@ -53,6 +55,7 @@ class ResultFragment : Fragment() {
         percentageTip = fragment.findViewById(R.id.edit_tip_percentage)
         currencyButton = fragment.findViewById(R.id.currencyButton)
         percentageButton = fragment.findViewById(R.id.percentageButton)
+        toggleGroup = fragment.findViewById(R.id.toggleButton)
         total = fragment.findViewById(R.id.total_amount)
         backButton = fragment.findViewById(R.id.back)
         restart = fragment.findViewById(R.id.restart)
@@ -103,6 +106,10 @@ class ResultFragment : Fragment() {
         currencyButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectCurrency) }
 
         percentageButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectPercentage) }
+
+        toggleGroup.addOnButtonCheckedListener { group, checkedId, _ ->
+            if (group.checkedButtonId == -1) group.check(checkedId)
+        }
 
         currencyTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
