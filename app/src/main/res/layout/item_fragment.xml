@@ -38,6 +38,10 @@
             android:text="@string/undo"
             android:visibility="gone" />
 
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+
         <Button
             android:id="@+id/clear_all"
             android:layout_width="match_parent"
