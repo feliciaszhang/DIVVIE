@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     // TODO slider for percentage?
     // TODO fix icon and launcher image
-    // TODO icons for navigation?
     // TODO more colors?
 
     override fun onCreate(savedInstanceState: Bundle?) {

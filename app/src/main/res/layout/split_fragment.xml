@@ -17,13 +17,19 @@
         app:layout_constraintBottom_toTopOf="@id/linearLayout">
 
         <Button
-            android:id="@+id/split_equally_button"
+            android:id="@+id/get_result"
+            app:iconTint="@color/colorPrimaryDark"
+            app:icon="@drawable/round_receipt_long_white_36dp"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/equally" />
+            android:text="@string/result" />
 
         <Button
             android:id="@+id/split_individually_button"
+            app:iconTint="@color/colorPrimaryDark"
+            app:icon="@drawable/round_emoji_food_beverage_white_36dp"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/individually" />

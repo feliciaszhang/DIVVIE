@@ -12,7 +12,7 @@ class CalculateFragment : Fragment() {
     companion object {
         fun newInstance() = CalculateFragment()
     }
-    private lateinit var calculateButton: Button
+    private lateinit var resultButton: Button
     private lateinit var backButton: Button
 
     override fun onCreateView(
@@ -20,7 +20,7 @@ class CalculateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.calculate_fragment, container, false)
-        calculateButton = fragment.findViewById(R.id.calculate)
+        resultButton = fragment.findViewById(R.id.result_button)
         backButton = fragment.findViewById(R.id.back_button)
         return fragment
     }
@@ -28,7 +28,7 @@ class CalculateFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        calculateButton.setOnClickListener {
+        resultButton.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout,
                 ResultFragment.newInstance()

@@ -9,14 +9,17 @@
 
 
     <Button
-        android:id="@+id/calculate"
+        android:id="@+id/result_button"
+        app:icon="@drawable/round_receipt_long_white_36dp"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        app:iconTint="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/calculate" />
+        android:text="@string/result" />
 
 
     <LinearLayout

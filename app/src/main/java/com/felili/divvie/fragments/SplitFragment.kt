@@ -16,7 +16,7 @@ class SplitFragment : Fragment() {
         fun newInstance() = SplitFragment()
     }
     private lateinit var viewModel: DivvieViewModel
-    private lateinit var equalButton: Button
+    private lateinit var resultButton: Button
     private lateinit var individualButton: Button
     private lateinit var backButton: Button
 
@@ -25,7 +25,7 @@ class SplitFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.split_fragment, container, false)
-        equalButton = fragment.findViewById(R.id.split_equally_button)
+        resultButton = fragment.findViewById(R.id.get_result)
         individualButton = fragment.findViewById(R.id.split_individually_button)
         backButton = fragment.findViewById(R.id.back_button)
         return fragment
@@ -36,7 +36,7 @@ class SplitFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(DivvieViewModel::class.java)
         viewModel.onEvent(DivvieViewEvent.DisplaySplitFragment)
 
-        equalButton.setOnClickListener {
+        resultButton.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, ResultFragment.newInstance()
             ).commit()

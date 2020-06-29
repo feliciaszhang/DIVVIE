@@ -18,10 +18,9 @@
     <!--    buttons-->
     <string name="next">Next</string>
     <string name="done">Done</string>
-    <string name="equally">Split Equally</string>
-    <string name="individually">Split Each Item</string>
+    <string name="result">See Result</string>
+    <string name="individually">Split Items</string>
     <string name="restart">Restart</string>
-    <string name="calculate">Calculate</string>
     <string name="undo">Undo</string>
     <string name="clear_all">Clear</string>
     <string name="back">Back</string>
