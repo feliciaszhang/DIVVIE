@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,7 +146,6 @@ class ItemFragment : Fragment() {
             nextButton.visibility = View.GONE
             doneButton.visibility = View.VISIBLE
         } else {
-            editItemText.requestFocus()
             editItemText.background = editTextBackground
             itemHelper.text = String.format(resources.getString(R.string.leftover), filter.clean(tempLeftover.toPlainString()))
             nextButton.visibility = View.VISIBLE

@@ -25,6 +25,10 @@
             android:layout_height="wrap_content"
             android:text="@string/result" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/normal_margin" />
+
         <Button
             android:id="@+id/split_individually_button"
             app:iconTint="@color/colorPrimaryDark"
