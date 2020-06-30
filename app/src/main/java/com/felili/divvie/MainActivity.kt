@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO leftover automatic update, set Done onClick to change fragment when leftover = 0
     // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
 
     // TODO slider for percentage?

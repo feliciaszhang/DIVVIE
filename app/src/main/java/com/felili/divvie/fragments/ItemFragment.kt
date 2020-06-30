@@ -98,8 +98,6 @@ class ItemFragment : Fragment() {
 
         nextButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemNext) }
 
-        doneButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemDone) }
-
         undoButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemUndo) }
 
         clearAllButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemClear) }
@@ -112,12 +110,17 @@ class ItemFragment : Fragment() {
     }
 
     private fun render(viewState: DivvieViewState) {
-        if (viewState.leftover == BigDecimal.ZERO || viewState.leftover.toString() == "0.00") {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, CalculateFragment.newInstance()
-            ).commit()
-        }
         val tempLeftover = (viewState.leftover ?: BigDecimal.ZERO) - (viewState.tempItemPrice ?: BigDecimal.ZERO)
+        if (tempLeftover == BigDecimal.ZERO || tempLeftover.toString() == "0.00") {
+            doneButton.setOnClickListener {
+                viewModel.onEvent(DivvieViewEvent.ItemDone)
+                fragmentManager!!.beginTransaction().replace(
+                    R.id.info_fragment_layout, CalculateFragment.newInstance()
+                ).commit()
+            }
+        } else {
+            doneButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemDone) }
+        }
         doneButton.isEnabled = viewState.tempItemListOfIndex.size != 0
         nextButton.isEnabled = viewState.tempItemPrice != BigDecimal.ZERO
                 && viewState.tempItemPrice.toString() != "0.00"
