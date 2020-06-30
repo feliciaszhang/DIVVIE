@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
+    // TODO spacing in Item and Result
 
     // TODO slider for percentage?
     // TODO fix icon and launcher image
