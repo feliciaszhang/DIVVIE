@@ -1,9 +1,18 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@color/colorPrimaryDark"/>
-    <item>
+    <item
+        android:bottom="90dp">
         <bitmap
-            android:src="@drawable/bowl"
+            android:src="@drawable/divvie_logo"
+            android:tint="@color/colorWhite"
+            android:gravity="center"/>
+    </item>
+    <item
+        android:top="90dp">
+        <bitmap
+            android:src="@drawable/felili_logo"
+            android:tint="@color/colorAccent"
             android:gravity="center"/>
     </item>
 </layer-list>

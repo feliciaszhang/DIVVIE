@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     // TODO spacing in Item and Result
 
     // TODO slider for percentage?
-    // TODO fix icon and launcher image
+    // TODO make new bowl icon
     // TODO more colors?
 
     override fun onCreate(savedInstanceState: Bundle?) {
