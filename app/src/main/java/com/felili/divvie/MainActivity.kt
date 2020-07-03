@@ -14,9 +14,6 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO more colors?
-    // TODO change "see result name" / more user centric
-
     // TODO slider for percentage?
     // TODO translate
     // TODO icon gradient

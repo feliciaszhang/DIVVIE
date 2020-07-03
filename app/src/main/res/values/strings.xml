@@ -9,16 +9,20 @@
     <string name="tax">Tax</string>
     <string name="tip">Tip</string>
     <string name="item_price">Item Price</string>
-    <string name="total">Grand Total</string>
+    <string name="total">Total</string>
     <string name="leftover">$ %1$s leftover</string>
     <string name="guests">Guests</string>
     <string name="enter_name">enter name</string>
     <string name="tap">Tap on bowl(s) to split</string>
+    <string name="personal_subtotal">Personal Subtotal</string>
+    <string name="personal_tip">Personal Tip</string>
+    <string name="personal_tax">Personal Tax</string>
+    <string name="personal_total">Personal Total</string>
 
     <!--    buttons-->
     <string name="next">Next</string>
     <string name="done">Done</string>
-    <string name="result">See Result</string>
+    <string name="result">Finish</string>
     <string name="individually">Split Items</string>
     <string name="restart">Restart</string>
     <string name="undo">Undo</string>

@@ -25,21 +25,25 @@ class ResultFragment : Fragment() {
         fun newInstance() = ResultFragment()
     }
     private lateinit var viewModel: DivvieViewModel
-    private lateinit var subtotal: DivvieEditText
-    private lateinit var tax: DivvieEditText
+    private lateinit var subtotalET: DivvieEditText
+    private lateinit var taxET: DivvieEditText
     private lateinit var currency: TextView
     private lateinit var percentage: TextView
-    private lateinit var currencyTip: DivvieEditText
-    private lateinit var percentageTip: EditText
+    private lateinit var currencyTipET: DivvieEditText
+    private lateinit var percentageTipET: EditText
     private lateinit var currencyButton: Button
     private lateinit var percentageButton: Button
     private lateinit var toggleGroup: MaterialButtonToggleGroup
-    private lateinit var total: DivvieEditText
+    private lateinit var totalET: DivvieEditText
     private lateinit var backButton: Button
     private lateinit var restart: Button
     private lateinit var editTextCurrencyBackground: Drawable
     private lateinit var editTextPercentageBackground: Drawable
     private lateinit var tipHelper: TextView
+    private lateinit var subtotalTitle: TextView
+    private lateinit var taxTitle: TextView
+    private lateinit var tipTitle: TextView
+    private lateinit var totalTitle: TextView
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -47,21 +51,25 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.result_fragment, container, false)
-        subtotal = fragment.findViewById(R.id.subtotal_amount)
-        tax = fragment.findViewById(R.id.tax_amount)
+        subtotalET = fragment.findViewById(R.id.subtotal_amount)
+        taxET = fragment.findViewById(R.id.tax_amount)
         currency = fragment.findViewById(R.id.currency4)
-        currencyTip = fragment.findViewById(R.id.edit_tip_currency)
+        currencyTipET = fragment.findViewById(R.id.edit_tip_currency)
         percentage = fragment.findViewById(R.id.percentage)
-        percentageTip = fragment.findViewById(R.id.edit_tip_percentage)
+        percentageTipET = fragment.findViewById(R.id.edit_tip_percentage)
         currencyButton = fragment.findViewById(R.id.currencyButton)
         percentageButton = fragment.findViewById(R.id.percentageButton)
         toggleGroup = fragment.findViewById(R.id.toggleButton)
-        total = fragment.findViewById(R.id.total_amount)
+        totalET = fragment.findViewById(R.id.total_amount)
         backButton = fragment.findViewById(R.id.back)
         restart = fragment.findViewById(R.id.restart)
-        editTextCurrencyBackground = currencyTip.background
-        editTextPercentageBackground = percentageTip.background
+        editTextCurrencyBackground = currencyTipET.background
+        editTextPercentageBackground = percentageTipET.background
         tipHelper = fragment.findViewById(R.id.tip_helper)
+        subtotalTitle = fragment.findViewById(R.id.subtotal_text)
+        tipTitle = fragment.findViewById(R.id.tip_text)
+        taxTitle = fragment.findViewById(R.id.tax_text)
+        totalTitle = fragment.findViewById(R.id.total_text)
         return fragment
     }
 
@@ -69,8 +77,8 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val text = currencyTip.text.toString()
-            currencyTip.textSize = SizeCalculator(42f).resize(text)
+            val text = currencyTipET.text.toString()
+            currencyTipET.textSize = SizeCalculator(42f).resize(text)
             try {
                 filter.clean(text)
                 viewModel.onEvent(DivvieViewEvent.ResultEnterCurrencyTip("0" + text))
@@ -84,8 +92,8 @@ class ResultFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val text = percentageTip.text.toString()
-            percentageTip.textSize = SizeCalculator(42f).resize(text)
+            val text = percentageTipET.text.toString()
+            percentageTipET.textSize = SizeCalculator(42f).resize(text)
             viewModel.onEvent(DivvieViewEvent.ResultEnterPercentageTip("0" + text))
         }
     }
@@ -96,12 +104,12 @@ class ResultFragment : Fragment() {
         viewModel.onEvent(DivvieViewEvent.DisplayResultFragment)
         viewModel.viewStateObservable.observe(viewLifecycleOwner, Observer { render(it) })
 
-        currencyTip.filters = arrayOf(filter)
-        percentageTip.filters = arrayOf(filter)
+        currencyTipET.filters = arrayOf(filter)
+        percentageTipET.filters = arrayOf(filter)
 
-        currencyTip.addTextChangedListener(currencyTextWatcher)
+        currencyTipET.addTextChangedListener(currencyTextWatcher)
 
-        percentageTip.addTextChangedListener(percentageTextWatcher)
+        percentageTipET.addTextChangedListener(percentageTextWatcher)
 
         currencyButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ResultSelectCurrency) }
 
@@ -111,22 +119,22 @@ class ResultFragment : Fragment() {
             if (group.checkedButtonId == -1) group.check(checkedId)
         }
 
-        currencyTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+        currencyTipET.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val text = currencyTip.text.toString()
+                val text = currencyTipET.text.toString()
                 val cleanedText = try {
                     filter.clean(text)
                 } catch (e: Exception) {
                     text
                 }
-                currencyTip.setText(cleanedText)
+                currencyTipET.setText(cleanedText)
             }
         })
 
-        percentageTip.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
+        percentageTipET.onFocusChangeListener = (View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val text = percentageTip.text.toString()
-                percentageTip.setText(filter.roundAndClean(text))
+                val text = percentageTipET.text.toString()
+                percentageTipET.setText(filter.roundAndClean(text))
             }
         })
 
@@ -146,84 +154,92 @@ class ResultFragment : Fragment() {
 
     private fun render(viewState: DivvieViewState) {
         val breakdownIndex = viewState.personalBreakDownIndex
-        currencyTip.isEnabled = breakdownIndex == null
-        percentageTip.isEnabled = breakdownIndex == null
+        currencyTipET.isEnabled = breakdownIndex == null
+        percentageTipET.isEnabled = breakdownIndex == null
         if (viewState.isCurrencyTip) {
             currency.visibility = View.VISIBLE
-            currencyTip.visibility = View.VISIBLE
+            currencyTipET.visibility = View.VISIBLE
             percentage.visibility = View.GONE
-            percentageTip.visibility = View.GONE
+            percentageTipET.visibility = View.GONE
             currencyButton.isEnabled = false
             percentageButton.isEnabled = true
         } else {
             currency.visibility = View.GONE
-            currencyTip.visibility = View.GONE
+            currencyTipET.visibility = View.GONE
             percentage.visibility = View.VISIBLE
-            percentageTip.visibility = View.VISIBLE
+            percentageTipET.visibility = View.VISIBLE
             currencyButton.isEnabled = true
             percentageButton.isEnabled = false
         }
         if (breakdownIndex != null) {
-            currencyTip.background = null
-            percentageTip.background = null
+            currencyTipET.background = null
+            percentageTipET.background = null
+            subtotalTitle.text = resources.getString(R.string.personal_subtotal)
+            tipTitle.text = resources.getString(R.string.personal_tip)
+            taxTitle.text = resources.getString(R.string.personal_tax)
+            totalTitle.text = resources.getString(R.string.personal_total)
             val person = viewState.personList[breakdownIndex]
             val personalSub = person.subtotal ?: BigDecimal.ZERO
             val personalTax = person.tax ?: BigDecimal.ZERO
             val personalTip = person.tip ?: BigDecimal.ZERO
             val personalGrandTotal = personalSub + personalTax + personalTip
-            subtotal.setText(filter.clean(personalSub.toPlainString()))
-            tax.setText(filter.clean(personalTax.toPlainString()))
-            total.setText(filter.clean(personalGrandTotal.toPlainString()))
-            subtotal.textSize = SizeCalculator(42f).resize(personalSub.toPlainString())
-            tax.textSize = SizeCalculator(42f).resize(personalTax.toPlainString())
-            total.textSize = SizeCalculator(42f).resize(personalGrandTotal.toPlainString())
+            subtotalET.setText(filter.clean(personalSub.toPlainString()))
+            taxET.setText(filter.clean(personalTax.toPlainString()))
+            totalET.setText(filter.clean(personalGrandTotal.toPlainString()))
+            subtotalET.textSize = SizeCalculator(42f).resize(personalSub.toPlainString())
+            taxET.textSize = SizeCalculator(42f).resize(personalTax.toPlainString())
+            totalET.textSize = SizeCalculator(42f).resize(personalGrandTotal.toPlainString())
             if (!viewState.isTipEditing) {
-                currencyTip.removeTextChangedListener(currencyTextWatcher)
-                percentageTip.removeTextChangedListener(percentageTextWatcher)
-                currencyTip.setText(filter.clean(personalTip.toPlainString()))
-                percentageTip.setText(filter.roundAndClean((personalTip * 100.toBigDecimal() / personalSub).toPlainString()))
-                currencyTip.addTextChangedListener(currencyTextWatcher)
-                percentageTip.addTextChangedListener(percentageTextWatcher)
+                currencyTipET.removeTextChangedListener(currencyTextWatcher)
+                percentageTipET.removeTextChangedListener(percentageTextWatcher)
+                currencyTipET.setText(filter.clean(personalTip.toPlainString()))
+                percentageTipET.setText(filter.roundAndClean((personalTip * 100.toBigDecimal() / personalSub).toPlainString()))
+                currencyTipET.addTextChangedListener(currencyTextWatcher)
+                percentageTipET.addTextChangedListener(percentageTextWatcher)
             }
         } else {
-            currencyTip.background = editTextCurrencyBackground
-            percentageTip.background = editTextPercentageBackground
+            currencyTipET.background = editTextCurrencyBackground
+            percentageTipET.background = editTextPercentageBackground
+            subtotalTitle.text = resources.getString(R.string.subtotal)
+            tipTitle.text = resources.getString(R.string.tip)
+            taxTitle.text = resources.getString(R.string.tax)
+            totalTitle.text = resources.getString(R.string.total)
             val totalSub = viewState.subtotal ?: BigDecimal.ZERO
             val totalTax = viewState.tax ?: BigDecimal.ZERO
             val totalTip = viewState.tip ?: BigDecimal.ZERO
             val grandTotal = totalSub + totalTax + totalTip
-            subtotal.setText(filter.clean(totalSub.toPlainString()))
-            tax.setText(filter.clean(totalTax.toPlainString()))
-            total.setText(filter.clean(grandTotal.toPlainString()))
-            subtotal.textSize = SizeCalculator(42f).resize(totalSub.toPlainString())
-            tax.textSize = SizeCalculator(42f).resize(totalTax.toPlainString())
-            total.textSize = SizeCalculator(42f).resize(grandTotal.toPlainString())
+            subtotalET.setText(filter.clean(totalSub.toPlainString()))
+            taxET.setText(filter.clean(totalTax.toPlainString()))
+            totalET.setText(filter.clean(grandTotal.toPlainString()))
+            subtotalET.textSize = SizeCalculator(42f).resize(totalSub.toPlainString())
+            taxET.textSize = SizeCalculator(42f).resize(totalTax.toPlainString())
+            totalET.textSize = SizeCalculator(42f).resize(grandTotal.toPlainString())
             if (viewState.tip != null && !viewState.isTipEditing) {
-                currencyTip.removeTextChangedListener(currencyTextWatcher)
-                percentageTip.removeTextChangedListener(percentageTextWatcher)
-                currencyTip.setText(filter.clean(totalTip.toPlainString()))
-                percentageTip.setText(filter.roundAndClean((totalTip * 100.toBigDecimal() / totalSub).toPlainString()))
-                currencyTip.addTextChangedListener(currencyTextWatcher)
-                percentageTip.addTextChangedListener(percentageTextWatcher)
+                currencyTipET.removeTextChangedListener(currencyTextWatcher)
+                percentageTipET.removeTextChangedListener(percentageTextWatcher)
+                currencyTipET.setText(filter.clean(totalTip.toPlainString()))
+                percentageTipET.setText(filter.roundAndClean((totalTip * 100.toBigDecimal() / totalSub).toPlainString()))
+                currencyTipET.addTextChangedListener(currencyTextWatcher)
+                percentageTipET.addTextChangedListener(percentageTextWatcher)
             }
         }
         if ((viewState.tip ?: BigDecimal.ZERO > viewState.subtotal ?: BigDecimal.ZERO) && breakdownIndex == null) {
-            currencyTip.setText(filter.clean(viewState.subtotal?.toPlainString() ?: "0.00"))
-            percentageTip.setText("100")
+            currencyTipET.setText(filter.clean(viewState.subtotal?.toPlainString() ?: "0.00"))
+            percentageTipET.setText("100")
         }
         if (viewState.invalidCurrencyTip && viewState.isCurrencyTip) {
-            total.setText("")
+            totalET.setText("")
             percentageButton.isEnabled = false
             tipHelper.visibility = View.VISIBLE
             tipHelper.setTextColor(resources.getColor(R.color.colorAccent, context!!.theme))
-            currencyTip.background.colorFilter = PorterDuffColorFilter(
+            currencyTipET.background.colorFilter = PorterDuffColorFilter(
                 resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         }
         if (!viewState.invalidCurrencyTip) {
             percentageButton.isEnabled = true
             tipHelper.visibility = View.INVISIBLE
             if (viewState.personalBreakDownIndex == null) {
-                currencyTip.background.colorFilter = PorterDuffColorFilter(
+                currencyTipET.background.colorFilter = PorterDuffColorFilter(
                     resources.getColor(R.color.colorLight, context!!.theme),
                     PorterDuff.Mode.SRC_ATOP
                 )
