@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
     // TODO change "see result name" / more user centric
 
     // TODO slider for percentage?
+    // TODO change DIVVIE to divvie
+    // TODO icon gradient
+    // TODO change bowl name
     // TODO more colors?
 
     override fun onCreate(savedInstanceState: Bundle?) {
