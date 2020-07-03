@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
 
     // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
     // TODO spacing in Item and Result
+    // TODO change "see result name" / more user centric
 
     // TODO slider for percentage?
-    // TODO make new bowl icon
     // TODO more colors?
 
     override fun onCreate(savedInstanceState: Bundle?) {
