@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DIVVIE</string>
+    <string name="app_name">divvie</string>
     <string name="currency">$</string>
     <string name="percentage">%</string>
     <string name="subtotal">Subtotal</string>

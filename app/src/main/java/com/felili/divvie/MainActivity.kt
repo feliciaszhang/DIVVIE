@@ -14,15 +14,14 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
-    // TODO spacing in Item and Result
+    // TODO more colors?
     // TODO change "see result name" / more user centric
 
     // TODO slider for percentage?
-    // TODO change DIVVIE to divvie
+    // TODO translate
     // TODO icon gradient
-    // TODO change bowl name
-    // TODO more colors?
+    // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
+    // TODO spacing in Item and Result
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
