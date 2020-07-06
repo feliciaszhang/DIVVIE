@@ -14,6 +14,9 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
+    // TODO button disable color
+    // TODO rate-it feature
+
     // TODO slider for percentage?
     // TODO translate
     // TODO icon gradient
