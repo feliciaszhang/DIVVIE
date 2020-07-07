@@ -15,12 +15,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO rate-it feature
+    // TODO store items / item name / edit item
+    // TODO save user names so don't have to input each time
 
+    // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
+    // TODO spacing in Item and Result
+    // TODO venmo?
     // TODO slider for percentage?
     // TODO translate
     // TODO icon gradient
-    // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
-    // TODO spacing in Item and Result
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
