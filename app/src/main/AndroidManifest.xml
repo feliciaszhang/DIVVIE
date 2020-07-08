@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
-
-        <activity android:name="com.felili.divvie.MainActivity">
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@style/AppTheme.Popup" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,7 +1,9 @@
 package com.felili.divvie.fragments
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +16,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import com.felili.divvie.*
 import com.google.android.material.button.MaterialButtonToggleGroup
 import java.math.BigDecimal
@@ -44,6 +45,7 @@ class ResultFragment : Fragment() {
     private lateinit var taxTitle: TextView
     private lateinit var tipTitle: TextView
     private lateinit var totalTitle: TextView
+    private lateinit var popupButton: Button
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(
@@ -70,6 +72,7 @@ class ResultFragment : Fragment() {
         tipTitle = fragment.findViewById(R.id.tip_text)
         taxTitle = fragment.findViewById(R.id.tax_text)
         totalTitle = fragment.findViewById(R.id.total_text)
+        popupButton = fragment.findViewById(R.id.popup)
         return fragment
     }
 
@@ -149,6 +152,11 @@ class ResultFragment : Fragment() {
             fragmentManager!!.beginTransaction().replace(
                 R.id.info_fragment_layout, InputFragment.newInstance()
             ).commit()
+        }
+
+        popupButton.setOnClickListener {
+            val intent = Intent(context, PopupActivity::class.java)
+            startActivity(intent)
         }
     }
 

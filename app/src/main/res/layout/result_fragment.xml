@@ -7,6 +7,13 @@
     android:orientation="vertical"
     tools:context=".fragments.ResultFragment">
 
+    <Button
+        android:id="@+id/popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"

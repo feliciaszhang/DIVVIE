@@ -28,4 +28,6 @@
     <string name="undo">Undo</string>
     <string name="clear_all">Clear</string>
     <string name="back">Back</string>
+    <string name="report">Report an issue</string>
+    <string name="rate">Rate us</string>
 </resources>
