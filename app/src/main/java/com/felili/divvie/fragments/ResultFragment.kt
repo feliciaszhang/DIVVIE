@@ -181,6 +181,8 @@ class ResultFragment : Fragment() {
             percentageButton.isEnabled = false
         }
         if (breakdownIndex != null) {
+            popupButton.visibility = View.GONE
+            popupButton.isEnabled = false
             currencyTipET.background = null
             percentageTipET.background = null
             subtotalTitle.text = resources.getString(R.string.personal_subtotal)
@@ -207,6 +209,8 @@ class ResultFragment : Fragment() {
                 percentageTipET.addTextChangedListener(percentageTextWatcher)
             }
         } else {
+            popupButton.visibility = View.VISIBLE
+            popupButton.isEnabled = true
             currencyTipET.background = editTextCurrencyBackground
             percentageTipET.background = editTextPercentageBackground
             subtotalTitle.text = resources.getString(R.string.subtotal)
