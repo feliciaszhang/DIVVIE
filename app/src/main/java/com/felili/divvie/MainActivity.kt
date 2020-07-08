@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DivvieViewModel
 
-    // TODO rate-it feature
     // TODO store items / item name / edit item
     // TODO save user names so don't have to input each time
 

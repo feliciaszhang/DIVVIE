@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -45,7 +46,7 @@ class ResultFragment : Fragment() {
     private lateinit var taxTitle: TextView
     private lateinit var tipTitle: TextView
     private lateinit var totalTitle: TextView
-    private lateinit var popupButton: Button
+    private lateinit var popupButton: ImageView
     private val filter = CurrencyInputFilter()
 
     override fun onCreateView(

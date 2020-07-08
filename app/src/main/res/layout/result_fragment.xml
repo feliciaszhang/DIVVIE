@@ -7,8 +7,9 @@
     android:orientation="vertical"
     tools:context=".fragments.ResultFragment">
 
-    <Button
+    <ImageView
         android:id="@+id/popup"
+        app:srcCompat="@drawable/round_info_white_36dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

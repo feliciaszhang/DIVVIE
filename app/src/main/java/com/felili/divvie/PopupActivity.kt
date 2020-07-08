@@ -21,7 +21,7 @@ class PopupActivity : AppCompatActivity() {
         windowManager.defaultDisplay.getMetrics(dm)
 
         val w = dm.widthPixels
-        val h = dm.heightPixels * 0.205
+        val h = dm.heightPixels * 0.27
 
         window.setLayout(w, h.toInt())
 

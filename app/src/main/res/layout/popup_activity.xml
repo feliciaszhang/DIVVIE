@@ -7,22 +7,44 @@
     android:background="@drawable/popup_background"
     tools:context=".PopupActivity">
 
+    <Space
+        android:id="@+id/space1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <Button
         android:id="@+id/report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/report"
+        app:iconTint="@color/colorPrimaryDark"
+        app:icon="@drawable/round_warning_white_36dp"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/space1" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/report"/>
 
     <Button
         android:id="@+id/rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rate"
+        app:iconTint="@color/colorPrimaryDark"
+        app:icon="@drawable/round_star_border_white_36dp"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/report"/>
+        app:layout_constraintTop_toBottomOf="@id/space"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
