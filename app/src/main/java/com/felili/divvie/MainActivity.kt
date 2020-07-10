@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     // TODO store items / item name / edit item
     // TODO save user names so don't have to input each time
+    // TODO save meal
+    // TODO Android back button
 
     // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
     // TODO spacing in Item and Result
