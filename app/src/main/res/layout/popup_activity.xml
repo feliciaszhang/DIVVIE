@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/report"
         app:iconTint="@color/colorPrimaryDark"
-        app:icon="@drawable/round_warning_white_36dp"
+        app:icon="@drawable/ic_warning"
         style="@style/Widget.MaterialComponents.Button.Icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/space1" />
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="@string/rate"
         app:iconTint="@color/colorPrimaryDark"
-        app:icon="@drawable/round_star_border_white_36dp"
+        app:icon="@drawable/ic_star"
         style="@style/Widget.MaterialComponents.Button.Icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

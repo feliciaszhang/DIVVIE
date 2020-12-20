@@ -10,7 +10,7 @@
 
     <Button
         android:id="@+id/result_button"
-        app:icon="@drawable/round_receipt_long_white_36dp"
+        app:icon="@drawable/ic_receipt"
         style="@style/Widget.MaterialComponents.Button.Icon"
         app:iconTint="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
