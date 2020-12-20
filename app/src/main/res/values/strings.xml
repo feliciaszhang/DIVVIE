@@ -12,7 +12,7 @@
     <string name="total">Total</string>
     <string name="leftover">$ %1$s leftover</string>
     <string name="guests">Guests</string>
-    <string name="enter_name">enter name</string>
+    <string name="enter_name">name</string>
     <string name="tap">Tap on each person to split</string>
     <string name="personal_subtotal">Personal Subtotal</string>
     <string name="personal_tip">Personal Tip</string>
