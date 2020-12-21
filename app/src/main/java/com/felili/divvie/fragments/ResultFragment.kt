@@ -200,7 +200,11 @@ class ResultFragment : FoFragment() {
                 currencyTipET.removeTextChangedListener(currencyTextWatcher)
                 percentageTipET.removeTextChangedListener(percentageTextWatcher)
                 currencyTipET.setText(filter.clean(personalTip.toPlainString()))
-                percentageTipET.setText(filter.roundAndClean((personalTip * 100.toBigDecimal() / personalSub).toPlainString()))
+                if (personalSub == BigDecimal.ZERO) {
+                    percentageTipET.setText(filter.roundAndClean("0"))
+                } else {
+                    percentageTipET.setText(filter.roundAndClean((personalTip * 100.toBigDecimal() / personalSub).toPlainString()))
+                }
                 currencyTipET.addTextChangedListener(currencyTextWatcher)
                 percentageTipET.addTextChangedListener(percentageTextWatcher)
             }
