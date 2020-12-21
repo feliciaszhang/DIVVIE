@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,8 +27,8 @@ import java.math.BigDecimal
 class InputFragment : FoFragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var guestsText: TextView
-    private lateinit var upButton: Button
-    private lateinit var downButton: Button
+    private lateinit var upButton: ImageView
+    private lateinit var downButton: ImageView
     private lateinit var editSubtotalText: DivvieEditText
     private lateinit var editTaxText: DivvieEditText
     private lateinit var nextButton: Button
@@ -48,6 +49,8 @@ class InputFragment : FoFragment() {
         nextButton = fragment.findViewById(R.id.next)
         subtotalHelper = fragment.findViewById(R.id.subtotal_helper)
         taxHelper = fragment.findViewById(R.id.tax_helper)
+        upButton.colorFilter = PorterDuffColorFilter(resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
+        downButton.colorFilter = PorterDuffColorFilter(resources.getColor(R.color.colorAccent, context!!.theme), PorterDuff.Mode.SRC_ATOP)
         return fragment
     }
 
@@ -61,12 +64,10 @@ class InputFragment : FoFragment() {
         editTaxText.filters = arrayOf(filter)
 
         upButton.setOnClickListener {
-            upButton.requestFocusFromTouch()
             viewModel.onEvent(DivvieViewEvent.InputInsertPerson)
         }
 
         downButton.setOnClickListener {
-            downButton.requestFocusFromTouch()
             viewModel.onEvent(DivvieViewEvent.InputRemovePerson)
         }
 
