@@ -20,6 +20,7 @@ class MainActivity : FoActivity() {
     // TODO save meal
 
     // TODO spacing in Item and Result
+    // TODO backbutton navigation kinda wierd sometimes
     // TODO slider for percentage?
     // TODO translate
 
