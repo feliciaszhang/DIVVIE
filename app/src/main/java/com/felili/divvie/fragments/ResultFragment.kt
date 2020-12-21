@@ -19,13 +19,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.felili.divvie.*
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.tubitv.fragmentoperator.fragment.FoFragment
+import com.tubitv.fragmentoperator.fragment.annotation.SingleInstanceFragment
+import com.tubitv.fragments.FragmentOperator
 import java.math.BigDecimal
 
-
-class ResultFragment : Fragment() {
-    companion object {
-        fun newInstance() = ResultFragment()
-    }
+@SingleInstanceFragment
+class ResultFragment : FoFragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var subtotalET: DivvieEditText
     private lateinit var taxET: DivvieEditText
@@ -143,16 +143,12 @@ class ResultFragment : Fragment() {
         })
 
         backButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, SplitFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(SplitFragment(), clearStack = false, skipOnPop = true)
         }
 
         restart.setOnClickListener {
             viewModel.onEvent(DivvieViewEvent.ResultToInput)
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, InputFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(InputFragment(), clearStack = true, skipOnPop = true)
         }
 
         popupButton.setOnClickListener {

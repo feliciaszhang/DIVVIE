@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.felili.divvie.DivvieViewEvent
 import com.felili.divvie.R
 import com.felili.divvie.DivvieViewModel
+import com.tubitv.fragmentoperator.fragment.FoFragment
+import com.tubitv.fragmentoperator.fragment.annotation.SingleInstanceFragment
+import com.tubitv.fragments.FragmentOperator
 
-class SplitFragment : Fragment() {
-    companion object {
-        fun newInstance() = SplitFragment()
-    }
+@SingleInstanceFragment
+class SplitFragment : FoFragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var resultButton: Button
     private lateinit var individualButton: Button
@@ -37,21 +37,15 @@ class SplitFragment : Fragment() {
         viewModel.onEvent(DivvieViewEvent.DisplaySplitFragment)
 
         resultButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, ResultFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(ResultFragment(), clearStack = false, skipOnPop = true)
         }
 
         individualButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, ItemFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(ItemFragment(), clearStack = false, skipOnPop = true)
         }
 
         backButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, InputFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(InputFragment(), clearStack = true, skipOnPop = true)
         }
     }
 }

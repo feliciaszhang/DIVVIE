@@ -1,7 +1,6 @@
 package com.felili.divvie
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.felili.divvie.fragments.BowlsFragment
@@ -10,21 +9,19 @@ import android.graphics.Rect
 import android.widget.EditText
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import com.tubitv.fragmentoperator.activity.FoActivity
+import com.tubitv.fragments.FragmentOperator
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FoActivity() {
     private lateinit var viewModel: DivvieViewModel
 
     // TODO store items / item name / edit item
     // TODO save user names so don't have to input each time
     // TODO save meal
-    // TODO Android back button
 
-    // TODO do not display error helper when Back, Undo, Clear are pressed in ItemFragment
     // TODO spacing in Item and Result
-    // TODO venmo?
     // TODO slider for percentage?
     // TODO translate
-    // TODO icon gradient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -32,11 +29,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         viewModel = ViewModelProviders.of(this).get(DivvieViewModel::class.java)
         viewModel.onEvent(DivvieViewEvent.DisplayActivity)
-
+        FragmentOperator.setCurrentActivity(this)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(
-                R.id.info_fragment_layout, InputFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(InputFragment())
             supportFragmentManager.beginTransaction().replace(
                 R.id.bowls_fragment_layout, BowlsFragment.newInstance()
             ).commit()
@@ -57,5 +52,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    override fun getFragmentContainerResId(): Int {
+        return R.id.info_fragment_layout
     }
 }

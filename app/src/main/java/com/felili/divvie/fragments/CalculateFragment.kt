@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.felili.divvie.*
+import com.tubitv.fragmentoperator.fragment.FoFragment
+import com.tubitv.fragmentoperator.fragment.annotation.SingleInstanceFragment
+import com.tubitv.fragments.FragmentOperator
 
-class CalculateFragment : Fragment() {
-    companion object {
-        fun newInstance() = CalculateFragment()
-    }
+@SingleInstanceFragment
+class CalculateFragment : FoFragment() {
     private lateinit var resultButton: Button
     private lateinit var backButton: Button
 
@@ -29,16 +30,11 @@ class CalculateFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         resultButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout,
-                ResultFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(ResultFragment(), clearStack = false, skipOnPop = true)
         }
 
         backButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, ItemFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(ItemFragment(), clearStack = false, skipOnPop = false)
         }
     }
 }

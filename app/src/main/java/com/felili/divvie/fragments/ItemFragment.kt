@@ -13,16 +13,16 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.felili.divvie.*
+import com.tubitv.fragmentoperator.fragment.FoFragment
+import com.tubitv.fragmentoperator.fragment.annotation.SingleInstanceFragment
+import com.tubitv.fragments.FragmentOperator
 import java.math.BigDecimal
 
-class ItemFragment : Fragment() {
-    companion object {
-        fun newInstance() = ItemFragment()
-    }
+@SingleInstanceFragment
+class ItemFragment : FoFragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var editItemText: EditText
     private lateinit var itemHelper: TextView
@@ -103,9 +103,7 @@ class ItemFragment : Fragment() {
         clearAllButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemClear) }
 
         backButton.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(
-                R.id.info_fragment_layout, SplitFragment.newInstance()
-            ).commit()
+            FragmentOperator.showFragment(SplitFragment(), clearStack = false, skipOnPop = false)
         }
     }
 
@@ -114,9 +112,7 @@ class ItemFragment : Fragment() {
         if (tempLeftover == BigDecimal.ZERO || tempLeftover.toString() == "0.00") {
             doneButton.setOnClickListener {
                 viewModel.onEvent(DivvieViewEvent.ItemDone)
-                fragmentManager!!.beginTransaction().replace(
-                    R.id.info_fragment_layout, CalculateFragment.newInstance()
-                ).commit()
+                FragmentOperator.showFragment(CalculateFragment(), clearStack = false, skipOnPop = true)
             }
         } else {
             doneButton.setOnClickListener { viewModel.onEvent(DivvieViewEvent.ItemDone) }

@@ -17,12 +17,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.felili.divvie.*
+import com.tubitv.fragmentoperator.fragment.FoFragment
+import com.tubitv.fragmentoperator.fragment.annotation.SingleInstanceFragment
+import com.tubitv.fragments.FragmentOperator
 import java.math.BigDecimal
 
-class InputFragment : Fragment() {
-    companion object {
-        fun newInstance() = InputFragment()
-    }
+@SingleInstanceFragment
+class InputFragment : FoFragment() {
     private lateinit var viewModel: DivvieViewModel
     private lateinit var guestsText: TextView
     private lateinit var upButton: Button
@@ -139,10 +140,7 @@ class InputFragment : Fragment() {
         viewModel.onEvent(DivvieViewEvent.InputToSplit)
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editTaxText.windowToken, 0)
-        fragmentManager!!.beginTransaction().replace(
-            R.id.info_fragment_layout,
-            SplitFragment.newInstance()
-        ).commit()
+        FragmentOperator.showFragment(SplitFragment(), clearStack = false, skipOnPop = false)
     }
 
     private fun render(viewState: DivvieViewState) {
