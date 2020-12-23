@@ -1,6 +1,8 @@
 # divvie
 Not your average tip calculator!
 Your friend ordered a lobster caviar Wagyu steak but you only ordered a drink? We can help you split the check fairly so you only pay for what you ordered!
+Available on Google Play Store:
+https://play.google.com/store/apps/details?id=com.felili.divvie
 
 ## Features
 - Tip and tax are calculated based on each person's total dinner amount
